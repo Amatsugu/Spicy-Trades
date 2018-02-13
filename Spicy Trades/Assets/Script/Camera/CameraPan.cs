@@ -27,9 +27,10 @@ public class CameraPan : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		if (Input.GetKeyDown(KeyCode.Mouse0))
+
+		if (Input.GetKeyDown(KeyCode.Mouse1))
 			_sPos = _cam.ScreenToWorldPoint(Input.mousePosition);
-		if(Input.GetKey(KeyCode.Mouse0))
+		if(Input.GetKey(KeyCode.Mouse1))
 		{
 			var cPos = _cam.ScreenToWorldPoint(Input.mousePosition);
 			var rPos =  cPos - _sPos;

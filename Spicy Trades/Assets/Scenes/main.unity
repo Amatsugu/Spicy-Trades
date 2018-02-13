@@ -296,8 +296,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a85c5cc94b3204c85fa7a27b7492e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperBound: {x: 13, y: 20, z: 7}
-  lowerBound: {x: -13, y: -20, z: 1}
+  upperBound: {x: 20, y: 20, z: 7}
+  lowerBound: {x: 0, y: 0, z: 1}
   sensitivity: 1
   scrollSpeed: 1
   scrollSensitivity: 0.5
