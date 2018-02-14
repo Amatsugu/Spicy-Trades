@@ -26,8 +26,12 @@ public class Pathfinder {
 					continue;
 				var adj = new PathNode(t, n.G + 1, n);
 				if (closed.Contains(adj))
+				{
+					Debug.DrawLine(n.Tile.transform.position, t.transform.position, Color.red, 30);
 					continue;
-				if(!open.Contains(adj))
+				}
+				Debug.DrawLine(n.Tile.transform.position, t.transform.position, Color.green, 30);
+				if (!open.Contains(adj))
 				{
 					open.Add(adj);
 				}else
@@ -38,7 +42,7 @@ public class Pathfinder {
 				}
 			}
 		}
-		var curNode = closed[closed.IndexOf(B)];
+		var curNode = closed.Last();
 		if (curNode == null)
 			return null;
 		List<Tile> path = new List<Tile>();

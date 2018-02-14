@@ -5,88 +5,84 @@ using UnityEngine;
 
 public class MapRenderer : MonoBehaviour
 {
+	public MapGenerator generator;
 
-    public Vector2 size = new Vector2(5, 5);
-	public float outerRadius = 0.433f;
-    public Transform tile;
-
-	public static Tile[] Tiles;
+	public Tile[] Tiles;
 	public static MapRenderer Map;
-	public static float InnerRadius;
-	private List<Transform> _tiles;
-	public bool regen = false;
 
-	private static Tile A, B;
-	private static bool endPoint = true;
+	private Tile A, B;
+	private bool endPoint = true;
 	private static Tile[] oldPath = null;
     // Use this for initialization
     void Start()
     {
 		Map = this;
-		InnerRadius = outerRadius * Mathf.Sqrt(3)/2;
-		Tiles = new Tile[(int)(size.x * size.y * 4)];
-		_tiles = new List<Transform>();
-        for (int y = 0, i = 0; y < size.y; y++)
+		Tiles = new Tile[(int)(generator.Size.x * generator.Size.y)];
+        for (int y = 0, i = 0; y < generator.Size.y; y++)
         {
-            for (int x = 0; x < size.x; x++)
+            for (int x = 0; x < generator.Size.x; x++)
             {
-				var pos = new Vector3
-				{
-					y = y * (InnerRadius * 1.5f),
-					x = (x + y * .5f - y/2) * (InnerRadius * 2f),
-				};
-				var g = Instantiate(tile, pos, Quaternion.Euler(0, 0, 90), transform);
-                g.GetComponent<SpriteRenderer>().color = Color.HSVToRGB((x + size.x)/(2*size.x), Mathf.Lerp(.4f, 1, (y + size.y) / (2*size.y)), 1);
-				var t = g.GetComponent<Tile>().SetPos(x, y);
-				if (Tiles[i] != null)
-					Debug.Log("Collision");
-				Tiles[i++] = t;
-				_tiles.Add(g);
+				Tiles[i++] = generator.Generate(x, y, transform);
             }
         }
-		
     }
 
     // Update is called once per frame
     void Update()
     {
-		if (!regen)
+		if (!generator.Regen)
 			return;
-		regen = false;
-		for (int i = 0; i < _tiles.Count; i++)
+		Debug.Log("Regen");
+		generator.Regen = false;
+		for (int i = 0; i < transform.childCount; i++)
 		{
-			Destroy(_tiles[i].gameObject);
+			Destroy(transform.GetChild(i).gameObject);
 		}
 		Start();
     }
 
 	public static Tile GetTile(int x, int y, int z)
 	{
-		int index = x + y * (int)Map.size.x + y / 2;
-		if (index < 0 || index > Tiles.Length)
+		if (-x - y != z)
 			return null;
-		return Tiles[index];
+		int oX = x + y / 2;
+		if (oX < 0 || oX >= Map.generator.Size.x)
+			return null;
+		if (y >= Map.generator.Size.y)
+			return null;
+		int index = x + y * (int)Map.generator.Size.x + y / 2;
+		if (index < 0 || index > Map.Tiles.Length)
+			return null;
+		return Map.Tiles[index];
 	}
 
 	public static void TouchTile(Tile tile)
 	{
-		if (endPoint)
-			A = tile;
+		var n = tile.GetNeighboringTiles();
+		foreach (Tile t in n)
+			if (t != null)
+				Debug.DrawLine(tile.transform.position, t.transform.position, Color.white, 3);
+		if (Map.endPoint)
+			Map.A = tile;
 		else
-			B = tile;
+			Map.B = tile;
 		if (oldPath != null)
 			foreach (var t in oldPath)
 				t.ResetColor();
-		endPoint = !endPoint;
-		if(A != null && B != null)
+		Map.endPoint = !Map.endPoint;
+		if(Map.A != null && Map.B != null)
 		{
-			oldPath = Pathfinder.FindPath(A, B);
-			foreach (var t in oldPath)
-				t.SetColor(Color.white);
+			oldPath = Pathfinder.FindPath(Map.A, Map.B);
+			for(int i = 0; i < oldPath.Length; i++)
+			{
+				oldPath[i].SetColor(Color.white);
+				if(i>0)
+					Debug.DrawLine(oldPath[i-1].transform.position, oldPath[i].transform.position, Color.red, 3);
+			}
 		}
-		if(A != null)
-			A.SetColor(Color.green);
-		if(B != null)
-			B.SetColor(Color.grey);
+		if(Map.A != null)
+			Map.A.SetColor(Color.green);
+		if(Map.B != null)
+			Map.B.SetColor(Color.grey);
 	}
 }

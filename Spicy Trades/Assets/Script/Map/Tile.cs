@@ -6,18 +6,26 @@ public class Tile : MonoBehaviour
 {
 	public HexCoords position;
 	public float cost;
+	public Vector3 wolrdPos
+	{
+		get
+		{
+			return transform.position;
+		}
+	}
 
 	private TextMesh _pText;
 	private SpriteRenderer _sprite;
 	private Color _sCol;
 	private Color _hCol;
+	private Color _curCol;
 
 	// Use this for initialization
 	void Start()
 	{
 		_pText = GetComponentInChildren<TextMesh>();
 		_sprite = GetComponent<SpriteRenderer>();
-		_sCol = _sprite.color;
+		_curCol = _sCol = _sprite.color;
 		_hCol = Color.white;
 	}
 
@@ -26,14 +34,14 @@ public class Tile : MonoBehaviour
 		position = HexCoords.FromOffsetCoords(x, y);
 		if (_pText == null)
 			Start();
-		//_pText.text = position.ToString();
 		return this;
 	}
 
-	// Update is called once per frame
-	void Update()
+	public Tile SetWeight(float cost)
 	{
-
+		this.cost = cost;
+		_pText.text = cost.ToString();
+		return this;
 	}
 
 	private void OnMouseUp()
@@ -48,18 +56,18 @@ public class Tile : MonoBehaviour
 
 	private void OnMouseExit()
 	{
-		_sprite.color = _sCol;
+		_sprite.color = _curCol;
 	}
 
 	public Tile SetColor(Color color)
 	{
-		_sprite.color = color;
+		_sprite.color = _curCol = color;
 		return this;
 	}
 
 	public Tile ResetColor()
 	{
-		_sprite.color = _sCol;
+		_sprite.color = _curCol = _sCol;
 		return this;
 	}
 
@@ -81,25 +89,18 @@ public class Tile : MonoBehaviour
 	public static Tile[] GetNeighboringTiles(int x, int y, int z)
 	{
 		var tiles = new Tile[6];
-		tiles[0] = MapRenderer.GetTile(x - 1, y, z - 1);
-		tiles[1] = MapRenderer.GetTile(x - 1, y + 1, z);
-		tiles[2] = MapRenderer.GetTile(x, y + 1, z - 1);
-		tiles[3] = MapRenderer.GetTile(x + 1, y, z - 1);
-		tiles[4] = MapRenderer.GetTile(x + 1, y - 1, z);
-		tiles[5] = MapRenderer.GetTile(x, y - 1, z - 1);
+		tiles[0] = MapRenderer.GetTile(x - 1, y, z + 1); //Left
+		tiles[1] = MapRenderer.GetTile(x - 1, y + 1, z); //Top Left
+		tiles[2] = MapRenderer.GetTile(x, y + 1, z - 1); //Top Right
+		tiles[3] = MapRenderer.GetTile(x + 1, y, z - 1); //Right
+		tiles[4] = MapRenderer.GetTile(x + 1, y - 1, z); //Bottom Right
+		tiles[5] = MapRenderer.GetTile(x, y - 1, z + 1); //Bottom Left
 		return tiles;
 	}
 
 	// override object.Equals
 	public override bool Equals(object obj)
 	{
-		//       
-		// See the full list of guidelines at
-		//   http://go.microsoft.com/fwlink/?LinkID=85237  
-		// and also the guidance for operator== at
-		//   http://go.microsoft.com/fwlink/?LinkId=85238
-		//
-
 		if (obj == null || GetType() != obj.GetType())
 		{
 			return false;

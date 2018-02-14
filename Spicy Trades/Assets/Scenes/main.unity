@@ -199,10 +199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cf97d8b0e1cfde4eabfec18989b7205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 20, y: 20}
-  outerRadius: 0.577
-  tile: {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  regen: 0
+  generator: {fileID: 11400000, guid: e74de6b860c16434db1dac92e840177c, type: 2}
+  Tiles: []
 --- !u!1 &1176639848
 GameObject:
   m_ObjectHideFlags: 0
@@ -296,8 +294,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a1a85c5cc94b3204c85fa7a27b7492e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  upperBound: {x: 20, y: 20, z: 7}
-  lowerBound: {x: 0, y: 0, z: 1}
+  minZoom: 1
+  maxZoom: 30
   sensitivity: 1
   scrollSpeed: 1
   scrollSensitivity: 0.5

@@ -23,14 +23,14 @@ public struct HexCoords
 
 	public static HexCoords FromOffsetCoords(int x, int y)
 	{
-		return new HexCoords(x - y /2, y);
+		return new HexCoords(x - y / 2, y);
 	}
 
 	public static HexCoords FromPosition(Vector3 position)
 	{
-		float x = position.x / (MapRenderer.InnerRadius * 2f);
+		float x = position.x / (MapRenderer.Map.generator.InnerRadius * 2f);
 		float z = -x;
-		float offset = position.y / (MapRenderer.InnerRadius * 3f);
+		float offset = position.y / (MapRenderer.Map.generator.InnerRadius * 3f);
 		z -= offset;
 		x -= offset;
 		int iX = Mathf.RoundToInt(x);
@@ -43,7 +43,7 @@ public struct HexCoords
 
 	public int ToIndex()
 	{
-		return X + Y * (int)MapRenderer.Map.size.x + Y / 2;
+		return X + Y * (int)MapRenderer.Map.generator.Size.x + Y / 2;
 	}
 
 	public override string ToString()
@@ -64,13 +64,6 @@ public struct HexCoords
 	// override object.Equals
 	public override bool Equals(object obj)
 	{
-		//       
-		// See the full list of guidelines at
-		//   http://go.microsoft.com/fwlink/?LinkID=85237  
-		// and also the guidance for operator== at
-		//   http://go.microsoft.com/fwlink/?LinkId=85238
-		//
-
 		if (obj == null || GetType() != obj.GetType())
 		{
 			return false;

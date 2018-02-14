@@ -5,8 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Camera))]
 public class CameraPan : MonoBehaviour
 {
-	public Vector3 upperBound = new Vector3(10, 20, 5);
-	public Vector3 lowerBound = new Vector3(0, 0, 1);
+	public int minZoom = 1, maxZoom = 10;
 	public float sensitivity = .5f;
 	public float scrollSpeed = 1;
 	public float scrollSensitivity = 1;
@@ -21,7 +20,7 @@ public class CameraPan : MonoBehaviour
 	{
 		_curPos = transform.position;
 		_cam = GetComponent<Camera>();
-		_zoom = upperBound.z;
+		_zoom = maxZoom;
 	}
 
 	// Update is called once per frame
@@ -35,14 +34,14 @@ public class CameraPan : MonoBehaviour
 			var cPos = _cam.ScreenToWorldPoint(Input.mousePosition);
 			var rPos =  cPos - _sPos;
 			_curPos -= rPos * sensitivity;
-			if (_curPos.x < lowerBound.x)
-				_curPos.x = lowerBound.x;
-			if (_curPos.y < lowerBound.y)
-				_curPos.y = lowerBound.y;
-			if (_curPos.x > upperBound.x)
-				_curPos.x = upperBound.x;
-			if (_curPos.y > upperBound.y)
-				_curPos.y = upperBound.y;
+			if (_curPos.x < 0)
+				_curPos.x = 0;
+			if (_curPos.y < 0)
+				_curPos.y = 0;
+			if (_curPos.x > MapRenderer.Map.generator.Size.x)
+				_curPos.x = MapRenderer.Map.generator.Size.x;
+			if (_curPos.y > MapRenderer.Map.generator.Size.y)
+				_curPos.y = MapRenderer.Map.generator.Size.y;
 			transform.position = _curPos;
 		}
 		var sY = Input.mouseScrollDelta.y;
@@ -51,10 +50,10 @@ public class CameraPan : MonoBehaviour
 			_zoom -= sY;
 			_lt = 0;
 		}
-		if (_zoom < lowerBound.z)
-			_zoom = lowerBound.z;
-		if (_zoom > upperBound.z)
-			_zoom = upperBound.z;
+		if (_zoom < minZoom)
+			_zoom = minZoom;
+		if (_zoom > maxZoom)
+			_zoom = maxZoom;
 		_cam.orthographicSize = Mathf.Lerp(_cam.orthographicSize, _zoom, _lt += scrollSpeed * Time.deltaTime);
 	}
 }
