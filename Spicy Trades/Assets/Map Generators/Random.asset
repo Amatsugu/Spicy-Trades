@@ -24,7 +24,7 @@ MonoBehaviour:
   damping: 0
   type: 1
   demensions: 3
-  position: {x: 0.07, y: 0, z: 0}
+  position: {x: 0.86, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0}
   coloring:
     serializedVersion: 2
