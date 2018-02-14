@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,7 +40,7 @@ public class Tile : MonoBehaviour
 	public Tile SetWeight(float cost)
 	{
 		this.cost = cost;
-		_pText.text = cost.ToString();
+		//_pText.text = cost.ToString();
 		return this;
 	}
 

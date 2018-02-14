@@ -19,7 +19,7 @@ MonoBehaviour:
   frequency: 39.92
   octaves: 3
   lacunarity: 2.3
-  persistence: 0.535
+  persistence: 0.263
   strength: 0.893
   damping: 0
   type: 1
