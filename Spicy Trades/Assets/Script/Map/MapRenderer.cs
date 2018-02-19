@@ -6,7 +6,7 @@ using UnityEngine;
 public class MapRenderer : MonoBehaviour
 {
 	public MapGenerator generator;
-
+	public GameObject smartTile;
 	public Tile[] Tiles;
 	public static MapRenderer Map;
 
@@ -58,10 +58,23 @@ public class MapRenderer : MonoBehaviour
 
 	public static void TouchTile(Tile tile)
 	{
+		var pos = tile.position;
+		var wPos = tile.transform.position;
+		var wRot = tile.transform.rotation;
+		var cost = tile.cost;
+		var col = tile.GetColor();
+		var g = Instantiate(Map.smartTile, wPos, wRot, tile.transform.parent);
+		g.GetComponent<SpriteRenderer>().color = col;
+		Map.Tiles[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos).SetWeight(cost);
+		//Map.Tiles[pos.ToIndex()] = g.AddComponent<SmartTile>().SetPos(pos).SetWeight(cost);
+
+#if DEBUG
 		var n = tile.GetNeighboringTiles();
 		foreach (Tile t in n)
 			if (t != null)
 				Debug.DrawLine(tile.transform.position, t.transform.position, Color.white, 3);
+#endif
+		/*
 		if (Map.endPoint)
 			Map.A = tile;
 		else
@@ -83,6 +96,6 @@ public class MapRenderer : MonoBehaviour
 		if(Map.A != null)
 			Map.A.SetColor(Color.green);
 		if(Map.B != null)
-			Map.B.SetColor(Color.grey);
+			Map.B.SetColor(Color.grey);*/
 	}
 }

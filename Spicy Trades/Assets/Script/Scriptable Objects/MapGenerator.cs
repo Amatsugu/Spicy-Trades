@@ -30,7 +30,7 @@ public abstract class MapGenerator : ScriptableObject
 
 	public Tile CreateTile(int x, int y, Transform parent, Color col)
 	{
-		var g = Instantiate(Tile, GetPosition(x, y), Quaternion.Euler(0, 0, 90), parent);
+		var g = Instantiate(Tile, GetPosition(x, y), Quaternion.identity, parent);
 		g.GetComponent<SpriteRenderer>().color = col;
 		return g.GetComponent<Tile>().SetPos(x, y);
 	}

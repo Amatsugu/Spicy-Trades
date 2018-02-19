@@ -20,7 +20,7 @@ public class CameraPan : MonoBehaviour
 	{
 		_curPos = transform.position;
 		_cam = GetComponent<Camera>();
-		_zoom = maxZoom;
+		_zoom = Mathf.Lerp(minZoom, maxZoom, .5f);
 	}
 
 	// Update is called once per frame

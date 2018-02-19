@@ -15,7 +15,7 @@ public class Tile : MonoBehaviour
 	}
 
 	private TextMesh _pText;
-	private SpriteRenderer _sprite;
+	protected SpriteRenderer _sprite;
 	private Color _sCol;
 	private Color _hCol;
 	private Color _curCol;
@@ -31,7 +31,12 @@ public class Tile : MonoBehaviour
 
 	public Tile SetPos(int x, int y)
 	{
-		position = HexCoords.FromOffsetCoords(x, y);
+		return SetPos(HexCoords.FromOffsetCoords(x, y));
+	}
+
+	public Tile SetPos(HexCoords coords)
+	{
+		position = coords;
 		if (_pText == null)
 			Start();
 		return this;
@@ -42,6 +47,11 @@ public class Tile : MonoBehaviour
 		this.cost = cost;
 		//_pText.text = cost.ToString();
 		return this;
+	}
+
+	public Color GetColor()
+	{
+		return _sCol;
 	}
 
 	private void OnMouseUp()

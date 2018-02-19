@@ -200,6 +200,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   generator: {fileID: 11400000, guid: e74de6b860c16434db1dac92e840177c, type: 2}
+  smartTile: {fileID: 1295639896062918, guid: af5b873760546474aaedfb7d291caf6d, type: 2}
   Tiles: []
 --- !u!1 &1176639848
 GameObject:

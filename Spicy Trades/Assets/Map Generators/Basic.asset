@@ -13,4 +13,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 20, y: 20}
   Tile: {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  OuterRadius: 0.577
+  OuterRadius: 0.576
+  Regen: 0
