@@ -6,7 +6,7 @@ using UnityEngine;
 public class SmartTileType : ScriptableObject
 {
 	public Sprite[] edgeSprites = new Sprite[6];
-	public Sprite[] cornerSprites = new Sprite[12];
+	public Sprite[] cornerSprites = new Sprite[5];
 	public bool dualSprite = false;
 	public bool invert = false;
 	public bool inheritColor = false;
@@ -23,16 +23,11 @@ public class SmartTileType : ScriptableObject
 		return edgeSprites[side];
 	}
 
-	public Sprite GetCorner(int side, bool dual = false)
+	public Sprite GetCorner(int side, bool dual = false, bool right = false)
 	{
-		side = side % 6;
-		if(dualSprite)
-		{
-			if (side == 0 || side == 3)
-				return cornerSprites[dual ? 1 : 0];
-			else
-				return cornerSprites[dual ? 3 : 2];
-		}
-		return cornerSprites[side];
+		if (side == 0 || side == 3)
+			return cornerSprites[dual ? 1 : 0];
+		else
+			return cornerSprites[dual ? 4 : right ? 3 : 2];
 	}
 }

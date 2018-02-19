@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SmartTile : Tile {
@@ -70,7 +71,9 @@ public class SmartTile : Tile {
 				continue;
 			}
 		}
-
+		if (tileType.invert)
+			return;
+		bool[] activations = new bool[_sides.Length];
 		for (int i = 0; i < _sides.Length; i++)
 		{
 			int iP = (i - 1 < 0) ? _sides.Length - 1 : i -1;
@@ -85,16 +88,45 @@ public class SmartTile : Tile {
 			if (i == 0 || i == 3)
 			{
 				c.sprite = tileType.GetCorner(i, l.enabled && r.enabled);
-				c.enabled = true;
+				activations[i] = true;
 				if(l.enabled != r.enabled)
 					c.flipY = (i == 0) ? !r.enabled : !l.enabled;
 				continue;
 			}else
 			{
-				//c.sprite = tileType.GetCorner(i, l.enabled && r.enabled);
-				//c.enabled = true;
-				//continue;
+				if (l.enabled && r.enabled)
+				{
+					c.sprite = tileType.GetCorner(i, true);
+					activations[i] = true;
+					continue;
+				}else if(r.enabled && !l.enabled)
+				{
+					var right = true;
+					if (c.flipX)
+						right = !right;
+					if (c.flipY)
+						right = !right;
+					c.sprite = tileType.GetCorner(i, false, right);
+					activations[i] = true;
+					continue;
+				}else if(!r.enabled && l.enabled)
+				{
+					var right = false;
+					if (c.flipX)
+						right = !right;
+					if (c.flipY)
+						right = !right;
+					c.sprite = tileType.GetCorner(i, false, right);
+					activations[i] = true;
+					continue;
+				}
 			}
+		}
+
+		for (int i = 0; i < activations.Length; i++)
+		{
+			if (activations[i] == true)
+				_sides[i].enabled = true;
 		}
 	}
 	

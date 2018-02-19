@@ -27,6 +27,7 @@ public class Tile : MonoBehaviour
 		_sprite = GetComponent<SpriteRenderer>();
 		_curCol = _sCol = _sprite.color;
 		_hCol = Color.white;
+		//_sprite.receiveShadows = true;
 	}
 
 	public Tile SetPos(int x, int y)
@@ -39,6 +40,12 @@ public class Tile : MonoBehaviour
 		position = coords;
 		if (_pText == null)
 			Start();
+		return this;
+	}
+
+	public Tile SetText(string text)
+	{
+		_pText.text = text;
 		return this;
 	}
 
@@ -78,6 +85,12 @@ public class Tile : MonoBehaviour
 	public Tile ResetColor()
 	{
 		_sprite.color = _curCol = _sCol;
+		return this;
+	}
+
+	public Tile ResetText()
+	{
+		_pText.text = "";
 		return this;
 	}
 
