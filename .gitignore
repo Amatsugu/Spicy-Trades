@@ -1,9 +1,9 @@
-Spicy\ Trades/[Ll]ibrary/
-Spicy\ Trades/[Tt]emp/
-Spicy\ Trades/[Oo]bj/
-Spicy\ Trades/[Bb]uild/
-Spicy\ Trades/[Bb]uilds/
-Spicy\ Trades/Assets/AssetStoreTools
+/Spicy\ Trades/[Ll]ibrary/
+/Spicy\ Trades/[Tt]emp/
+/Spicy\ Trades/[Oo]bj/
+/Spicy\ Trades/[Bb]uild/
+/Spicy\ Trades/[Bb]uilds/
+/Spicy\ Trades/Assets/AssetStoreTools
 
 # Visual Studio 2015 cache directory
 /.vs/
