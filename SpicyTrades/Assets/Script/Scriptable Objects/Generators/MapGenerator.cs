@@ -5,8 +5,9 @@ using UnityEngine;
 public abstract class MapGenerator : ScriptableObject
 {
 	public Vector2 Size = new Vector2(20, 20);
-	public Transform Tile;
+	public TileMapper tileMapper;
 	public float OuterRadius = 0.577f;
+	public FeatureGenerator[] featureGenerators;
 	[HideInInspector]
 	public bool Regen;
 
@@ -27,11 +28,23 @@ public abstract class MapGenerator : ScriptableObject
 			x = (x + y * .5f - y / 2) * (InnerRadius * 2f),
 		};
 	}
-
 	public Tile CreateTile(int x, int y, Transform parent, Color col)
 	{
-		var g = Instantiate(Tile, GetPosition(x, y), Quaternion.identity, parent);
+		return CreateTile(tileMapper.GetTile(0), x, y, parent, col);
+	}
+
+	public Tile CreateTile(Transform t, int x, int y, Transform parent, Color col)
+	{
+		var g = Instantiate(t, GetPosition(x, y), Quaternion.identity, parent);
 		g.GetComponent<SpriteRenderer>().color = col;
 		return g.GetComponent<Tile>().SetPos(x, y);
+	}
+
+	public void GenerateFeatures(Tile[] map)
+	{
+		if (featureGenerators == null)
+			return;
+		foreach (var fg in featureGenerators)
+			fg.Generate(map);
 	}
 }

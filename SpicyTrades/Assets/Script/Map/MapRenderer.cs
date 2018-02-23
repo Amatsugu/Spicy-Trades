@@ -7,8 +7,8 @@ public class MapRenderer : MonoBehaviour
 {
 	public MapGenerator generator;
 	public GameObject smartTile;
-	public Tile[] Tiles;
-	public static MapRenderer Map;
+	public Map map;
+	public static MapRenderer Instance;
 
 	private Tile A, B;
 	private bool endPoint = true;
@@ -16,13 +16,13 @@ public class MapRenderer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-		Map = this;
-		Tiles = new Tile[(int)(generator.Size.x * generator.Size.y)];
+		Instance = this;
+		map = new Map((int)generator.Size.x,  (int)generator.Size.y);
         for (int y = 0, i = 0; y < generator.Size.y; y++)
         {
             for (int x = 0; x < generator.Size.x; x++)
             {
-				Tiles[i++] = generator.Generate(x, y, transform);
+				map[i++] = generator.Generate(x, y, transform);
             }
         }
     }
@@ -32,7 +32,6 @@ public class MapRenderer : MonoBehaviour
     {
 		if (!generator.Regen)
 			return;
-		Debug.Log("Regen");
 		generator.Regen = false;
 		for (int i = 0; i < transform.childCount; i++)
 		{
@@ -43,17 +42,7 @@ public class MapRenderer : MonoBehaviour
 
 	public static Tile GetTile(int x, int y, int z)
 	{
-		if (-x - y != z)
-			return null;
-		int oX = x + y / 2;
-		if (oX < 0 || oX >= Map.generator.Size.x)
-			return null;
-		if (y >= Map.generator.Size.y)
-			return null;
-		int index = x + y * (int)Map.generator.Size.x + y / 2;
-		if (index < 0 || index > Map.Tiles.Length)
-			return null;
-		return Map.Tiles[index];
+		return Instance.map[x, y, z];
 	}
 
 	public static void TouchTile(Tile tile)
@@ -63,9 +52,9 @@ public class MapRenderer : MonoBehaviour
 		var wRot = tile.transform.rotation;
 		var cost = tile.cost;
 		var col = tile.GetColor();
-		var g = Instantiate(Map.smartTile, wPos, wRot, tile.transform.parent);
+		var g = Instantiate(Instance.smartTile, wPos, wRot, tile.transform.parent);
 		g.GetComponent<SpriteRenderer>().color = col;
-		Map.Tiles[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos).SetWeight(cost);
+		Instance.map[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos).SetWeight(cost);
 		//Map.Tiles[pos.ToIndex()] = g.AddComponent<SmartTile>().SetPos(pos).SetWeight(cost);
 
 #if DEBUG

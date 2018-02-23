@@ -21,8 +21,8 @@ public class CameraPan : MonoBehaviour
 	void Start()
 	{
 		_curPos = transform.position;
-		_curPos.x = Mathf.Lerp(0, MapRenderer.Map.generator.Size.x, .5f);
-		_curPos.y = Mathf.Lerp(0, MapRenderer.Map.generator.Size.y, .25f);
+		_curPos.x = Mathf.Lerp(0, MapRenderer.Instance.generator.Size.x, .5f);
+		_curPos.y = Mathf.Lerp(0, MapRenderer.Instance.generator.Size.y, .25f);
 		_cam = GetComponent<Camera>();
 		_zoom = Mathf.Lerp(minZoom, maxZoom, .5f);
 	}

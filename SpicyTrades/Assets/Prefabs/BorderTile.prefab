@@ -40,7 +40,7 @@ GameObject:
   - component: {fileID: 60190124717019038}
   - component: {fileID: 114699452600015926}
   m_Layer: 0
-  m_Name: SmartTile
+  m_Name: BorderTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

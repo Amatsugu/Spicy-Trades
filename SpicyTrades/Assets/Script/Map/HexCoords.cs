@@ -28,9 +28,9 @@ public struct HexCoords
 
 	public static HexCoords FromPosition(Vector3 position)
 	{
-		float x = position.x / (MapRenderer.Map.generator.InnerRadius * 2f);
+		float x = position.x / (MapRenderer.Instance.generator.InnerRadius * 2f);
 		float z = -x;
-		float offset = position.y / (MapRenderer.Map.generator.InnerRadius * 3f);
+		float offset = position.y / (MapRenderer.Instance.generator.InnerRadius * 3f);
 		z -= offset;
 		x -= offset;
 		int iX = Mathf.RoundToInt(x);
@@ -43,7 +43,7 @@ public struct HexCoords
 
 	public int ToIndex()
 	{
-		return X + Y * (int)MapRenderer.Map.generator.Size.x + Y / 2;
+		return X + Y * (int)MapRenderer.Instance.generator.Size.x + Y / 2;
 	}
 
 	public override string ToString()

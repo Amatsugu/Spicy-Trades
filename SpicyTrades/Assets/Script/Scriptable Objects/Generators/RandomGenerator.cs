@@ -23,8 +23,6 @@ public class RandomGenerator : MapGenerator {
 	public int demensions = 3;
 	public Vector3 position;
 	public Vector3 rotation;
-	public Gradient coloring;
-	public AnimationCurve moveCostCurve = new AnimationCurve();
 	public bool coloredStrength;
 
 
@@ -60,14 +58,14 @@ public class RandomGenerator : MapGenerator {
 		Color col;
 		if (coloredStrength)
 		{
-			col = coloring.Evaluate(sample);
 			sample *= amplitude;
+			col = tileMapper.GetColor(sample);
 		}
 		else
 		{
+			col = tileMapper.GetColor(sample);
 			sample *= amplitude;
-			col = coloring.Evaluate(sample);
 		}
-		return CreateTile(x, y, parent, coloring.Evaluate(sample)).SetWeight(moveCostCurve.Evaluate(sample));
+		return CreateTile(tileMapper.GetTile(sample), x, y, parent, col).SetWeight(tileMapper.GetMoveCost(sample));
 	}
 }

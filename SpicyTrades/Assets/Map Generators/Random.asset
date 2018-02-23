@@ -12,101 +12,19 @@ MonoBehaviour:
   m_Name: Random
   m_EditorClassIdentifier: 
   Size: {x: 40, y: 40}
-  Tile: {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
+  tileMapper: {fileID: 11400000, guid: bb90c7fedf21a6446a79cc6acbeaad75, type: 2}
   OuterRadius: 0.576
+  featureGenerators: []
   Regen: 0
-  resolution: 904
+  resolution: 493
   frequency: 39.92
-  octaves: 3
-  lacunarity: 2.3
-  persistence: 0.263
-  strength: 0.893
+  octaves: 2
+  lacunarity: 1.59
+  persistence: 0
+  strength: 0.695
   damping: 0
   type: 1
   demensions: 3
-  position: {x: 0.86, y: 0, z: 0}
+  position: {x: 3.33, y: 0, z: 0}
   rotation: {x: 0, y: 0, z: 0}
-  coloring:
-    serializedVersion: 2
-    key0: {r: 0.9705882, g: 1, b: 0.98661256, a: 1}
-    key1: {r: 0.1270545, g: 0.6911765, b: 0.17763095, a: 1}
-    key2: {r: 0.26527628, g: 0.75021374, b: 0.38901886, a: 0}
-    key3: {r: 1, g: 0.90436107, b: 0.6985294, a: 0}
-    key4: {r: 0, g: 0.37931037, b: 1, a: 0}
-    key5: {r: 0, g: 0.3019608, b: 0.8000001, a: 0}
-    key6: {r: 0.015679054, g: 0.1707327, b: 0.42647058, a: 0}
-    key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 10794
-    ctime1: 15227
-    ctime2: 25058
-    ctime3: 29684
-    ctime4: 34502
-    ctime5: 41827
-    ctime6: 65535
-    ctime7: 0
-    atime0: 0
-    atime1: 65535
-    atime2: 0
-    atime3: 0
-    atime4: 0
-    atime5: 0
-    atime6: 0
-    atime7: 0
-    m_Mode: 1
-    m_NumColorKeys: 7
-    m_NumAlphaKeys: 2
-  moveCostCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 2
-      time: -0.02727606
-      value: 1.37851
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: -0.003508173
-      value: 1.3939629
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.2542904
-      value: 1.2932519
-      inSlope: -1.5610456
-      outSlope: -1.5610456
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.3624865
-      value: 1.0008295
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.39502838
-      value: 1.3097764
-      inSlope: 14.252427
-      outSlope: 14.252427
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 0.46308398
-      value: 2.8901083
-      inSlope: 23.22119
-      outSlope: 0
-      tangentMode: 5
-    - serializedVersion: 2
-      time: 0.5573865
-      value: 2.9023325
-      inSlope: 0.3224554
-      outSlope: 0.3224554
-      tangentMode: 0
-    - serializedVersion: 2
-      time: 1.0511231
-      value: 2.977496
-      inSlope: 0.3409831
-      outSlope: 0.3409831
-      tangentMode: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 0
-  coloredStrength: 0
+  coloredStrength: 1
