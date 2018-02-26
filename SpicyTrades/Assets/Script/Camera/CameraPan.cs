@@ -45,7 +45,6 @@ public class CameraPan : MonoBehaviour
 			Debug.DrawRay(r.origin, r.direction * 10, Color.red);
 			Debug.DrawLine(r.origin, hit.point, Color.cyan);
 			}
-			Debug.Log(Input.mousePosition);
 			var rPos = cPos - _sPos;
 			_curPos -= rPos * sensitivity;
 			/*if (_curPos.x < 0)
@@ -57,6 +56,14 @@ public class CameraPan : MonoBehaviour
 			if (_curPos.y > MapRenderer.Map.generator.Size.y)
 				_curPos.y = MapRenderer.Map.generator.Size.y;*/
 		}
+		if (Input.GetKey(KeyCode.W))
+			_curPos.y += 1 * sensitivity * Time.deltaTime;
+		else if(Input.GetKey(KeyCode.S))
+			_curPos.y -= 1 * sensitivity * Time.deltaTime;
+		if (Input.GetKey(KeyCode.D))
+			_curPos.x += 1 * sensitivity * Time.deltaTime;
+		else if (Input.GetKey(KeyCode.A))
+			_curPos.x -= 1 * sensitivity * Time.deltaTime;
 		var sY = Input.mouseScrollDelta.y;
 		if (sY != 0)
 		{

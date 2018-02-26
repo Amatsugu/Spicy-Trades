@@ -41,18 +41,19 @@ public class MapRenderer : MonoBehaviour
 
 	public static void TouchTile(Tile tile)
 	{
-		var pos = tile.Position;
+		/*var pos = tile.Position;
 		var wPos = tile.transform.position;
 		var wRot = tile.transform.rotation;
 		var cost = tile.Cost;
 		var col = tile.GetColor();
 		var g = Instantiate(Instance.smartTile, wPos, wRot, tile.transform.parent);
 		g.GetComponent<SpriteRenderer>().color = col;
-		Instance.map[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos).SetWeight(cost);
+		Instance.map[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos).SetWeight(cost);*/
 		//Map.Tiles[pos.ToIndex()] = g.AddComponent<SmartTile>().SetPos(pos).SetWeight(cost);
+		Instance.map.ReplaceTile(tile, Instance.smartTile, true, true);
 
 #if DEBUG
-		var n = tile.GetNeighboringTiles();
+		var n = tile.GetNeighbors();
 		foreach (Tile t in n)
 			if (t != null)
 				Debug.DrawLine(tile.transform.position, t.transform.position, Color.white, 3);

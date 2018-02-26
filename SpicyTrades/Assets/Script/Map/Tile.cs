@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
 	public HexCoords Position { get; private set; }
-	public float Cost { get; private set; }
+	public float Cost { get; set; }
 	public Vector3 WolrdPos
 	{
 		get
@@ -94,22 +94,27 @@ public class Tile : MonoBehaviour
 		return this;
 	}
 
-	public Tile[] GetNeighboringTiles()
+	public float DistanceTo(Tile t)
 	{
-		return GetNeighboringTiles(this);
+		return Vector3.Distance(WolrdPos, t.WolrdPos);
 	}
 
-	public static Tile[] GetNeighboringTiles(Tile t)
+	public Tile[] GetNeighbors()
 	{
-		return GetNeighboringTiles(t.Position);
+		return GetNeighbors(this);
 	}
 
-	public static Tile[] GetNeighboringTiles(HexCoords pos)
+	public static Tile[] GetNeighbors(Tile t)
 	{
-		return GetNeighboringTiles(pos.X, pos.Y, pos.Z);
+		return GetNeighbors(t.Position);
 	}
 
-	public static Tile[] GetNeighboringTiles(int x, int y, int z)
+	public static Tile[] GetNeighbors(HexCoords pos)
+	{
+		return GetNeighbors(pos.X, pos.Y, pos.Z);
+	}
+
+	public static Tile[] GetNeighbors(int x, int y, int z)
 	{
 		var tiles = new Tile[6];
 		tiles[0] = MapRenderer.GetTile(x - 1, y, z + 1); //Left

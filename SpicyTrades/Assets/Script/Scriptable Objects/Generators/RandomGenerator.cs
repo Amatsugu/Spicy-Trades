@@ -66,6 +66,6 @@ public class RandomGenerator : MapGenerator {
 			col = tileMapper.GetColor(sample);
 			sample *= amplitude;
 		}
-		return CreateTile(tileMapper.GetTile(sample), x, y, parent, col).SetWeight(tileMapper.GetMoveCost(sample));
+		return CreateTile(tileMapper.GetTile(sample), x, y, parent, col);//.SetWeight(tileMapper.GetMoveCost(sample));
 	}
 }

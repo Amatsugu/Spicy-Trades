@@ -13,3 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TownTile: {fileID: 0}
   RoadTile: {fileID: 1295639896062918, guid: 4b32309761e56fb45bb3efafa74963a0, type: 2}
+  maxGenerationCycles: 100
+  maxTowns: 15
+  minTowns: 5
+  minDistance: 5

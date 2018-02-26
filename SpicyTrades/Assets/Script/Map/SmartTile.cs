@@ -6,15 +6,16 @@ using UnityEngine;
 public class SmartTile : Tile {
 
 	public SmartTileType tileType;
-	private bool _startUpdate = false;
+	public string[] connectTo;
 
+	private bool _startUpdate = false;
 	private SpriteRenderer[] _sides = new SpriteRenderer[6];
 	// Use this for initialization
 	void Start ()
 	{
 		if (tileType == null)
 			return;
-		var n = GetNeighboringTiles();
+		var n = GetNeighbors();
 		for (int i = 0; i < n.Length; i++)
 		{
 			RenderSide(i);
@@ -58,7 +59,7 @@ public class SmartTile : Tile {
 
 	public void UpdateSides()
 	{
-		var n = GetNeighboringTiles();
+		var n = GetNeighbors();
 		for (int i = 0; i < n.Length; i++)
 		{
 			if (n[i] == null)
@@ -66,9 +67,14 @@ public class SmartTile : Tile {
 				_sides[i].enabled = !tileType.invert;
 				continue;
 			}
+			if(connectTo.Contains(n[i].tag))
+			{
+				Debug.Log(n[i].tag);
+				_sides[i].enabled = tileType.invert;
+				continue;
+			}
 			if (n[i].GetType() != typeof(SmartTile))
 			{
-				
 				_sides[i].enabled = !tileType.invert;
 				continue;
 			}

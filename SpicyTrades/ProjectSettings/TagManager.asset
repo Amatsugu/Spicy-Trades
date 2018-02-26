@@ -7,6 +7,9 @@ TagManager:
   - Ground
   - Water
   - Mountain
+  - Road
+  - Town
+  - Capital
   layers:
   - Default
   - TransparentFX

@@ -20,7 +20,7 @@ public class Pathfinder {
 			closed.Add(n);
 			if (closed.Contains(B))
 				break;
-			foreach (Tile t in n.Tile.GetNeighboringTiles())
+			foreach (Tile t in n.Tile.GetNeighbors())
 			{
 				if (t == null)
 					continue;

@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114699452600015926}
   m_Layer: 0
   m_Name: RoadTile
-  m_TagString: Untagged
+  m_TagString: Road
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,8 +171,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a65acdbbb85d8f4d9796e5952f06d02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cost: 0
   tileType: {fileID: 11400000, guid: d4fedb79947b16f46a359448dcada6e6, type: 2}
+  connectTo:
+  - Town
+  - Capital
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

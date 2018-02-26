@@ -14,6 +14,14 @@ public class Map : IEnumerable<Tile>
 	public int Height { get; private set; }
 	public int Width{ get; private set; }
 
+	public int TileCount
+	{
+		get
+		{
+			return Tiles.Length;
+		}
+	}
+
 	public Map(int height, int width)
 	{
 		Height = height;
@@ -77,7 +85,7 @@ public class Map : IEnumerable<Tile>
 		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
 	}
 
-	public Map ReplaceTile(Tile oldTile, Transform newTile, bool preserveColor = false, bool preserveCost = false)
+	public Tile ReplaceTile(Tile oldTile, GameObject newTile, bool preserveColor = false, bool preserveCost = false)
 	{
 		var pos = oldTile.Position;
 		var wPos = oldTile.transform.position;
@@ -90,6 +98,7 @@ public class Map : IEnumerable<Tile>
 		var t = this[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos);
 		if (preserveCost)
 			t.SetWeight(cost);
-		return this;
+		GameObject.Destroy(oldTile.gameObject);
+		return t;
 	}
 }
