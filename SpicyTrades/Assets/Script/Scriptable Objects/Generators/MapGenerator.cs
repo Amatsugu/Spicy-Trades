@@ -40,11 +40,25 @@ public abstract class MapGenerator : ScriptableObject
 		return g.GetComponent<Tile>().SetPos(x, y);
 	}
 
-	public void GenerateFeatures(Tile[] map)
+	public void GenerateFeatures(Map map)
 	{
 		if (featureGenerators == null)
 			return;
 		foreach (var fg in featureGenerators)
-			fg.Generate(map);
+		{
+			if (fg != null)
+				fg.Generate(map);
+		}
+	}
+
+	public void GenerateMap(Map map, Transform parent = null)
+	{
+		for (int y = 0, i = 0; y < map.Height; y++)
+		{
+			for (int x = 0; x < map.Width; x++)
+			{
+				map[i++] = Generate(x, y, parent);
+			}
+		}
 	}
 }

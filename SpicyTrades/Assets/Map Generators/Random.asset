@@ -14,7 +14,8 @@ MonoBehaviour:
   Size: {x: 40, y: 40}
   tileMapper: {fileID: 11400000, guid: bb90c7fedf21a6446a79cc6acbeaad75, type: 2}
   OuterRadius: 0.576
-  featureGenerators: []
+  featureGenerators:
+  - {fileID: 11400000, guid: 20c1a71c5036ca64ab9f24cd62486203, type: 2}
   Regen: 0
   resolution: 493
   frequency: 39.92

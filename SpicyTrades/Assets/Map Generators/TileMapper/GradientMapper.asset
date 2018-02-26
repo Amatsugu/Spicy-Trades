@@ -59,12 +59,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   Tiles:
+  - {fileID: 4954783902580176, guid: 7a5efc8b49395744999d2966bf040970, type: 2}
   - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
+  - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
+  - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
+  - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
   colorize: 1

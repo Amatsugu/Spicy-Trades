@@ -1,14 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
+using UnityEngine;
 
-public class Map
+[Serializable]
+public class Map : IEnumerable<Tile>
 {
 
 	public Tile[] Tiles { get; private set; }
 	public int Height { get; private set; }
 	public int Width{ get; private set; }
+
 	public Map(int height, int width)
 	{
 		Height = height;
@@ -44,10 +49,47 @@ public class Map
 				return null;
 			return Tiles[index];
 		}
+		
 	}
 
 	public Tile GetTile(int x, int y, int z)
 	{
 		return this[x, y, z];
+	}
+
+	public string ToJSON()
+	{
+		return JsonUtility.ToJson(this);
+	}
+
+	public static Map FromJSON(string json)
+	{
+		return JsonUtility.FromJson<Map>(json);
+	}
+
+	IEnumerator<Tile> IEnumerable<Tile>.GetEnumerator()
+	{
+		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
+	}
+
+	public IEnumerator GetEnumerator()
+	{
+		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
+	}
+
+	public Map ReplaceTile(Tile oldTile, Transform newTile, bool preserveColor = false, bool preserveCost = false)
+	{
+		var pos = oldTile.Position;
+		var wPos = oldTile.transform.position;
+		var wRot = oldTile.transform.rotation;
+		var cost = oldTile.Cost;
+		var col = oldTile.GetColor();
+		var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
+		if(preserveColor)
+			g.GetComponent<SpriteRenderer>().color = col;
+		var t = this[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos);
+		if (preserveCost)
+			t.SetWeight(cost);
+		return this;
 	}
 }

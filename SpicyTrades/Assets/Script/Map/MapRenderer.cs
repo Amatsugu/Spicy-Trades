@@ -17,14 +17,8 @@ public class MapRenderer : MonoBehaviour
     void Start()
     {
 		Instance = this;
-		map = new Map((int)generator.Size.x,  (int)generator.Size.y);
-        for (int y = 0, i = 0; y < generator.Size.y; y++)
-        {
-            for (int x = 0; x < generator.Size.x; x++)
-            {
-				map[i++] = generator.Generate(x, y, transform);
-            }
-        }
+		generator.GenerateMap(map = new Map((int)generator.Size.x,  (int)generator.Size.y), transform);
+		generator.GenerateFeatures(map);
     }
 
     // Update is called once per frame
@@ -47,10 +41,10 @@ public class MapRenderer : MonoBehaviour
 
 	public static void TouchTile(Tile tile)
 	{
-		var pos = tile.position;
+		var pos = tile.Position;
 		var wPos = tile.transform.position;
 		var wRot = tile.transform.rotation;
-		var cost = tile.cost;
+		var cost = tile.Cost;
 		var col = tile.GetColor();
 		var g = Instantiate(Instance.smartTile, wPos, wRot, tile.transform.parent);
 		g.GetComponent<SpriteRenderer>().color = col;

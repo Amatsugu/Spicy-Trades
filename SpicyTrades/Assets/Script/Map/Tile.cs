@@ -4,9 +4,9 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-	public HexCoords position;
-	public float cost;
-	public Vector3 wolrdPos
+	public HexCoords Position { get; private set; }
+	public float Cost { get; private set; }
+	public Vector3 WolrdPos
 	{
 		get
 		{
@@ -37,7 +37,7 @@ public class Tile : MonoBehaviour
 
 	public Tile SetPos(HexCoords coords)
 	{
-		position = coords;
+		Position = coords;
 		if (_pText == null)
 			Start();
 		return this;
@@ -51,7 +51,7 @@ public class Tile : MonoBehaviour
 
 	public Tile SetWeight(float cost)
 	{
-		this.cost = cost;
+		this.Cost = cost;
 		//_pText.text = cost.ToString();
 		return this;
 	}
@@ -101,7 +101,7 @@ public class Tile : MonoBehaviour
 
 	public static Tile[] GetNeighboringTiles(Tile t)
 	{
-		return GetNeighboringTiles(t.position);
+		return GetNeighboringTiles(t.Position);
 	}
 
 	public static Tile[] GetNeighboringTiles(HexCoords pos)
@@ -129,12 +129,12 @@ public class Tile : MonoBehaviour
 			return false;
 		}
 
-		return position == (obj as Tile).position;
+		return Position == (obj as Tile).Position;
 	}
 
 	// override object.GetHashCode
 	public override int GetHashCode()
 	{
-		return position.GetHashCode();
+		return Position.GetHashCode();
 	}
 }

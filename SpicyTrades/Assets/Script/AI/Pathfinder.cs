@@ -77,7 +77,7 @@ public class PathNode
 
 	public float CalculateF(Tile b)
 	{
-		return (G * Tile.cost) + CalculateH(b) ;
+		return (G * Tile.Cost) + CalculateH(b) ;
 	}
 
 	// override object.Equals
