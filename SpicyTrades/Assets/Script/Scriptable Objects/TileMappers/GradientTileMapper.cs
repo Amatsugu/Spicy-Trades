@@ -18,7 +18,6 @@ public class GradientTileMapper : TileMapper
 		tiles.Clear();
 		for (int i = 0; i < Tiles.Length; i++)
 		{
-			//_mapper.Tiles[i] = t[i];
 			if (i > Tiles.Length - 1)
 				tiles.Add(tileGradient.colorKeys[i].color, null);
 			else
@@ -29,7 +28,6 @@ public class GradientTileMapper : TileMapper
 	public override Transform GetTile(float sample)
 	{
 		return tiles[tileGradient.Evaluate(sample)];
-		//return tiles[tileGradient.colorKeys.Aggregate((a,b) => Mathf.Abs(a.time - sample) < Mathf.Abs(b.time - sample) ? a : b).color];
 	}
 
 	public override Color GetColor(float sample)

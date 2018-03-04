@@ -9,7 +9,6 @@ using UnityEngine;
 [Serializable]
 public class Map : IEnumerable<Tile>
 {
-
 	public Tile[] Tiles { get; private set; }
 	public int Height { get; private set; }
 	public int Width{ get; private set; }
@@ -65,6 +64,11 @@ public class Map : IEnumerable<Tile>
 		return this[x, y, z];
 	}
 
+	public IEnumerable<TownTile> GetTowns()
+	{
+		return from Tile t in Tiles where t.GetType() == typeof(TownTile) select t as TownTile;
+	}
+
 	public string ToJSON()
 	{
 		return JsonUtility.ToJson(this);
@@ -83,6 +87,12 @@ public class Map : IEnumerable<Tile>
 	public IEnumerator GetEnumerator()
 	{
 		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
+	}
+
+	public TownTile MakeTown(Tile tile, GameObject town)
+	{
+
+		return ReplaceTile(tile, town) as TownTile;
 	}
 
 	public Tile ReplaceTile(Tile oldTile, GameObject newTile, bool preserveColor = false, bool preserveCost = false)
