@@ -674,11 +674,11 @@
       "hideWarningsAndErrors": true
     },
     "restore": {
-      "projectUniqueName": "C:\\Users\\Ryan\\source\\repos\\ConsoleApp1\\ConsoleApp1\\NetworkManager.csproj",
+      "projectUniqueName": "C:\\Users\\Ryan\\Documents\\GitHub\\Spicy-Trades\\ServerStuff\\NetworkManager\\NetworkManager.csproj",
       "projectName": "NetworkManager",
-      "projectPath": "C:\\Users\\Ryan\\source\\repos\\ConsoleApp1\\ConsoleApp1\\NetworkManager.csproj",
+      "projectPath": "C:\\Users\\Ryan\\Documents\\GitHub\\Spicy-Trades\\ServerStuff\\NetworkManager\\NetworkManager.csproj",
       "packagesPath": "C:\\Users\\Ryan\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Ryan\\source\\repos\\ConsoleApp1\\ConsoleApp1\\obj\\",
+      "outputPath": "C:\\Users\\Ryan\\Documents\\GitHub\\Spicy-Trades\\ServerStuff\\NetworkManager\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackagesFallback\\",
