@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e9f7025dffb04504ab3b76955cdb655a, type: 3}
   m_Name: TownGenerator
   m_EditorClassIdentifier: 
-  TownTile: {fileID: 0}
+  TownTile: {fileID: 1295639896062918, guid: 657c707b5bd498d4dad54c60678ebf50, type: 2}
   RoadTile: {fileID: 1295639896062918, guid: 4b32309761e56fb45bb3efafa74963a0, type: 2}
   maxGenerationCycles: 100
   maxTowns: 15

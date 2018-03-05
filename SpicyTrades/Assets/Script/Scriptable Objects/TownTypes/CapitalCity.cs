@@ -2,15 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CapitalCity : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+[CreateAssetMenu(menuName = "Town Type/Capital")]
+public class CapitalCity : TownType {
+	public override void Initialize(TownTile tile)
+	{
+		base.Initialize(tile);
 	}
 }

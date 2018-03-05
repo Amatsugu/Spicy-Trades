@@ -69,7 +69,6 @@ public class SmartTile : Tile {
 			}
 			if(connectTo.Contains(n[i].tag))
 			{
-				Debug.Log(n[i].tag);
 				_sides[i].enabled = tileType.invert;
 				continue;
 			}

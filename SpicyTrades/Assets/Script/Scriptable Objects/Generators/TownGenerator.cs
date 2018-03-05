@@ -6,6 +6,8 @@ using System.Linq;
 [CreateAssetMenu(menuName = "Feature Generator/Towns")]
 public class TownGenerator : FeatureGenerator
 {
+	public GameObject TownTile;
+	public GameObject RoadTile;
 	public int maxGenerationCycles = 100;
 	public int maxTowns = 8;
 	public int minTowns = 4;
@@ -36,9 +38,7 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (towns.Any(t => t != null && t.DistanceTo(townCandidate) < minDistance))
 				continue;
-			towns[--numTowns] = townCandidate;
-			townCandidate.SetWeight(0).SetColor(Color.cyan).gameObject.tag = "Town";
-			Debug.Log("Town Selected");
+			towns[--numTowns] = map.ReplaceTile(townCandidate, TownTile).SetWeight(0);
 		}
 		Debug.Log("Finished in " + curCycles + " cycles");
 		List<Tile> open = new List<Tile>();
@@ -56,6 +56,8 @@ public class TownGenerator : FeatureGenerator
 			open.Remove(closest);
 			for (int i = 1; i < path.Length - 1; i++)
 			{
+				if (path[i].tag == "Town" || path[i].tag == "Road")
+					continue;
 				map.ReplaceTile(path[i], RoadTile, true).SetWeight(0);
 			}
 		}

@@ -102,13 +102,13 @@ public class Map : IEnumerable<Tile>
 		var wRot = oldTile.transform.rotation;
 		var cost = oldTile.Cost;
 		var col = oldTile.GetColor();
+		GameObject.Destroy(oldTile.gameObject);
 		var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
 		if(preserveColor)
 			g.GetComponent<SpriteRenderer>().color = col;
 		var t = this[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos);
 		if (preserveCost)
 			t.SetWeight(cost);
-		GameObject.Destroy(oldTile.gameObject);
 		return t;
 	}
 }
