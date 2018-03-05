@@ -4,8 +4,8 @@ using UnityEngine;
 
 [CreateAssetMenu(menuName = "Town Type/Capital")]
 public class CapitalCity : TownType {
-	public override void Initialize(TownTile tile)
+	public override TownTile Initialize(TownTile tile)
 	{
-		base.Initialize(tile);
+		return base.Initialize(tile);
 	}
 }

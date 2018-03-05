@@ -7,8 +7,9 @@ public abstract class TownType : ScriptableObject
 	public int MinPopulation;
 	public int MaxPopulation;
 
-	public virtual void Initialize(TownTile tile)
+	public virtual TownTile Initialize(TownTile tile)
 	{
 		tile.Population = Random.Range(MinPopulation, MaxPopulation);
+		return tile;
 	}
 }

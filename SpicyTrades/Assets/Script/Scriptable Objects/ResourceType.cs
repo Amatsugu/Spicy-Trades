@@ -5,6 +5,17 @@ using UnityEngine;
 public class ResourceType : ScriptableObject
 {
 	public string ResourceName;
-	public Sprite sprite;
+	public ResourceCategory category;
+	public Sprite sprite; //TODO: Replace with renderer
 
+
+}
+
+public enum ResourceCategory
+{
+	Material,
+	Food,
+	Luxury,
+	Fuel,
+	Stategic
 }

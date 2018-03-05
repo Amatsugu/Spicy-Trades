@@ -14,12 +14,16 @@ public class ResourceGenerator : FeatureGenerator
 		var towns = map.GetTowns();
 		foreach(TownTile t in towns)
 		{
-			var candicadates = t.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt.tag == "Ground" select nt).Distinct().ToList();
-			var r = Random.Range(1, maxResources + 1);
-			for(int i = 0; i < r; i++)
+			if(t.tileType.GetType() != typeof(Village))
 			{
-				map.ReplaceTile(candicadates[i], resources[Random.Range(0, resources.Length)], false, true);
-				candicadates.Remove(candicadates[i]);
+				var candicadates = t.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt.tag == "Ground" select nt).Distinct().ToList();
+				var r = Random.Range(1, maxResources + 1);
+				for(int i = 0; i < r; i++)
+				{
+					map.ReplaceTile(candicadates[i], resources[Random.Range(0, resources.Length)], false, true);
+					candicadates.Remove(candicadates[i]);
+				}
+				t.Initialize();
 			}
 		}
 	}
