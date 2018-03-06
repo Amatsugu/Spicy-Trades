@@ -14,7 +14,7 @@ public class ResourceGenerator : FeatureGenerator
 		var towns = map.GetTowns();
 		foreach(TownTile t in towns)
 		{
-			if(t.tileType.GetType() != typeof(Village))
+			if(t.townType.GetType() == typeof(Town))
 			{
 				var candicadates = t.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt.tag == "Ground" select nt).Distinct().ToList();
 				var r = Random.Range(1, maxResources + 1);
@@ -23,7 +23,7 @@ public class ResourceGenerator : FeatureGenerator
 					map.ReplaceTile(candicadates[i], resources[Random.Range(0, resources.Length)], false, true);
 					candicadates.Remove(candicadates[i]);
 				}
-				t.Initialize();
+				
 			}
 		}
 	}

@@ -8,9 +8,4 @@ public class TownTile : SmartTile
 
 	public int Population { get; set; }
 
-	public TownTile Initialize()
-	{
-		return townType.Initialize(this);
-	}
-
 }
