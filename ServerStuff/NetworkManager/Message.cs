@@ -9,7 +9,7 @@ namespace NetworkManager
         private string message;
         private PID pid;
         private DateTime time;
-        public Message(string message, PlatformID pid,DateTime time)
+        public Message(string message, PID pid,DateTime time)
         {
             this.message = message;
             this.pid = pid;
