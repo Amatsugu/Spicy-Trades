@@ -14,6 +14,7 @@ public class TownGenerator : FeatureGenerator
 	public float minDistance = 5f;
 	public override void Generate(Map map)
 	{
+		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		Random.InitState(11);
 		var capitalCandidates = from Tile t in map where t.tag == "Ground" && t.GetNeighbors().Count(nt => nt != null && nt.tag == "Water") == 3 select t;
 		var capitalCandicateCenters = capitalCandidates.SelectMany(t => from Tile nt in t.GetNeighbors() where nt != null && nt.tag == "Ground" select nt);
@@ -24,7 +25,7 @@ public class TownGenerator : FeatureGenerator
 		int numTowns = Random.Range(minTowns, maxTowns);
 		int curCycles = 0;
 		Tile[] towns = new Tile[numTowns];
-		Debug.Log("Slecting " + numTowns + " towns...");
+		Debug.Log(GeneratorName + "Slecting " + numTowns + " towns...");
 		while(curCycles++ < maxGenerationCycles)
 		{
 			if (numTowns <= 0)
@@ -40,7 +41,7 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			towns[--numTowns] = map.ReplaceTile(townCandidate, TownTile).SetWeight(0);
 		}
-		Debug.Log("Finished in " + curCycles + " cycles");
+		Debug.Log(GeneratorName + "Finished in " + curCycles + " cycles");
 		List<Tile> open = new List<Tile>();
 		open.AddRange(towns);
 		List<Tile> closed = new List<Tile>

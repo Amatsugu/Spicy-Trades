@@ -14,3 +14,4 @@ MonoBehaviour:
   maxResources: 3
   resources:
   - {fileID: 1295639896062918, guid: 8befeb34aae345649913de7ccd51f1cc, type: 2}
+  basicFood: {fileID: 1295639896062918, guid: cbf2ec4381affc04a8a6e9c97587d934, type: 2}

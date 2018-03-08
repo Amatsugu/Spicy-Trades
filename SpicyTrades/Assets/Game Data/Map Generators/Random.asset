@@ -15,15 +15,15 @@ MonoBehaviour:
   tileMapper: {fileID: 11400000, guid: bb90c7fedf21a6446a79cc6acbeaad75, type: 2}
   OuterRadius: 0.576
   featureGenerators:
-  - {fileID: 11400000, guid: da67ae6e98e4f134598b77b2dee392b4, type: 2}
+  - {fileID: 0}
   - {fileID: 11400000, guid: 20c1a71c5036ca64ab9f24cd62486203, type: 2}
   - {fileID: 11400000, guid: de7c548e92e27ce479a7bbd86dedc918, type: 2}
   Regen: 0
   resolution: 493
-  frequency: 39.92
-  octaves: 2
+  frequency: 40.04
+  octaves: 3
   lacunarity: 1.59
-  persistence: 0
+  persistence: 0.311
   strength: 0.695
   damping: 0
   type: 1

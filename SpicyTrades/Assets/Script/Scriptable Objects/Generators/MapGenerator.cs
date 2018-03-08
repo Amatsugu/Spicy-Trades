@@ -47,7 +47,10 @@ public abstract class MapGenerator : ScriptableObject
 		foreach (var fg in featureGenerators)
 		{
 			if (fg != null)
+			{
+				Debug.Log("Running Feature Generator: " + fg.GetType().Name);
 				fg.Generate(map);
+			}
 		}
 	}
 

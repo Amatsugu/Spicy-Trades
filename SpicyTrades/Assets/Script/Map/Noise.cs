@@ -208,10 +208,10 @@ namespace LuminousVector
 			float v100 = Dot(g100, tx1, ty0, tz0);
 			float v010 = Dot(g010, tx0, ty1, tz0);
 			float v110 = Dot(g110, tx1, ty1, tz0);
-			float v001 = Dot(g000, tx0, ty0, tz1);
-			float v101 = Dot(g100, tx1, ty0, tz1);
-			float v011 = Dot(g010, tx0, ty1, tz1);
-			float v111 = Dot(g110, tx1, ty1, tz1);
+			float v001 = Dot(g001, tx0, ty0, tz1);
+			float v101 = Dot(g101, tx1, ty0, tz1);
+			float v011 = Dot(g011, tx0, ty1, tz1);
+			float v111 = Dot(g111, tx1, ty1, tz1);
 
 			float tx = Smooth(tx0);
 			float ty = Smooth(ty0);

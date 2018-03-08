@@ -5,7 +5,7 @@ using UnityEngine;
 public class Tile : MonoBehaviour
 {
 	public HexCoords Position { get; private set; }
-	public float Cost { get; set; }
+	public float Cost;
 	public Vector3 WolrdPos
 	{
 		get
