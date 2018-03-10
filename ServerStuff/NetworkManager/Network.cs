@@ -30,5 +30,15 @@ namespace NetworkManager
                 throw new Exception("Unable to connect to the server! Is the server running? " + ip +":"+port);
             }
         }
+        public static void OnDataRecieved(DataEventArgs e)
+        {
+            EventHandler<DataEventArgs> handler = DataRecieved;
+            handler(null,e);
+        }
+        public static event EventHandler<DataEventArgs> DataRecieved;
+    }
+    public class DataEventArgs: EventArgs
+    {
+        public string Response { get; set; }
     }
 }

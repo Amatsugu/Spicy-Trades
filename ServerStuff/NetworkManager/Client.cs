@@ -106,7 +106,9 @@ namespace NetworkManager
                     string test = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
                     state.sb.Append(test);
                     Console.WriteLine("We got a response: " + test);
-                    // Get the rest of the data.  
+                    DataEventArgs data = new DataEventArgs();
+                    data.Response = test;
+                    Network.OnDataRecieved(data);
                     client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                         new AsyncCallback(ReceiveCallback), state);
                 }
@@ -135,7 +137,7 @@ namespace NetworkManager
 
                 // Complete sending the data to the remote device.  
                 int bytesSent = client.EndSend(ar);
-                Console.WriteLine("Sent {0} bytes to server.", bytesSent);
+                //Console.WriteLine("Sent {0} bytes to server.", bytesSent);
 
                 // Signal that all bytes have been sent.  
                 sendDone.Set();

@@ -18,10 +18,15 @@ namespace NetworkManager
                 client = null;
                 Environment.Exit(1);
             }
-            client.Send(new byte[] {1,2,3,4,5,6,7,8,9,0,11,22,12,13,14,15,16});
+            Network.DataRecieved += OnDataRecieved;
+            client.Send("Hello Server!");
             Thread t = new Thread(new ThreadStart(ThreadProc));
-            // Receive the response from the remote device.  
+            // Receive the response from the remote device.
             t.Start();
+        }
+        static void OnDataRecieved(object sender, DataEventArgs e)
+        {
+            Console.WriteLine("Got response form the server {0}: ", e.Response);
         }
         public static void ThreadProc()
         {

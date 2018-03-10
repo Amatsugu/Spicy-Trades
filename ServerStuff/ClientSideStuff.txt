@@ -1,0 +1,93 @@
+//CLIENTSIDE:
+//-----------
+Server 	Network.Connect(int port,string ip)
+Client 	Client=Server.Login(string user,string pass)
+bool 	Client.HasUpdates() // Check for Updates
+bool 	Client.GetUpdates() // Does the Updates
+Resources[] Client.GetAllResources()
+Room[] 	Client.GetRooms() // Returns a room[] of rooms
+MapData Client.JoinRoom(Room room)
+void 	Client.SendChat(String message) // sends a chat to a global lobby
+void	Client.SendFriendRequest(UID userID)
+void	Client.RemoveFriend(UID userID)
+UID[]	Client.GetFriendList()
+UID[]	Client.GetFriendRequestList() // FIDs that can be added as a friend
+void	Client.AddFriend(UID userID,bool doit)		
+Room 	Client.CreateRoom(MapData mapdata) // only 1 room can be created at a time
+		Client.OnChat+=event(Message msg)
+		Client.OnFriendRequest+=event(UID userID)
+		
+bool	Room.IsHost()
+bool	Room.KickFromRoom(UID UserID)
+void	Room.InviteFriend(FID FriendID)
+void 	Room.SendChat(string message) // sends a message to a room
+void	Room.SetReady(bool ready)
+bool	Room.IsReady() // You can keep track of this yourself too
+void	Room.Leave()// be sure to remove the mapdata from the previous room join or overwrite that data
+		Room.GameStarted+=YourEventForThis
+		Room.OnChat+=event(Message msg)
+		Room.OnPlayerJoined+=event(UID UserID)
+		Room.OnPlayerLeave+=event(UID UserID)
+//The argument for this is a game object where you can sync game data...
+//Chatting is still done through the room
+Game.OnMapUpdate+=event
+//Raw Commands
+CMD			  CODE								CLIENT->SERVER
+--------------------------------------------------------------
+HELLO 		= 0x00 //Say Hi to the server		oprands()
+LOGIN 		= 0x01 //Send Login Details			oprands(user,pass)
+REGISTER	= 0x02 //Sends Register Data		oprands(user,pass,displayname,email)
+UPDATES 	= 0x03 //Checks for updates			oprands(CID)
+DOUPDATES 	= 0x04 //Does the updates			oprands(CID)
+LISTR		= 0x05 //Gets List of Rooms			oprands(CID)
+JROOM		= 0x06 //Joins a Room				oprands(CID,RID)
+CHAT		= 0x07 //Sends Chat					oprands(CID,CID or RID or null_ID) //This command is a bit bloated but it allows for global/room/private chatting
+REQUEST		= 0x08 //Sends a friend request		oprands(CID,UID)
+LISTF		= 0x09 //Returns a list of friends	oprands(CID)
+LISTRF		= 0x0A //List resquests for friends	oprands(CID)
+ADDF		= 0x0B //Accept/Deny F Request		oprands(CID,UID,0 or 1)
+FORMR		= 0x0C //Creates a Room				oprands(CID,MapData)
+IHOST		= 0x0D //Are you host?				oprands(CID)
+KICK		= 0x0E //Kicks a player from room	oprands(CID,RID,UID)
+INVITEF		= 0x0F //Invite friend to room		oprands(CID,RID,FID)
+READY		= 0x10 //Are you ready to play?		oprands(CID,0 or 1 or 2)//1-R 0-NR 2-GR
+LEAVER		= 0x11 //Leave the room				oprands(CID,RID)
+GRESORCE	= 0x12 //Gets a list of resources	oprands(CID)
+
+CMD			  CODE - (RESPONSE)					SERVER->CLIENT
+--------------------------------------------------------------
+HELLO 		= 0x00 //A hello from server		returns()
+LOGIN 		= 0x01 //Send Login Details			returns(ERR, CID or null)
+REGISTER	= 0x02 //Sends Register Data		returns(ERR)
+UPDATES 	= 0x03 //Checks for updates			returns(ERR)
+DOUPDATES 	= 0x04 //Does the updates			returns(ERR)
+LISTR		= 0x05 //Gets List of Rooms			returns(ERR,RID[]) //LEFT OFF HERE
+JROOM		= 0x06 //Joins a Room				returns(ERR,UID)
+CHAT		= 0x07 //Sends Chat					returns(ERR)
+REQUEST		= 0x08 //Sends a friend request		returns(ERR)
+LISTF		= 0x09 //Returns a list of friends	returns(ERR,FID[])
+LISTRF		= 0x0A //List resquests for friends	returns(ERR,FID[])
+ADDF		= 0x0B //Accept/Deny F Request		returns(ERR)
+FORMR		= 0x0C //Creates a Room				returns(ERR)
+IHOST		= 0x0D //Are you host?				returns(ERR,1 or 0)
+KICK		= 0x0E //Kicks a player from room	returns(ERR)
+INVITEF		= 0x0F //Invite friend to room		returns(ERR)
+READY		= 0x10 //Are you ready to play?		returns(ERR,UID)
+LEAVER		= 0x11 //Leave the room				returns(ERR,UID)
+GRESORCE	= 0x12 //Gets a list of resources	returns(ERR,Resource[]) //Database Query
+
+//Errors/Response Codes
+NO_ERROR			= 0x00
+UNKNOWN_ERROR		= 0x01
+INVALID_USERPASS	= 0x02
+INVALID_UID			= 0x03
+INVALID_FID			= 0x04
+INVALID_RID			= 0x05
+INVALID_EMAIL		= 0x06
+INVALID_CID			= 0x07
+CANT_FORM_ROOM		= 0x08
+CANT_SEND_CHAT		= 0x09
+CANNOT_KICK_PLAYER	= 0x0A
+NO_UPDATES			= 0x0B
+CANT_JOIN_ROOM		= 0x0C
+
