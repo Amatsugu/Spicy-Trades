@@ -22,11 +22,12 @@ namespace NetworkManager
             client.Send("Hello Server!");
             Thread t = new Thread(new ThreadStart(ThreadProc));
             // Receive the response from the remote device.
+            Console.WriteLine(Network.ERROR_CODES[0x01]);
             t.Start();
         }
         static void OnDataRecieved(object sender, DataEventArgs e)
         {
-            Console.WriteLine("Got response form the server {0}: ", e.Response);
+            Console.WriteLine("Got response form the server: {0}", e.Response);
         }
         public static void ThreadProc()
         {

@@ -105,7 +105,6 @@ namespace NetworkManager
                     // There might be more data, so store the data received so far. 
                     string test = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
                     state.sb.Append(test);
-                    Console.WriteLine("We got a response: " + test);
                     DataEventArgs data = new DataEventArgs();
                     data.Response = test;
                     Network.OnDataRecieved(data);
