@@ -9,48 +9,45 @@ namespace NetworkManager
 {
     static class Network
     {
-        //Error Codes
-        private static string[] _ERROR_CODES = new string[]{
-            "NO_ERROR",
-            "UNKNOWN_ERROR",
-            "INVALID_USERPASS",
-            "INVALID_UID",
-            "INVALID_FID",
-            "INVALID_RID",
-            "INVALID_EMAIL",
-            "INVALID_CID",
-            "CANT_FORM_ROOM",
-            "CANT_SEND_CHAT",
-            "CANNOT_KICK_PLAYER",
-            "NO_UPDATES",
-            "CANT_JOIN_ROOM",
-        };
+        //Data Types
+        public static byte PID       = 0x00;
+        public static byte ROOM      = 0x01;
+        public static byte MESSAGE   = 0x02;
         //Commands
-        private static string[] _COMMANDS = new string[]{
-            "HELLO",
-            "LOGIN",
-            "REGISTER",
-            "UPDATES",
-            "DOUPDATES",
-            "LISTR",
-            "JROOM",
-            "CHAT",
-            "REQUEST",
-            "LISTF",
-            "LISTRF",
-            "ADDF",
-            "FORMR",
-            "IHOST",
-            "KICK",
-            "INVITEF",
-            "READY",
-            "LEAVER",
-            "GRESORCE",
-        };
-
-        public static string[] ERROR_CODES { get => _ERROR_CODES; set => _ERROR_CODES = value; }
-        public static string[] COMMANDS { get => _COMMANDS; set => _COMMANDS = value; }
-
+        public static byte HELLO         = 0x00;
+        public static byte LOGIN         = 0x01;
+        public static byte REGISTER      = 0x02;
+        public static byte UPDATES       = 0x03;
+        public static byte DOUPDATES     = 0x04;
+        public static byte LISTR         = 0x05;
+        public static byte JROOM         = 0x06;
+        public static byte CHAT          = 0x07;
+        public static byte REQUEST       = 0x08;
+        public static byte LISTF         = 0x09;
+        public static byte LISTRF        = 0x0A;
+        public static byte ADDF          = 0x0B;
+        public static byte FORMR         = 0x0C;
+        public static byte IHOST         = 0x0D;
+        public static byte KICK          = 0x0E;
+        public static byte INVITEF       = 0x0F;
+        public static byte READY         = 0x10;
+        public static byte LEAVER        = 0x11;
+        public static byte GRESORCE      = 0x12;
+        //Error Codes
+        public static byte NO_ERROR              = 0x00;
+        public static byte UNKNOWN_ERROR         = 0x01;
+        public static byte INVALID_USERPASS      = 0x02;
+        public static byte INVALID_UID           = 0x03;
+        public static byte INVALID_FID           = 0x04;
+        public static byte INVALID_RID           = 0x05;
+        public static byte INVALID_EMAIL         = 0x06;
+        public static byte INVALID_CID           = 0x07;
+        public static byte CANT_FORM_ROOM        = 0x08;
+        public static byte CANT_SEND_CHAT        = 0x09;
+        public static byte CANNOT_KICK_PLAYER    = 0x0A;
+        public static byte NO_UPDATES            = 0x0B;
+        public static byte CANT_JOIN_ROOM        = 0x0C;
+        public static byte MESSAGE_TO_LARGE      = 0x0D;
         public static Client Connect(string ip, int port)
         {
             IPHostEntry ipHostInfo;
@@ -106,15 +103,24 @@ namespace NetworkManager
             EventHandler<DataEventArgs> handler = PlayerLeft;
             handler(null, e);
         }
+        public static void OnError(DataEventArgs e)
+        {
+            EventHandler<DataEventArgs> handler = Error;
+            handler(null, e);
+        }
         public static event EventHandler<DataEventArgs> DataRecieved;
         public static event EventHandler<DataEventArgs> Chat;
         public static event EventHandler<DataEventArgs> FriendRequest;
         public static event EventHandler<DataEventArgs> GameStarted;
         public static event EventHandler<DataEventArgs> PlayerJoined;
         public static event EventHandler<DataEventArgs> PlayerLeft;
+        public static event EventHandler<DataEventArgs> Error;
     }
     public class DataEventArgs : EventArgs
     {
         public string Response { get; set; }
+        public int errorcode { get; set; }
+        public byte[] RawResponse { get; set; }
+        public object ObjectRef { get; set; }
     }
 }

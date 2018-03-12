@@ -107,6 +107,7 @@ namespace NetworkManager
                     state.sb.Append(test);
                     DataEventArgs data = new DataEventArgs();
                     data.Response = test;
+                    data.RawResponse = state.buffer;
                     Network.OnDataRecieved(data);
                     client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                         new AsyncCallback(ReceiveCallback), state);

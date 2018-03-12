@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Text;
 namespace NetworkManager
 {
     class Program
@@ -19,15 +20,33 @@ namespace NetworkManager
                 Environment.Exit(1);
             }
             Network.DataRecieved += OnDataRecieved;
-            client.Send("Hello Server!");
+            //client.Send(new byte[] {0});
             Thread t = new Thread(new ThreadStart(ThreadProc));
             // Receive the response from the remote device.
-            Console.WriteLine(Network.ERROR_CODES[0x01]);
             t.Start();
+            //PID testPid = new PID("12345678", "epicknex", false);
+            //Message testMsg = new Message("Hello how are you doing?", testPid, DateTime.Now);
+            //byte[] test = testMsg.ToBytes();
+            //for(int i=0; i < test.Length; i++)
+            //{
+            //    Console.Write((char)test[i]);
+            //}
         }
         static void OnDataRecieved(object sender, DataEventArgs e)
         {
-            Console.WriteLine("Got response form the server: {0}", e.Response);
+            byte command = e.RawResponse[0];
+            byte error = e.RawResponse[1];
+            if (error != Network.NO_ERROR)
+            {
+                DataEventArgs data = new DataEventArgs();
+                data.errorcode = error;
+                Network.OnError(data);
+            }
+            if (command == Network.HELLO)
+            {
+                client.Send(new byte[] { 0 }); // Send Hello command to server
+            }
+            Console.WriteLine("Got Response from server: "+command+"  "+error);
         }
         public static void ThreadProc()
         {
