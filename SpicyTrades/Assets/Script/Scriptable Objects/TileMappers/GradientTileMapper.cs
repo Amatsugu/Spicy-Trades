@@ -8,8 +8,8 @@ public class GradientTileMapper : TileMapper
 {
 	public Gradient tileGradient = new Gradient();
 	public AnimationCurve moveCostCurve = new AnimationCurve();
-	public Transform[] Tiles;
-	public Dictionary<Color, Transform> tiles = new Dictionary<Color, Transform>();
+	public TileInfo[] Tiles;
+	public Dictionary<Color, TileInfo> tiles = new Dictionary<Color, TileInfo>();
 
 
 	public void OnEnable()
@@ -24,7 +24,7 @@ public class GradientTileMapper : TileMapper
 		}
 	}
 
-	public override Transform GetTile(float sample)
+	public override TileInfo GetTile(float sample)
 	{
 		return tiles[tileGradient.Evaluate(sample)];
 	}

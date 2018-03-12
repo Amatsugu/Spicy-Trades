@@ -20,7 +20,7 @@ public class Pathfinder {
 			closed.Add(n);
 			if (closed.Contains(B))
 				break;
-			if (stopAt != null && n.Tile.tag == stopAt)
+			if (stopAt != null && n.Tile.Tag == stopAt)
 				break;
 			foreach (Tile t in n.Tile.GetNeighbors())
 			{
@@ -71,7 +71,7 @@ public class PathNode
 
 	public float CalculateH(Tile b)
 	{
-		var d = (Tile.transform.position - b.transform.position);
+		var d = (Tile.WolrdPos - b.WolrdPos);
 		return Mathf.Abs(d.x) + Mathf.Abs(d.y);
 	}
 

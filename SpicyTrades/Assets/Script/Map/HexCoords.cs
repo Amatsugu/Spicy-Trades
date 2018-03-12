@@ -26,6 +26,22 @@ public struct HexCoords
 		return new HexCoords(x - y / 2, y);
 	}
 
+	public int OffsetX
+	{
+		get
+		{
+			return X + Y / 2;
+		}
+	}
+
+	public int OffsetY
+	{
+		get
+		{
+			return Y;
+		}
+	}
+
 	public static HexCoords FromPosition(Vector3 position)
 	{
 		float x = position.x / (MapRenderer.Instance.generator.InnerRadius * 2f);

@@ -5,9 +5,9 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tile Mapper/Basic")]
 public class BasicTileMapper : TileMapper
 {
-	public Transform Tile;
+	public TileInfo Tile;
 
-	public override Transform GetTile(float sample)
+	public override TileInfo GetTile(float sample)
 	{
 		return Tile;
 	}

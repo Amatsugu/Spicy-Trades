@@ -37,7 +37,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4954783902580176}
   - component: {fileID: 212652183615359448}
-  - component: {fileID: 114963464260798650}
   - component: {fileID: 60190124717019038}
   m_Layer: 0
   m_Name: Deep Water
@@ -160,19 +159,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114963464260798650
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1295639896062918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23d8be484d777bd48a1fd48c367ed732, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cost: 10000000
-  tileRenderers: []
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

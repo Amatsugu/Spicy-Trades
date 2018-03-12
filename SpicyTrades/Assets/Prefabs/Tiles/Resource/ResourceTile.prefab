@@ -38,7 +38,6 @@ GameObject:
   - component: {fileID: 4954783902580176}
   - component: {fileID: 212652183615359448}
   - component: {fileID: 60190124717019038}
-  - component: {fileID: 114234002950435100}
   m_Layer: 0
   m_Name: ResourceTile
   m_TagString: Resource
@@ -160,20 +159,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114234002950435100
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1295639896062918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3446faa9bc8ddff489d34d7ab10e447d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cost: 0
-  tileRenderers: []
-  resourceType: {fileID: 0}
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

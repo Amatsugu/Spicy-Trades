@@ -33,10 +33,12 @@ public abstract class MapGenerator : ScriptableObject
 		return CreateTile(tileMapper.GetTile(0), x, y, parent);
 	}
 
-	public Tile CreateTile(Transform t, int x, int y, Transform parent)
+	public Tile CreateTile(TileInfo tileInfo , int x, int y, Transform parent)
 	{
-		var g = Instantiate(t, GetPosition(x, y), Quaternion.identity, parent);
-		return g.GetComponent<Tile>().SetPos(x, y);
+		var tile = new Tile(tileInfo, parent, HexCoords.FromOffsetCoords(x,y), OuterRadius);
+		return tile;
+		//var g = Instantiate(t, GetPosition(x, y), Quaternion.identity, parent);
+		//return g.GetComponent<Tile>().SetPos(x, y);
 	}
 
 	public void GenerateFeatures(Map map)

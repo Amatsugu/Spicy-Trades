@@ -38,7 +38,6 @@ GameObject:
   - component: {fileID: 4954783902580176}
   - component: {fileID: 212652183615359448}
   - component: {fileID: 60190124717019038}
-  - component: {fileID: 114699452600015926}
   m_Layer: 0
   m_Name: RoadTile
   m_TagString: Road
@@ -160,23 +159,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114699452600015926
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1295639896062918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a65acdbbb85d8f4d9796e5952f06d02, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cost: 0
-  tileRenderers: []
-  tileType: {fileID: 11400000, guid: d4fedb79947b16f46a359448dcada6e6, type: 2}
-  connectTo:
-  - Town
-  - Capital
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

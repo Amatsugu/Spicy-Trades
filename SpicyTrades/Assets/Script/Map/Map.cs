@@ -104,16 +104,18 @@ public class Map : IEnumerable<Tile>
 		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
 	}
 
-	public TownTile MakeTown(Tile tile, GameObject town)
+	public TownTile MakeTown(Tile tile, TownTileInfo town)
 	{
-		var t = ReplaceTile(tile, town) as TownTile;
+		var t = new TownTile(town, tile.parent, tile.Position, tile.outerRadius);
+		this[tile.Position.ToIndex()] = t;
 		Towns.Add(t);
 		return t;
 	}
 
-	public TownTile MakeCapital(Tile tile, GameObject capital)
+	public TownTile MakeCapital(Tile tile, TownTileInfo capital)
 	{
-		Capital = ReplaceTile(tile, capital) as TownTile;
+		tile.Destroy();
+		this[tile.Position.ToIndex()] = Capital = new TownTile(capital, tile.parent, tile.Position, tile.outerRadius);
 		foreach (Tile t in tile.GetNeighbors())
 			ReplaceTile(t, capital);
 		return Capital;
@@ -127,20 +129,44 @@ public class Map : IEnumerable<Tile>
 		return player;
 	}
 
-	public Tile ReplaceTile(Tile oldTile, GameObject newTile, bool preserveColor = false, bool preserveCost = false)
+	public void Destroy()
+	{
+		foreach(Tile t in this)
+			t.Destroy();
+		foreach (var player in Players)
+			UnityEngine.Object.Destroy(player.gameObject);
+	}
+
+	public Tile ReplaceTile(Tile oldTile, TileInfo newTile, bool preserveColor = false, bool preserveCost = false)
 	{
 		var pos = oldTile.Position;
-		var wPos = oldTile.transform.position;
-		var wRot = oldTile.transform.rotation;
+		var wPos = oldTile.WolrdPos;
+		//var wRot = oldTile.transform.rotation;
 		var cost = oldTile.Cost;
-		var col = oldTile.GetColor();
-		GameObject.Destroy(oldTile.gameObject);
-		var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
-		if(preserveColor)
-			g.GetComponent<SpriteRenderer>().color = col;
-		var t = this[pos.ToIndex()] = g.GetComponent<Tile>().SetPos(pos);
+		var col = oldTile.tileInfo.color;
+		oldTile.Destroy();
+		Tile nTile;
+		switch(newTile.tileType)
+		{
+			case TileType.Tile:
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
+				break;
+			case TileType.Resource:
+				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+				break;
+			case TileType.Town:
+				nTile = new TownTile(newTile as TownTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+				break;
+			default:
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
+				break;
+		}
+		//var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
+		if (preserveColor)
+			nTile.SetColor(col, true);
+		this[pos.ToIndex()] = nTile;
 		if (preserveCost)
-			t.SetWeight(cost);
-		return t;
+			nTile.SetWeight(cost);
+		return nTile;
 	}
 }

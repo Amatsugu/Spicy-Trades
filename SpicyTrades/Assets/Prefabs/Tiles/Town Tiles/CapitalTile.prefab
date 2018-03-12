@@ -38,7 +38,6 @@ GameObject:
   - component: {fileID: 4954783902580176}
   - component: {fileID: 212652183615359448}
   - component: {fileID: 60190124717019038}
-  - component: {fileID: 114048284113182902}
   m_Layer: 0
   m_Name: CapitalTile
   m_TagString: Capital
@@ -160,23 +159,6 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114048284113182902
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1295639896062918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f4bb5d715be6c44999223b1f88af75, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Cost: 0
-  tileRenderers: []
-  tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
-  connectTo:
-  - Capital
-  townType: {fileID: 11400000, guid: 82429e7a0d849ad488b66f9138a7aac2, type: 2}
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

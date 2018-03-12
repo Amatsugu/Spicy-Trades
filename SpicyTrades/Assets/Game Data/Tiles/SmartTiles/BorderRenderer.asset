@@ -8,11 +8,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49e2861c1d1a9dc4a8f9c8e2acbc98c1, type: 3}
-  m_Name: Test
+  m_Script: {fileID: 11500000, guid: 95dead3b074e55b458d4b8dc388e75bd, type: 3}
+  m_Name: BorderRenderer
   m_EditorClassIdentifier: 
-  ResourceName: Test
-  category: 0
-  sprite: {fileID: 0}
-  requiredWorkers: 2
-  yeild: 1
+  tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
+  connectTo:
+  - Capital

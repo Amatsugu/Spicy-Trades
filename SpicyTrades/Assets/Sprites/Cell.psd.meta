@@ -100,7 +100,15 @@ TextureImporter:
     serializedVersion: 2
     sprites: []
     outline: []
-    physicsShape: []
+    physicsShape:
+    - - {x: -4, y: 256}
+      - {x: -256, y: 130}
+      - {x: -256, y: -130}
+      - {x: -10, y: -256}
+      - {x: 4, y: -256}
+      - {x: 256, y: -132}
+      - {x: 256, y: 130}
+      - {x: 4, y: 256}
   spritePackingTag: 
   userData: 
   assetBundleName: 

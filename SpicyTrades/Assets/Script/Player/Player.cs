@@ -9,9 +9,11 @@ public class Player : MonoBehaviour
 	public bool isMoving = false;
 
 	private TownTile _curTile;
+	private SpriteRenderer _sprite;
 
 	private void Start()
 	{
+		_sprite = GetComponent<SpriteRenderer>();
 	}
 
 	public void SetTile(TownTile tile)
@@ -30,12 +32,16 @@ public class Player : MonoBehaviour
 
 	IEnumerator MoveAnimation(Tile[] path)
 	{
-		for (int i = 0; i < path.Length; i++)
+		for (int i = 1; i < path.Length; i++)
 		{
 			float time = 0;
-			while(time <= 1)
+			while(time < 1)
 			{
-				transform.position = Vector3.Lerp(transform.position, path[i].WolrdPos, time += Time.deltaTime * moveSpeed);
+				transform.position = Vector3.Lerp(path[i-1].WolrdPos, path[i].WolrdPos, time += Time.deltaTime * moveSpeed);
+				if (path[i - 1].WolrdPos.x > path[i].WolrdPos.x)
+					_sprite.flipX = true;
+				else
+					_sprite.flipX = false;
 				yield return new WaitForEndOfFrame();
 			}
 		}

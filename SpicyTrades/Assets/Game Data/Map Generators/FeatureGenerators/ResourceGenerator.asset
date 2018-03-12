@@ -15,6 +15,6 @@ MonoBehaviour:
   resourceTile: {fileID: 1295639896062918, guid: 8befeb34aae345649913de7ccd51f1cc,
     type: 2}
   resources:
-  - {fileID: 11400000, guid: 543cf206fddf7944e979f73c669b27d8, type: 2}
-  - {fileID: 11400000, guid: ba05b3cee77caef46a6c3256c9de481a, type: 2}
-  basicFood: {fileID: 11400000, guid: ba05b3cee77caef46a6c3256c9de481a, type: 2}
+  - {fileID: 11400000, guid: abf58effb97c4b144b14968b73ed263d, type: 2}
+  - {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
+  basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}

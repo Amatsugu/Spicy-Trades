@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class ResourceTile : Tile
 {
-	public ResourceType resourceType;
-
-	public override void TileInit()
+	public ResourceTile(ResourceTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
-		base.TileInit();
-		tileRenderers.Add(resourceType.TileRenderer);
 	}
 }

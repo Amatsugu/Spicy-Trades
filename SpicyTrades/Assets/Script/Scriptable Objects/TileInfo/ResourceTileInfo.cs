@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ResourceType/Basic")]
-public class ResourceType : ScriptableObject
+[CreateAssetMenu(menuName = "Tile/Resource")]
+public class ResourceTileInfo : TileInfo
 {
+	public new readonly TileType tileType = TileType.Resource;
 	public string ResourceName;
 	public ResourceCategory category;
-	public TileRenderer TileRenderer; 
 	public int requiredWorkers;
 	public float yeild;
 

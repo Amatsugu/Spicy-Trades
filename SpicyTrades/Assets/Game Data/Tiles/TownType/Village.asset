@@ -8,8 +8,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 66a750970531d064a95161d5302cc17e, type: 3}
+  m_Script: {fileID: 11500000, guid: db7459a6143e68942a4d3c75d23328bc, type: 3}
   m_Name: Village
   m_EditorClassIdentifier: 
-  MinPopulation: 50
-  MaxPopulation: 100
+  tag: Village
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
+  tileRenderers:
+  - {fileID: 11400000, guid: b51258155599c384b9f725e8394e72eb, type: 2}
+  townType: 1

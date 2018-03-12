@@ -156,7 +156,8 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 114963464260798650, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   m_IsPrefabParent: 0
 --- !u!1 &940113685
@@ -363,7 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minAngle: -45
   maxAngle: 0
-  sensitivity: 2
+  sensitivity: 5
   minZoom: 3
   maxZoom: 30
   scrollSpeed: 1

@@ -1,77 +1,138 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile
 {
 	public HexCoords Position { get; private set; }
-	public float Cost;
-	public List<TileRenderer> tileRenderers = new List<TileRenderer>();
-	public Vector3 WolrdPos
+	public float Cost { get; private set; }
+	public Vector3 WolrdPos { get; private set; }
+	public GameObject ThisGameObject { get; private set; }
+
+	internal void Hover()
+	{
+		_sprite.color = _hCol;
+	}
+
+	internal void Blur()
+	{
+		_sprite.color = _curCol;
+	}
+
+	public Transform ThisTransform { get; private set; }
+	public string Tag
 	{
 		get
 		{
-			return transform.position;
+			return tileInfo.tag;
 		}
 	}
+	public TileInfo tileInfo;
 
-	private TextMesh _pText;
+	internal Transform parent;
+	internal float outerRadius;
+
+
+
+	private Dictionary<string, object> _renderData;
 	protected SpriteRenderer _sprite;
 	private Color _sCol;
 	private Color _hCol;
 	private Color _curCol;
-
+	private bool _colorOveride;
 	// Use this for initialization
-	void Start()
+
+	/*public Tile(GameObject tilePrefab, Transform parent, int x, int y, float outerRadius)
 	{
-		_pText = GetComponentInChildren<TextMesh>();
-		_sprite = GetComponent<SpriteRenderer>();
-		_curCol = _sCol = _sprite.color;
-		_hCol = Color.white;
+		this.tilePrefab = tilePrefab;
+		this.parent = parent;
+		WolrdPos = GetPosition(x, y);
+		Position = HexCoords.FromOffsetCoords(x, y);
+	}*/
+
+	public Tile(TileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius)
+	{
+		this.tileInfo = tileInfo;
+		this.parent = parent;
+		this.outerRadius = outerRadius;
+		Cost = tileInfo.cost;
+		WolrdPos = GetPosition(hexCoords.OffsetX, hexCoords.OffsetY);
+		Position = hexCoords;
 	}
 
-	public virtual void TileInit()
+	private float _innerRadius
 	{
-
+		get
+		{
+			return outerRadius * Mathf.Sqrt(3) / 2;
+		}
+	}
+	private Vector3 GetPosition(int x, int y)
+	{
+		return new Vector3
+		{
+			y = y * (_innerRadius * 1.5f),
+			x = (x + y * .5f - y / 2) * (_innerRadius * 2f),
+		};
 	}
 
 	public virtual void TileRender()
 	{
-		if (tileRenderers == null)
+		ThisGameObject = new GameObject(tileInfo.GetType().ToString())
+		{
+			tag = Tag
+		};
+		ThisTransform = ThisGameObject.transform;
+		ThisTransform.position = WolrdPos;
+		ThisTransform.parent = parent;
+		_sprite = ThisGameObject.AddComponent<SpriteRenderer>();
+		_sprite.sprite = tileInfo.sprite;
+		var collider = ThisGameObject.AddComponent<PolygonCollider2D>();
+		var points = new List<Vector2>();
+		tileInfo.sprite.GetPhysicsShape(0, points);
+		collider.SetPath(0, points.ToArray());
+		ThisGameObject.AddComponent<TileToucher>().target = this;
+		if(!_colorOveride)
+			_sprite.color = _curCol = _sCol = tileInfo.color;
+		else
+			_sprite.color = _curCol = _sCol;
+		_hCol = Color.white;
+		if (tileInfo.tileRenderers == null)
 			return;
-		foreach (var tr in tileRenderers)
+		_renderData = new Dictionary<string, object>();
+		foreach (var tr in tileInfo.tileRenderers)
 			if (tr == null)
 				continue;
 			else
+			{
+				_renderData.Add(tr.name, null);
 				tr.RenderInit(this);
+			}
+	}
+
+	public virtual void PostRender()
+	{
+		if (tileInfo.tileRenderers == null)
+			return;
+		foreach (var tr in tileInfo.tileRenderers)
+			if (tr == null)
+				continue;
+			else
+				tr.PostRender(this, _renderData[tr.name]);
+	}
+
+	public void SetRenderData(string name, object data)
+	{
+		_renderData[name] = data;
 	}
 
 	public void RenderReset()
 	{
-		for (int i = 0; i < transform.childCount; i++)
+		for (int i = 0; i < ThisTransform.childCount; i++)
 		{
-			Destroy(transform.GetChild(i).gameObject);
+			UnityEngine.Object.Destroy(ThisTransform.GetChild(i).gameObject);
 		}
-	}
-
-
-	public Tile SetPos(int x, int y)
-	{
-		return SetPos(HexCoords.FromOffsetCoords(x, y));
-	}
-
-	public Tile SetPos(HexCoords coords)
-	{
-		Position = coords;
-		if (_pText == null)
-			Start();
-		return this;
-	}
-
-	public Tile SetText(string text)
-	{
-		_pText.text = text;
-		return this;
 	}
 
 	public Tile SetWeight(float cost)
@@ -86,36 +147,23 @@ public class Tile : MonoBehaviour
 		return _sCol;
 	}
 
-	private void OnMouseUp()
-	{
-		MapRenderer.TouchTile(this);
-	}
 
-	private void OnMouseEnter()
+	public Tile SetColor(Color color, bool permanent = false)
 	{
-		_sprite.color = _hCol;
-	}
-
-	private void OnMouseExit()
-	{
-		_sprite.color = _curCol;
-	}
-
-	public Tile SetColor(Color color)
-	{
-		_sprite.color = _curCol = color;
+		if (_sprite != null)
+			_sprite.color = color;
+		_curCol = color;
+		if (permanent)
+		{
+			_sCol = color;
+			_colorOveride = true;
+		}
 		return this;
 	}
 
 	public Tile ResetColor()
 	{
 		_sprite.color = _curCol = _sCol;
-		return this;
-	}
-
-	public Tile ResetText()
-	{
-		_pText.text = "";
 		return this;
 	}
 
@@ -149,6 +197,11 @@ public class Tile : MonoBehaviour
 		tiles[4] = MapRenderer.GetTile(x + 1, y - 1, z); //Bottom Right
 		tiles[5] = MapRenderer.GetTile(x, y - 1, z + 1); //Bottom Left
 		return tiles;
+	}
+
+	public void Destroy()
+	{
+		UnityEngine.Object.Destroy(ThisGameObject);
 	}
 
 	// override object.Equals

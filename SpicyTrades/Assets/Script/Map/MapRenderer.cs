@@ -19,8 +19,8 @@ public class MapRenderer : MonoBehaviour
 		generator.GenerateFeatures(map);
 		foreach (Tile t in map)
 		{
-			t.TileInit();
 			t.TileRender();
+			t.PostRender();
 		}
 		Debug.Log("Generation Time: " + (System.DateTime.Now - startTime).TotalMilliseconds + "ms");
     }
@@ -31,10 +31,7 @@ public class MapRenderer : MonoBehaviour
 		if (!generator.Regen)
 			return;
 		generator.Regen = false;
-		for (int i = 0; i < transform.childCount; i++)
-		{
-			Destroy(transform.GetChild(i).gameObject);
-		}
+		map.Destroy();
 		Start();
     }
 
@@ -53,7 +50,7 @@ public class MapRenderer : MonoBehaviour
 		var n = tile.GetNeighbors();
 		foreach (Tile t in n)
 			if (t != null)
-				Debug.DrawLine(tile.transform.position, t.transform.position, Color.white, 3);
+				Debug.DrawLine(tile.WolrdPos, t.WolrdPos, Color.white, 3);
 #endif
 	}
 }

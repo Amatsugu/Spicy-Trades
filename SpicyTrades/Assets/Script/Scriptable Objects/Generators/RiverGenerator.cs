@@ -8,8 +8,6 @@ public class RiverGenerators : FeatureGenerator
 {
 	public override void Generate(Map map)
 	{
-		return;
-		var mountains = from Tile t in map where t.tag == "Mountain" select t;
-
+		
 	}
 }
