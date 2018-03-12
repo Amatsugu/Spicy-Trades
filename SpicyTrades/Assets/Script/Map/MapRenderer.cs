@@ -45,6 +45,10 @@ public class MapRenderer : MonoBehaviour
 
 	public static void TouchTile(Tile tile)
 	{
+		if(tile.GetType() == typeof(TownTile))
+		{
+			Instance.map.CurrentPlayer.MoveTo(tile as TownTile); 
+		}
 #if DEBUG
 		var n = tile.GetNeighbors();
 		foreach (Tile t in n)

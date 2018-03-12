@@ -17,6 +17,7 @@ MonoBehaviour:
   featureGenerators:
   - {fileID: 11400000, guid: 20c1a71c5036ca64ab9f24cd62486203, type: 2}
   - {fileID: 11400000, guid: de7c548e92e27ce479a7bbd86dedc918, type: 2}
+  - {fileID: 11400000, guid: f02fc7ac3bf25ce40b6e330bc3c6b264, type: 2}
   Regen: 0
   resolution: 493
   frequency: 43.3
@@ -27,7 +28,7 @@ MonoBehaviour:
   damping: 0
   type: 1
   demensions: 3
-  position: {x: 87, y: -40, z: -89}
-  rotation: {x: -56, y: 79, z: -96}
-  useSeed: 0
-  seed: -889665250
+  position: {x: 71, y: -34, z: 39}
+  rotation: {x: -99, y: -23, z: -25}
+  useSeed: 1
+  seed: -889672637

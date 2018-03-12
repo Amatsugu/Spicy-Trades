@@ -4,14 +4,14 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Capital
+  - Resource
+  - Road
+  - Town
+  - Village
   - Ground
   - Water
   - Mountain
-  - Road
-  - Town
-  - Capital
-  - Resource
-  - Village
   layers:
   - Default
   - TransparentFX
@@ -48,4 +48,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Player
+    uniqueID: 4197086985
     locked: 0

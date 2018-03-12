@@ -21,4 +21,4 @@ MonoBehaviour:
   maxTowns: 15
   minTowns: 5
   minDistance: 5
-  pathMethod: 3
+  pathMethod: 2

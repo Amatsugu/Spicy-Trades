@@ -34,9 +34,7 @@ public class TownGenerator : FeatureGenerator
 		var ccA = centerCandidates.ToArray();
 		var capital = ccA[Random.Range(0, ccA.Length)];
 		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
-		capital = map.ReplaceTile(capital, CapitalTile);
-		foreach (Tile t in capital.GetNeighbors())
-			map.ReplaceTile(t, CapitalTile);
+		capital = map.MakeCapital(capital, CapitalTile);
 		int numTowns = Random.Range(minTowns, maxTowns);
 		int curCycles = 0;
 		Tile[] towns = new Tile[numTowns];
@@ -54,7 +52,7 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (towns.Any(t => t != null && t.DistanceTo(townCandidate) < minDistance))
 				continue;
-			towns[--numTowns] = map.ReplaceTile(townCandidate, TownTile).SetWeight(0);
+			towns[--numTowns] = map.MakeTown(townCandidate, TownTile).SetWeight(0);
 		}
 		Debug.Log(GeneratorName + "Finished in " + curCycles + " cycles");
 		List<Tile> open = new List<Tile>();

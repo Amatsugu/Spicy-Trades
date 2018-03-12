@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f4bb5d715be6c44999223b1f88af75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cost: 0
+  tileRenderers: []
   tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
   connectTo: []
   townType: {fileID: 11400000, guid: 6c1be2c4edb753f4982e32627f41a449, type: 2}
@@ -188,7 +190,7 @@ SpriteRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 1880fc35c2d160341b404207f93e3415, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

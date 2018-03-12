@@ -10,6 +10,10 @@ using UnityEngine;
 public class Map : IEnumerable<Tile>
 {
 	public Tile[] Tiles { get; private set; }
+	public List<TownTile> Towns { get; private set; }
+	public TownTile Capital { get; private set; }
+	public List<Player> Players { get; private set; }
+	public Player CurrentPlayer { get; private set; }
 	public int Height { get; private set; }
 	public int Width { get; private set; }
 	public int Length { get
@@ -35,6 +39,8 @@ public class Map : IEnumerable<Tile>
 		Height = height;
 		Width = width;
 		Tiles = new Tile[height * width];
+		Towns = new List<TownTile>();
+		Players = new List<Player>();
 	}
 
 	public Tile this[int i]
@@ -100,8 +106,25 @@ public class Map : IEnumerable<Tile>
 
 	public TownTile MakeTown(Tile tile, GameObject town)
 	{
+		var t = ReplaceTile(tile, town) as TownTile;
+		Towns.Add(t);
+		return t;
+	}
 
-		return ReplaceTile(tile, town) as TownTile;
+	public TownTile MakeCapital(Tile tile, GameObject capital)
+	{
+		Capital = ReplaceTile(tile, capital) as TownTile;
+		foreach (Tile t in tile.GetNeighbors())
+			ReplaceTile(t, capital);
+		return Capital;
+	}
+
+	public Player AddPlayer(Player player, bool currentPlayer = false)
+	{
+		if (currentPlayer)
+			CurrentPlayer = player;
+		Players.Add(player);
+		return player;
 	}
 
 	public Tile ReplaceTile(Tile oldTile, GameObject newTile, bool preserveColor = false, bool preserveCost = false)
