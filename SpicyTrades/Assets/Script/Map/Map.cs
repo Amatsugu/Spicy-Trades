@@ -18,6 +18,8 @@ public class Map : IEnumerable<Tile>
 		}
 	}
 
+	public readonly int Seed;
+
 	public int TileCount
 	{
 		get
@@ -26,8 +28,10 @@ public class Map : IEnumerable<Tile>
 		}
 	}
 
-	public Map(int height, int width)
+	public Map(int height, int width, int seed = 0)
 	{
+		Debug.Log(seed);
+		UnityEngine.Random.InitState(seed);
 		Height = height;
 		Width = width;
 		Tiles = new Tile[height * width];
@@ -74,7 +78,7 @@ public class Map : IEnumerable<Tile>
 		return from Tile t in Tiles where t.GetType() == typeof(TownTile) select t as TownTile;
 	}
 
-	public string ToJSON()
+	public string ToJSON() //TODO: Implement Proper Serialization
 	{
 		return JsonUtility.ToJson(this);
 	}

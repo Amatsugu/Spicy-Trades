@@ -9,7 +9,6 @@ public class ResourceTile : Tile
 	public override void TileInit()
 	{
 		base.TileInit();
-		Debug.Log("super");
 		tileRenderers.Add(resourceType.TileRenderer);
 	}
 }

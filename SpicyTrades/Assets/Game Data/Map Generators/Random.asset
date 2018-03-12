@@ -19,14 +19,15 @@ MonoBehaviour:
   - {fileID: 11400000, guid: de7c548e92e27ce479a7bbd86dedc918, type: 2}
   Regen: 0
   resolution: 493
-  frequency: 40.04
-  octaves: 6
-  lacunarity: 2.41
-  persistence: 0.311
-  strength: 0.695
+  frequency: 43.3
+  octaves: 8
+  lacunarity: 1.31
+  persistence: 0.246
+  strength: 0.643
   damping: 0
   type: 1
   demensions: 3
-  position: {x: 3.33, y: 0.1, z: 0}
-  rotation: {x: 0, y: 0, z: 0}
-  coloredStrength: 1
+  position: {x: 87, y: -40, z: -89}
+  rotation: {x: -56, y: 79, z: -96}
+  useSeed: 0
+  seed: -889665250

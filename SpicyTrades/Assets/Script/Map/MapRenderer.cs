@@ -13,14 +13,16 @@ public class MapRenderer : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+		var startTime = System.DateTime.Now;
 		Instance = this;
-		generator.GenerateMap(map = new Map((int)generator.Size.y,  (int)generator.Size.x), transform);
+		map = generator.GenerateMap(transform);
 		generator.GenerateFeatures(map);
 		foreach (Tile t in map)
 		{
 			t.TileInit();
 			t.TileRender();
 		}
+		Debug.Log("Generation Time: " + (System.DateTime.Now - startTime).TotalMilliseconds + "ms");
     }
 
     // Update is called once per frame

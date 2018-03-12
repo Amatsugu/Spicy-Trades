@@ -21,8 +21,12 @@ public class RandomGenerator : MapGenerator {
 	public NoiseMethodType type;
 	[Range(1, 3)]
 	public int demensions = 3;
+	[HideInInspector]
 	public Vector3 position;
+	[HideInInspector]
 	public Vector3 rotation;
+	public bool useSeed;
+	public int seed = 11;
 
 
 	private float _stepSize
@@ -42,6 +46,7 @@ public class RandomGenerator : MapGenerator {
 	}
 	public override Tile Generate(int x, int y, Transform parent = null)
 	{
+		//rotation = new Vector3(Random.value, Random.value, Random.value);
 		var q = Quaternion.Euler(rotation);
 		Vector3 p00 = q * (new Vector3(-.5f, -.5f) + position);
 		Vector3 p10 = q * (new Vector3(.5f, -.5f) + position);
@@ -57,4 +62,25 @@ public class RandomGenerator : MapGenerator {
 		sample *= amplitude;
 		return CreateTile(tileMapper.GetTile(sample), x, y, parent);//.SetWeight(tileMapper.GetMoveCost(sample));
 	}
+
+	public override Map GenerateMap(Transform parent = null)
+	{
+		if(!useSeed)
+		{
+			seed = (int)(new System.DateTime(1990, 1, 1) - System.DateTime.Now).TotalSeconds; 
+		}
+		Debug.Log(seed);
+		Map map = new Map((int)Size.y, (int)Size.x, seed);
+		position = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
+		rotation = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
+		for (int y = 0, i = 0; y < map.Height; y++)
+		{
+			for (int x = 0; x < map.Width; x++)
+			{
+				map[i++] = Generate(x, y, parent);
+			}
+		}
+		return map;
+	}
+
 }

@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23d8be484d777bd48a1fd48c367ed732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cost: 100000
+  Cost: 10000000
   tileRenderers: []
 --- !u!212 &212652183615359448
 SpriteRenderer:

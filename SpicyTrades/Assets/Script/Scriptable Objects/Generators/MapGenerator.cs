@@ -53,8 +53,9 @@ public abstract class MapGenerator : ScriptableObject
 		}
 	}
 
-	public void GenerateMap(Map map, Transform parent = null)
+	public virtual Map GenerateMap(Transform parent = null)
 	{
+		Map map = new Map((int)Size.y, (int)Size.x);
 		for (int y = 0, i = 0; y < map.Height; y++)
 		{
 			for (int x = 0; x < map.Width; x++)
@@ -62,5 +63,6 @@ public abstract class MapGenerator : ScriptableObject
 				map[i++] = Generate(x, y, parent);
 			}
 		}
+		return map;
 	}
 }
