@@ -11,7 +11,6 @@ public class GradientTileMapper : TileMapper
 	public Transform[] Tiles;
 	public Dictionary<Color, Transform> tiles = new Dictionary<Color, Transform>();
 
-	public bool colorize;
 
 	public void OnEnable()
 	{
@@ -28,11 +27,6 @@ public class GradientTileMapper : TileMapper
 	public override Transform GetTile(float sample)
 	{
 		return tiles[tileGradient.Evaluate(sample)];
-	}
-
-	public override Color GetColor(float sample)
-	{
-		return colorize ? tileGradient.Evaluate(sample) : Color.white;
 	}
 
 	public override float GetMoveCost(float sample)

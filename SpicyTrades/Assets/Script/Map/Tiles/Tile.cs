@@ -6,6 +6,7 @@ public class Tile : MonoBehaviour
 {
 	public HexCoords Position { get; private set; }
 	public float Cost;
+	public List<TileRenderer> tileRenderers = new List<TileRenderer>();
 	public Vector3 WolrdPos
 	{
 		get
@@ -27,8 +28,32 @@ public class Tile : MonoBehaviour
 		_sprite = GetComponent<SpriteRenderer>();
 		_curCol = _sCol = _sprite.color;
 		_hCol = Color.white;
-		//_sprite.receiveShadows = true;
 	}
+
+	public virtual void TileInit()
+	{
+
+	}
+
+	public virtual void TileRender()
+	{
+		if (tileRenderers == null)
+			return;
+		foreach (var tr in tileRenderers)
+			if (tr == null)
+				continue;
+			else
+				tr.RenderInit(this);
+	}
+
+	public void RenderReset()
+	{
+		for (int i = 0; i < transform.childCount; i++)
+		{
+			Destroy(transform.GetChild(i).gameObject);
+		}
+	}
+
 
 	public Tile SetPos(int x, int y)
 	{

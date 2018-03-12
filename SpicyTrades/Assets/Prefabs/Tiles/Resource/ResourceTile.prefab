@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114234002950435100}
   m_Layer: 0
   m_Name: ResourceTile
-  m_TagString: Water
+  m_TagString: Resource
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cost: 0
-  resourceType: {fileID: 11400000, guid: 543cf206fddf7944e979f73c669b27d8, type: 2}
+  resourceType: {fileID: 0}
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1

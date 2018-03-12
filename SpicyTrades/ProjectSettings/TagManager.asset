@@ -10,6 +10,8 @@ TagManager:
   - Road
   - Town
   - Capital
+  - Resource
+  - Village
   layers:
   - Default
   - TransparentFX

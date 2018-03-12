@@ -16,6 +16,11 @@ public class MapRenderer : MonoBehaviour
 		Instance = this;
 		generator.GenerateMap(map = new Map((int)generator.Size.y,  (int)generator.Size.x), transform);
 		generator.GenerateFeatures(map);
+		foreach (Tile t in map)
+		{
+			t.TileInit();
+			t.TileRender();
+		}
     }
 
     // Update is called once per frame

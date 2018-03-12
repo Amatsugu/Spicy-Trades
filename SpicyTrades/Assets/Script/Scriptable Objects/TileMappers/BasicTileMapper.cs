@@ -12,11 +12,6 @@ public class BasicTileMapper : TileMapper
 		return Tile;
 	}
 
-	public override Color GetColor(float sample)
-	{
-		return Random.ColorHSV();
-	}
-
 	public override float GetMoveCost(float sample)
 	{
 		return 1f;

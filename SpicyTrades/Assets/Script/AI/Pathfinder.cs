@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Pathfinder {
 
-	public static Tile[] FindPath(Tile a, Tile b)
+	public static Tile[] FindPath(Tile a, Tile b, string stopAt = null)
 	{
 		//Debug.Log("A: " + a.position.ToString() + " B: " + b.position.ToString());
 		List<PathNode> open = new List<PathNode>
@@ -20,6 +20,8 @@ public class Pathfinder {
 			closed.Add(n);
 			if (closed.Contains(B))
 				break;
+			if (stopAt != null && n.Tile.tag == stopAt)
+				break;
 			foreach (Tile t in n.Tile.GetNeighbors())
 			{
 				if (t == null)
@@ -27,10 +29,8 @@ public class Pathfinder {
 				var adj = new PathNode(t, n.G + 1, n);
 				if (closed.Contains(adj))
 				{
-					Debug.DrawLine(n.Tile.transform.position, t.transform.position, Color.red, 30);
 					continue;
 				}
-				Debug.DrawLine(n.Tile.transform.position, t.transform.position, Color.green, 30);
 				if (!open.Contains(adj))
 				{
 					open.Add(adj);

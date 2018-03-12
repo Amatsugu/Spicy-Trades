@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114048284113182902}
   m_Layer: 0
   m_Name: VillageTile
-  m_TagString: Town
+  m_TagString: Village
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -171,6 +171,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65f4bb5d715be6c44999223b1f88af75, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Cost: 0
+  tileRenderers: []
   tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
   connectTo: []
   townType: {fileID: 11400000, guid: 6838f09df75c0e9498fdf6022e9b2697, type: 2}

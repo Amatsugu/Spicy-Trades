@@ -23,7 +23,6 @@ public class RandomGenerator : MapGenerator {
 	public int demensions = 3;
 	public Vector3 position;
 	public Vector3 rotation;
-	public bool coloredStrength;
 
 
 	private float _stepSize
@@ -55,17 +54,7 @@ public class RandomGenerator : MapGenerator {
 		float sample = Noise.Sum(_method, p, frequency, octaves, lacunarity, persistence);
 		if (type != NoiseMethodType.Value)
 			sample = sample * .5f + .5f;
-		Color col;
-		if (coloredStrength)
-		{
-			sample *= amplitude;
-			col = tileMapper.GetColor(sample);
-		}
-		else
-		{
-			col = tileMapper.GetColor(sample);
-			sample *= amplitude;
-		}
-		return CreateTile(tileMapper.GetTile(sample), x, y, parent, col);//.SetWeight(tileMapper.GetMoveCost(sample));
+		sample *= amplitude;
+		return CreateTile(tileMapper.GetTile(sample), x, y, parent);//.SetWeight(tileMapper.GetMoveCost(sample));
 	}
 }

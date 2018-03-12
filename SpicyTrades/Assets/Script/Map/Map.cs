@@ -11,7 +11,12 @@ public class Map : IEnumerable<Tile>
 {
 	public Tile[] Tiles { get; private set; }
 	public int Height { get; private set; }
-	public int Width{ get; private set; }
+	public int Width { get; private set; }
+	public int Length { get
+		{
+			return Height * Width;
+		}
+	}
 
 	public int TileCount
 	{

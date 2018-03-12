@@ -13,21 +13,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileGradient:
     serializedVersion: 2
-    key0: {r: 0.9705882, g: 1, b: 0.98661256, a: 1}
-    key1: {r: 0.47653547, g: 0.5735294, b: 0.4852315, a: 1}
-    key2: {r: 0.1270545, g: 0.6911765, b: 0.17763095, a: 0}
-    key3: {r: 0.26527628, g: 0.75021374, b: 0.38901886, a: 0}
-    key4: {r: 1, g: 0.90436107, b: 0.6985294, a: 0}
-    key5: {r: 0, g: 0.37931037, b: 1, a: 0}
-    key6: {r: 0, g: 0.3019608, b: 0.8000001, a: 0}
+    key0: {r: 0.47653547, g: 0.5735294, b: 0.4852315, a: 1}
+    key1: {r: 0.1270545, g: 0.6911765, b: 0.17763095, a: 1}
+    key2: {r: 0.26527628, g: 0.75021374, b: 0.38901886, a: 0}
+    key3: {r: 1, g: 0.90436107, b: 0.6985294, a: 0}
+    key4: {r: 0, g: 0.37931037, b: 1, a: 0}
+    key5: {r: 0, g: 0.3019608, b: 0.8000001, a: 0}
+    key6: {r: 0.015679054, g: 0.1707327, b: 0.42647058, a: 0}
     key7: {r: 0.015679054, g: 0.1707327, b: 0.42647058, a: 0}
-    ctime0: 6939
-    ctime1: 11180
-    ctime2: 15227
-    ctime3: 24672
-    ctime4: 29684
-    ctime5: 34502
-    ctime6: 42405
+    ctime0: 11180
+    ctime1: 15227
+    ctime2: 24865
+    ctime3: 29684
+    ctime4: 34502
+    ctime5: 42405
+    ctime6: 65535
     ctime7: 65535
     atime0: 0
     atime1: 65535
@@ -38,7 +38,7 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 1
-    m_NumColorKeys: 8
+    m_NumColorKeys: 7
     m_NumAlphaKeys: 2
   moveCostCurve:
     serializedVersion: 2
@@ -60,11 +60,9 @@ MonoBehaviour:
     m_RotationOrder: 0
   Tiles:
   - {fileID: 4954783902580176, guid: 7a5efc8b49395744999d2966bf040970, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
-  - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
+  - {fileID: 4954783902580176, guid: 200e409e551b1924f900b860b6807a20, type: 2}
   - {fileID: 4954783902580176, guid: 68581158952fe9044ad016ad2a7f4370, type: 2}
   - {fileID: 4954783902580176, guid: 643a5901a035cbf4fb444ce26df135cc, type: 2}
   - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
-  - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
-  - {fileID: 4954783902580176, guid: 39efa895cc0e07747b1bfdd18b56fddb, type: 2}
-  colorize: 1
+  - {fileID: 4954783902580176, guid: b7d8690f17515d44fa8071237a16779f, type: 2}
+  - {fileID: 4954783902580176, guid: b7d8690f17515d44fa8071237a16779f, type: 2}

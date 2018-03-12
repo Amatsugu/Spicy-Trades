@@ -7,7 +7,7 @@ public class ResourceType : ScriptableObject
 {
 	public string ResourceName;
 	public ResourceCategory category;
-	public Sprite sprite; //TODO: Replace with renderer
+	public TileRenderer TileRenderer; 
 	public int requiredWorkers;
 	public float yeild;
 

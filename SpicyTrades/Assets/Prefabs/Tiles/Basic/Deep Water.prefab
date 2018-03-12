@@ -37,11 +37,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4954783902580176}
   - component: {fileID: 212652183615359448}
+  - component: {fileID: 114963464260798650}
   - component: {fileID: 60190124717019038}
-  - component: {fileID: 114048284113182902}
   m_Layer: 0
-  m_Name: CapitalTile
-  m_TagString: Capital
+  m_Name: Deep Water
+  m_TagString: Water
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -160,7 +160,7 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190080
---- !u!114 &114048284113182902
+--- !u!114 &114963464260798650
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -168,15 +168,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1295639896062918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 65f4bb5d715be6c44999223b1f88af75, type: 3}
+  m_Script: {fileID: 11500000, guid: 23d8be484d777bd48a1fd48c367ed732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Cost: 0
+  Cost: 100000
   tileRenderers: []
-  tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
-  connectTo:
-  - Capital
-  townType: {fileID: 11400000, guid: 82429e7a0d849ad488b66f9138a7aac2, type: 2}
 --- !u!212 &212652183615359448
 SpriteRenderer:
   m_ObjectHideFlags: 1
@@ -212,7 +208,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.23427993, b: 0.61764705, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

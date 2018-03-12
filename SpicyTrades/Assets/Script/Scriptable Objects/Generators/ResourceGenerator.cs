@@ -7,13 +7,13 @@ using UnityEngine;
 public class ResourceGenerator : FeatureGenerator
 {
 	public int maxResources = 3;
-	public GameObject[] resources;
-	public GameObject basicFood;
+	public GameObject resourceTile;
+	public ResourceType[] resources;
+	public ResourceType basicFood;
 	public override void Generate(Map map)
 	{
 		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		var towns = map.GetTowns();
-		var foodType = basicFood.GetComponent<ResourceTile>().resourceType;
 		foreach(TownTile t in towns)
 		{
 			if(t.townType.GetType() == typeof(Town))
@@ -25,7 +25,8 @@ public class ResourceGenerator : FeatureGenerator
 				for (int i = 0; i < r; i++)
 				{
 					int c = Random.Range(0, candicadates.Count);
-					var res = map.ReplaceTile(candicadates[c], resources[Random.Range(0, resources.Length)], false, true) as ResourceTile;
+					var res = map.ReplaceTile(candicadates[c], resourceTile, false, true) as ResourceTile;
+					res.resourceType = resources[Random.Range(0, resources.Length)];
 					placedResources.Add(res);
 					t.AddResource(res);
 					t.Population += res.resourceType.requiredWorkers;
@@ -38,7 +39,7 @@ public class ResourceGenerator : FeatureGenerator
 				if(requiredFood > foodTotal)
 				{
 					float neededFood = requiredFood - foodTotal;
-					int numFoodTiles = Mathf.CeilToInt(neededFood / foodType.yeild);
+					int numFoodTiles = Mathf.CeilToInt(neededFood / basicFood.yeild);
 					Debug.Log(GeneratorName + "Need " + neededFood + " [" + numFoodTiles +"] Food Units");
 					for (int i = 0; i < numFoodTiles; i++)
 					{
@@ -48,8 +49,9 @@ public class ResourceGenerator : FeatureGenerator
 							break;
 						}
 						int c = Random.Range(0, candicadates.Count); 
-						var f = map.ReplaceTile(candicadates[c], basicFood, false, true) as ResourceTile;
-						t.Population += foodType.requiredWorkers;
+						var f = map.ReplaceTile(candicadates[c], resourceTile, false, true) as ResourceTile;
+						f.resourceType = basicFood;
+						t.Population += basicFood.requiredWorkers;
 						t.AddResource(f);
 						candicadates.RemoveAt(c);
 					}

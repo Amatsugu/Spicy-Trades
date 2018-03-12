@@ -28,15 +28,14 @@ public abstract class MapGenerator : ScriptableObject
 			x = (x + y * .5f - y / 2) * (InnerRadius * 2f),
 		};
 	}
-	public Tile CreateTile(int x, int y, Transform parent, Color col)
+	public Tile CreateTile(int x, int y, Transform parent)
 	{
-		return CreateTile(tileMapper.GetTile(0), x, y, parent, col);
+		return CreateTile(tileMapper.GetTile(0), x, y, parent);
 	}
 
-	public Tile CreateTile(Transform t, int x, int y, Transform parent, Color col)
+	public Tile CreateTile(Transform t, int x, int y, Transform parent)
 	{
 		var g = Instantiate(t, GetPosition(x, y), Quaternion.identity, parent);
-		g.GetComponent<SpriteRenderer>().color = col;
 		return g.GetComponent<Tile>().SetPos(x, y);
 	}
 
