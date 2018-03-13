@@ -43,7 +43,7 @@ namespace NetworkManager
             {
                 throw new ArgumentException("Attempt to form an object (PID) from non PID data! TYPECODE: "+(int)Type);
             }
-            //Get dataa from byte and create the object
+            //Get data from byte and create the object
         }
         public string GetID()
         {

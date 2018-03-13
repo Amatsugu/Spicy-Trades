@@ -42,7 +42,7 @@ namespace NetworkManager
             }
             else
             {
-                throw new ArgumentException("Attempt to form an object (PID) from non PID data! TYPECODE: " + (int)Type);
+                throw new ArgumentException("Attempt to form an object (Message) from non Message data! TYPECODE: " + (int)Type);
             }
         }
         public String GetMessage()

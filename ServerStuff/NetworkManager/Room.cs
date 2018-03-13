@@ -26,7 +26,42 @@ namespace NetworkManager
             members = new PID[MAX_MEMBERS];
             theyReady = new bool[MAX_MEMBERS];
         }
-
+        /* Room Structure
+         * byte[0] Type
+         * byte[1] NumPplInRoom
+         * byte[2] boolArrayOfReadyPlayers
+         * byte[3] int of host
+         * byte[4] bool _pass
+         * byte[5,+8] RID
+         * byte[13,+128]? if pass none if none
+         * byte[13+pass,138-522]?depending on members
+         */
+        public Room(byte[] roomdata)
+        {
+            members = new PID[MAX_MEMBERS];
+            theyReady = new bool[MAX_MEMBERS];
+            byte Type = roomdata[0];
+            if (Type == Network.ROOM) // Make sure the datatype is correct
+            {
+                numOfPlayers = roomdata[1];
+                theyReady = NetUtils.ConvertByteToBoolArray(roomdata[2]);
+                theyHost = roomdata[3];
+                int _pass = roomdata[4];
+                roomID = NetUtils.ConvertByteToString(roomdata.SubArray(5, 8));
+                if (_pass != 0)
+                {
+                    roomPass = NetUtils.ConvertByteToString(roomdata.SubArray(13, 128));
+                }
+                for(int i = 0; i < numOfPlayers; i++)
+                {
+                    members[i] = new PID(roomdata.SubArray(13+_pass, 138));
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Attempt to form an object (Room) from non Room data! TYPECODE: " + (int)Type);
+            }
+        }
         public byte[] ToBytes()
         {
             byte Type = Network.ROOM;
@@ -41,12 +76,13 @@ namespace NetworkManager
             {
                 _pass = 0;
             }
-            int sendSize = (ppl * members[0].GetSize())+1+1+ MAX_ID_SIZE + 1+1+ _pass; // The data stuff
+            int sendSize = (ppl * members[0].GetSize())+1+1+ MAX_ID_SIZE +1+ 1+1+ _pass; // The data stuff
             byte[] send = new byte[sendSize];
             send[0] = Network.ROOM;
             send[1] = (byte)ppl;
             send[2] = NetUtils.ConvertBoolArrayToByte(theyReady);
             send[3] = theyHost;
+            send[4] = (byte)_pass;
             byte[] _id = ASCIIEncoding.ASCII.GetBytes(roomID);
             byte[] _roompass = ASCIIEncoding.ASCII.GetBytes(roomPass);
             if (_id.Length < MAX_ID_SIZE)
@@ -63,7 +99,7 @@ namespace NetworkManager
                     }
                     else
                     {
-                        send[4 + i] = _id[i];
+                        send[5 + i] = _id[i];
                     }
                 }
             }
@@ -83,18 +119,17 @@ namespace NetworkManager
                         }
                         else
                         {
-                            send[12 + i] = _roompass[i];
+                            send[13 + i] = _roompass[i];
                         }
                     }
                 }
             }
-            Console.WriteLine(sendSize);
             for(int p = 0; p < ppl; p++)
             {
                 byte[] temp = members[p].ToBytes();
                 for (int i = 0; i < temp.Length;i++)
                 {
-                    send[_pass + 12 + i + (p * members[0].GetSize())] = temp[i];
+                    send[_pass + 13 + i + (p * members[0].GetSize())] = temp[i];
                 }
             }
             return send;
@@ -140,6 +175,7 @@ namespace NetworkManager
         public void SetReady(bool b)
         {
             isReady = b;
+            // TODO send data to server
         }
         public void SendChat(string message)
         {
