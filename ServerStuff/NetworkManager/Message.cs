@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Globalization;
 
 namespace NetworkManager
 {
@@ -9,15 +10,40 @@ namespace NetworkManager
         private string message;
         private PID pid;
         private DateTime time;
-        public Message(string message, PID pid,DateTime time) //When data comes from the client
+        private int MESSAGE_BYTE_SIZE;
+        public Message(string message, PID pid) //When data comes from the client
         {
             this.message = message;
             this.pid = pid;
-            this.time = time;
+            this.time = DateTime.Now;
         }
+        /*
+         * So the Message object has this byte format:
+         * 2-bytes Message Size
+         * 3-bytes Time-Stamp
+         * 138-bytes PID (This may change so i use getSize() on the pid data)
+         * VSar-Size Message
+         */
         public Message(byte[] messagedata) //When data comes from the server
         {
             //BitConverter.ToInt32(b, 0)
+            byte Type = messagedata[0];
+            if (Type == Network.MESSAGE) // Make sure the datatype is correct
+            {
+                int mSize = BitConverter.ToInt16(messagedata.SubArray(1, 2),0);
+                int hour = messagedata[3];
+                int minute = messagedata[4];
+                int second = messagedata[5];
+                CultureInfo MyCultureInfo = CultureInfo.CurrentCulture;//This may not work for non USA time... But for now we dont need to worry about that... I could use ticks as well but meh
+                string MyString = "12 July 2004 "+hour+":"+minute+":"+second;
+                time = DateTime.Parse(MyString, MyCultureInfo);
+                pid = new PID(messagedata.SubArray(6, 138));
+                message = NetUtils.ConvertByteToString(messagedata.SubArray(144, mSize));
+            }
+            else
+            {
+                throw new ArgumentException("Attempt to form an object (PID) from non PID data! TYPECODE: " + (int)Type);
+            }
         }
         public String GetMessage()
         {
@@ -31,24 +57,20 @@ namespace NetworkManager
         {
             return time;
         }
-        /*
-         * So the Message object has this byte format:
-         * 2-bytes Message Size
-         * 3-bytes Time-Stamp
-         * VSar-Size Message
-         */
+        public int GetSize()
+        {
+            int pidsize = pid.GetSize();
+            int mSize = message.Length;
+            return mSize + pidsize + 6;
+        }
         public byte[] ToBytes()
         {
             int pidsize = pid.GetSize();
             int mSize = message.Length;
-            byte[] send = new byte[mSize + pidsize + 5];
+            byte[] send = new byte[mSize + pidsize + 6];
             if (mSize > 65535)
             {
-                DataEventArgs data = new DataEventArgs();
-                data.Response = "Message size is too large Limit messages to 65535 characters or less!";
-                data.errorcode = Network.MESSAGE_TO_LARGE;
-                data.ObjectRef = this;
-                Network.OnError(data);
+                throw new ArgumentException("Message size is too large Limit messages to 65535 characters or less!");
             }
             else
             {
@@ -58,18 +80,19 @@ namespace NetworkManager
                 byte hour = (byte)time.Hour;
                 byte minute = (byte)time.Minute;
                 byte second = (byte)time.Second;
-                send[0] = size[0];
-                send[1] = size[1];
-                send[2] = hour;
-                send[3] = minute;
-                send[4] = second;
+                send[0] = Network.MESSAGE;
+                send[1] = size[0];
+                send[2] = size[1];
+                send[3] = hour;
+                send[4] = minute;
+                send[5] = second;
                 for (int i = 0; i < pidsize; i++)
                 {
-                    send[5 + i] = pidB[i];
+                    send[6 + i] = pidB[i];
                 }
                 for (int i = 0; i < mSize; i++)
                 {
-                    send[5 + pidsize + i] = msg[i];
+                    send[6 + pidsize + i] = msg[i];
                 }
             }
             return send;
