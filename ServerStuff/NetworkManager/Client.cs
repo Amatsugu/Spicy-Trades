@@ -109,19 +109,19 @@ namespace NetworkManager
                     data.Response = test;
                     data.RawResponse = state.buffer;
                     Network.OnDataRecieved(data);
-                    client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
-                        new AsyncCallback(ReceiveCallback), state);
+                    //client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
+                    //    new AsyncCallback(ReceiveCallback), state);
                 }
-                else
-                {
-                    // All the data has arrived; put it in response.  
-                    if (state.sb.Length > 1)
-                    {
-                        response = state.sb.ToString();
-                    }
-                    // Signal that all bytes have been received.  
-                    receiveDone.Set();
-                }
+                //else
+                //{
+                //    // All the data has arrived; put it in response.  
+                //    if (state.sb.Length > 1)
+                //    {
+                //        response = state.sb.ToString();
+                //    }
+                //    // Signal that all bytes have been received.  
+                //    receiveDone.Set();
+                //}
             }
             catch (Exception e)
             {

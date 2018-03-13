@@ -5,32 +5,21 @@ namespace NetworkManager
 {
     class Program
     {
-        public static Client client;
         static void Main(string[] args)
         {
             try
             {
-                client = Network.Connect("192.168.1.6", 12344);
+                //Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
+                Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + "\nPress Enter!");
                 Console.ReadLine();
-                client = null;
                 Environment.Exit(1);
             }
             Network.DataRecieved += OnDataRecieved;
-            //client.Send(new byte[] {0});
-            Thread t = new Thread(new ThreadStart(ThreadProc));
-            // Receive the response from the remote device.
-            t.Start();
-            //PID testPid = new PID("12345678", "epicknex", false);
-            //Message testMsg = new Message("Hello how are you doing?", testPid, DateTime.Now);
-            //byte[] test = testMsg.ToBytes();
-            //for(int i=0; i < test.Length; i++)
-            //{
-            //    Console.Write((char)test[i]);
-            //}
+            Network.SendData(new byte[] { 0 });
         }
         static void OnDataRecieved(object sender, DataEventArgs e)
         {
@@ -44,19 +33,9 @@ namespace NetworkManager
             }
             if (command == Network.HELLO)
             {
-                client.Send(new byte[] { 0 }); // Send Hello command to server
+                Network.SendData(new byte[] { 0 }); // Send Hello command to server
             }
             Console.WriteLine("Got Response from server: "+command+"  "+error);
-        }
-        public static void ThreadProc()
-        {
-            client.Receive();
-            client.sendDone.WaitOne();
-            while (true)
-            {
-                //Keep the thread going
-                Thread.Sleep(10);
-            }
         }
     }
 }

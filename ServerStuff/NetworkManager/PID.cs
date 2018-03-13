@@ -15,12 +15,35 @@ namespace NetworkManager
         //Max Username 128 characters
         //Id size 8 characters
         //ToBytes() will be used 
+        //Format of pid bytes
+        /*
+         * byte[0] Type
+         * byte[1] isFriend
+         * byte[2-129] username
+         * byte[130-137] id
+         */
         public PID(string id,string name,bool isFriend)
         {
             this.id = id;
             this.name = name;
             this.isFriend = isFriend;
             UID_BYTE_SIZE = 2 + MAX_ID_SIZE + MAX_USERNAME_SIZE;
+        }
+        public PID(byte[] piddata)
+        {
+            byte Type = piddata[0];
+            if (Type == Network.PID) // Make sure the datatype is correct
+            {
+                isFriend = piddata[1] != 0x00;// Assign the isFriend bool
+                byte[] _name = piddata.SubArray(2,MAX_USERNAME_SIZE);
+                name = NetUtils.ConvertByteToString(_name);
+                byte[] _id = piddata.SubArray(2+MAX_USERNAME_SIZE, MAX_ID_SIZE);
+                id = NetUtils.ConvertByteToString(_id);
+            } else
+            {
+                throw new ArgumentException("Attempt to form an object (PID) from non PID data! TYPECODE: "+(int)Type);
+            }
+            //Get data from byte and create the object
         }
         public string GetID()
         {
@@ -52,11 +75,7 @@ namespace NetworkManager
             }
             if (_name.Length > MAX_USERNAME_SIZE)
             {
-                DataEventArgs data = new DataEventArgs();
-                data.Response = "Username has a character length of greater than " + MAX_USERNAME_SIZE + "!";
-                data.errorcode = Network.INVALID_UID;
-                data.ObjectRef = this;
-                Network.OnError(data);
+                throw new Exception("Username has a character length of greater than " + MAX_USERNAME_SIZE + "!");
             } else
             {
                 for (int i=0; i < MAX_USERNAME_SIZE; i++)
@@ -73,11 +92,7 @@ namespace NetworkManager
             }
             if (_id.Length < MAX_ID_SIZE)
             {
-                DataEventArgs data = new DataEventArgs();
-                data.Response = "Username has a character length of greater than "+MAX_ID_SIZE+"!";
-                data.errorcode = Network.INVALID_UID;
-                data.ObjectRef = this;
-                Network.OnError(data);
+                throw new Exception("ID length must be equal to "+MAX_ID_SIZE+"!");
             }
             else
             {

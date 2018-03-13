@@ -53,10 +53,11 @@ INVITEF		= 0x0F //Invite friend to room		oprands(CID,RID,FID)
 READY		= 0x10 //Are you ready to play?		oprands(CID,0 or 1 or 2)//1-R 0-NR 2-GR
 LEAVER		= 0x11 //Leave the room				oprands(CID,RID)
 GRESORCE	= 0x12 //Gets a list of resources	oprands(CID)
+INIT		= 0x13 //Setup the connection data	oprands(null)
 
 CMD			  CODE - (RESPONSE)					SERVER->CLIENT
 --------------------------------------------------------------
-HELLO 		= 0x00 //A hello from server		returns()
+HELLO 		= 0x00 //A hello from server		returns(ERR)
 LOGIN 		= 0x01 //Send Login Details			returns(ERR, CID or null)
 REGISTER	= 0x02 //Sends Register Data		returns(ERR)
 UPDATES 	= 0x03 //Checks for updates			returns(ERR)
