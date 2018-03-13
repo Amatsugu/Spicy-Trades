@@ -134,6 +134,10 @@ namespace NetworkManager
             }
             return send;
         }
+        public string GetRoomPass()
+        {
+            return roomPass;
+        }
         public int GetNumPlayers()
         {
             int sum = 0;

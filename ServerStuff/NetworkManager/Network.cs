@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-
+using System.Threading;
 
 namespace NetworkManager
 {
@@ -49,7 +49,9 @@ namespace NetworkManager
         public static byte NO_UPDATES            = 0x0B;
         public static byte CANT_JOIN_ROOM        = 0x0C;
         public static byte MESSAGE_TO_LARGE      = 0x0D;
-        public static Client Connect(string ip, int port)
+        //Client stuff
+        public static Client connection;
+        public static void Connect(string ip, int port,string user,string pass)
         {
             IPHostEntry ipHostInfo;
             IPAddress ipAddress;
@@ -67,11 +69,31 @@ namespace NetworkManager
             {
                 IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
                 Socket client = new Socket(ipAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                return new Client(client, remoteEP, ipHostInfo, ipAddress, ip, port);
+                connection = new Client(client, remoteEP, ipHostInfo, ipAddress, ip, port);
+                Thread t = new Thread(new ThreadStart(ThreadProc));
+                t.Start();
             }
             catch
             {
                 throw new Exception("Unable to connect to the server! Is the server running? " + ip + ":" + port);
+            }
+        }
+        public static void SendData(byte[] data)
+        {
+            connection.Send(data);
+        }
+        public static void SendData(string data)
+        {
+            connection.Send(data);
+        }
+        public static void ThreadProc()
+        {
+            connection.Receive();
+            connection.sendDone.WaitOne();
+            while (true)
+            {
+                //Keep the thread going
+                Thread.Sleep(10);
             }
         }
         public static void OnDataRecieved(DataEventArgs e)
