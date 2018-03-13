@@ -364,7 +364,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   minAngle: -45
   maxAngle: 0
-  sensitivity: 5
+  sensitivity: 2.5
   minZoom: 3
   maxZoom: 30
   scrollSpeed: 1

@@ -17,6 +17,7 @@ public class CameraPan : MonoBehaviour
 	private Camera _cam;
 	private float _lt;
 	private float _zoom;
+	private Vector2 _lastTouchDelta;
 	// Use this for initialization
 	void Start()
 	{
@@ -30,35 +31,38 @@ public class CameraPan : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		var zoomDamping = Mathf.Max(.1f, (_zoom - minZoom) / (maxZoom - minZoom));
+		var touches = Input.touches;
+		if (touches.Length == 1)
+		{
+			var dPos = touches[0].deltaPosition;
+			_curPos -= new Vector3(dPos.x, dPos.y, 0) * Time.deltaTime * zoomDamping;
+		}else if(touches.Length == 2)
+		{
+			Vector2 touchZeroPrevPos = touches[0].position - touches[0].deltaPosition;
+			Vector2 touchOnePrevPos = touches[1].position - touches[1].deltaPosition;
+
+			float prevTouchDeltaMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
+			float touchDeltaMag = (touches[0].position - touches[1].position).magnitude;
+
+			float deltaMagnitudeDiff = prevTouchDeltaMag - touchDeltaMag;
+			_zoom += deltaMagnitudeDiff * Time.deltaTime * scrollSensitivity;
+		}
+#if !EDITOR
 		var mPos = Input.mousePosition;
 		mPos.z = _cam.nearClipPlane;
 		if (Input.GetKeyDown(KeyCode.Mouse1))
-			_sPos = _cam.ScreenToWorldPoint(mPos);
-		if(Input.GetKey(KeyCode.Mouse1))
+			_sPos = mPos;
+		if (Input.GetKey(KeyCode.Mouse1))
 		{
-			var cPos = _cam.ScreenToWorldPoint(mPos);
-			var r = _cam.ScreenPointToRay(Input.mousePosition);
-			RaycastHit hit;
-			if(Physics.Raycast(r, out hit, 100))
-			{
-
-				Debug.DrawRay(r.origin, r.direction * 10, Color.red);
-				Debug.DrawLine(r.origin, hit.point, Color.cyan);
-			}
+			var cPos = mPos;
 			var rPos = cPos - _sPos;
-			_curPos -= rPos * sensitivity;
-			/*if (_curPos.x < 0)
-				_curPos.x = 0;
-			if (_curPos.y < 0)
-				_curPos.y = 0;
-			if (_curPos.x > MapRenderer.Map.generator.Size.x)
-				_curPos.x = MapRenderer.Map.generator.Size.x;
-			if (_curPos.y > MapRenderer.Map.generator.Size.y)
-				_curPos.y = MapRenderer.Map.generator.Size.y;*/
+			_sPos = cPos;
+			_curPos -= rPos * sensitivity * Time.deltaTime * zoomDamping;
 		}
 		if (Input.GetKey(KeyCode.W))
 			_curPos.y += 5 * sensitivity * Time.deltaTime;
-		else if(Input.GetKey(KeyCode.S))
+		else if (Input.GetKey(KeyCode.S))
 			_curPos.y -= 5 * sensitivity * Time.deltaTime;
 		if (Input.GetKey(KeyCode.D))
 			_curPos.x += 5 * sensitivity * Time.deltaTime;
@@ -70,6 +74,7 @@ public class CameraPan : MonoBehaviour
 			_zoom -= sY;
 			_lt = 0;
 		}
+#endif
 		if (_zoom < minZoom)
 			_zoom = minZoom;
 		if (_zoom > maxZoom)

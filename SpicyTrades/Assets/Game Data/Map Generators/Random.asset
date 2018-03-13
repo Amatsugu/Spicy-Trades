@@ -30,5 +30,5 @@ MonoBehaviour:
   demensions: 3
   position: {x: 36, y: 6, z: -7}
   rotation: {x: -65, y: 74, z: 0}
-  useSeed: 1
+  useSeed: 0
   seed: -889724439
