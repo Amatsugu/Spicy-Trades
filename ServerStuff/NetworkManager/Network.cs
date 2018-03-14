@@ -78,7 +78,16 @@ namespace NetworkManager
                 throw new Exception("Unable to connect to the server! Is the server running? " + ip + ":" + port);
             }
         }
+        public static void CreateRoom(string password)
+        {
+            SendData(new byte[] { });
+        }
         public static void SendData(byte[] data)
+        {
+            //Add a way to ensure data goes where it needs to
+            connection.Send(data);
+        }
+        public static void SendDataUnMonitored(byte[] data)
         {
             connection.Send(data);
         }
@@ -96,9 +105,9 @@ namespace NetworkManager
                 Thread.Sleep(10);
             }
         }
-        public static void OnDataRecieved(DataEventArgs e)
+        public static void OnDataRecieved(DataRecievedArgs e)
         {
-            EventHandler<DataEventArgs> handler = DataRecieved;
+            EventHandler<DataRecievedArgs> handler = DataRecieved;
             handler(null, e);
         }
         public static void OnChat(DataEventArgs e)
@@ -126,18 +135,18 @@ namespace NetworkManager
             EventHandler<DataEventArgs> handler = PlayerLeft;
             handler(null, e);
         }
-        public static void OnError(DataEventArgs e)
+        public static void OnError(ErrorArgs e)
         {
-            EventHandler<DataEventArgs> handler = Error;
+            EventHandler<ErrorArgs> handler = Error;
             handler(null, e);
         }
-        public static event EventHandler<DataEventArgs> DataRecieved;
+        public static event EventHandler<DataRecievedArgs> DataRecieved;
         public static event EventHandler<DataEventArgs> Chat;
         public static event EventHandler<DataEventArgs> FriendRequest;
         public static event EventHandler<DataEventArgs> GameStarted;
         public static event EventHandler<DataEventArgs> PlayerJoined;
         public static event EventHandler<DataEventArgs> PlayerLeft;
-        public static event EventHandler<DataEventArgs> Error;
+        public static event EventHandler<ErrorArgs> Error;
     }
     public class DataEventArgs : EventArgs
     {
@@ -145,5 +154,15 @@ namespace NetworkManager
         public int errorcode { get; set; }
         public byte[] RawResponse { get; set; }
         public object ObjectRef { get; set; }
+    }
+    public class DataRecievedArgs : EventArgs
+    {
+        public string Response { get; set; }
+        public byte[] RawResponse { get; set; }
+    }
+    public class ErrorArgs : EventArgs
+    {
+        public int errorCode { get; set; }
+        public string errorMessage { get; set; }
     }
 }

@@ -105,7 +105,7 @@ namespace NetworkManager
                     // There might be more data, so store the data received so far. 
                     string test = Encoding.ASCII.GetString(state.buffer, 0, bytesRead);
                     state.sb.Append(test);
-                    DataEventArgs data = new DataEventArgs();
+                    DataRecievedArgs data = new DataRecievedArgs();
                     data.Response = test;
                     data.RawResponse = state.buffer;
                     Network.OnDataRecieved(data);
@@ -155,5 +155,16 @@ namespace NetworkManager
         {
             return port;
         }
+    }
+    public class StateObject
+    {
+        // Client socket.  
+        public Socket workSocket = null;
+        // Size of receive buffer.  
+        public const int BufferSize = 256;
+        // Receive buffer.  
+        public byte[] buffer = new byte[BufferSize];
+        // Received data string.  
+        public StringBuilder sb = new StringBuilder();
     }
 }

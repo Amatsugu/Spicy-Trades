@@ -57,5 +57,96 @@ namespace NetworkManager
 
             return result;
         }
+        public static object[] BreakCommand(byte[] data,string[] split)
+        {
+            var temp = new List<object>();
+            //TODO Finish PArsing this data
+            for (int i = 0; i < split.Length; i++)
+            {
+                if (split[i] == "string") // first 2 bytes length
+                {
+
+                } else if (split[i] == "byte")
+                {
+
+                }
+                else if (split[i] == "int")
+                {
+
+                }
+                else if (split[i] == "message")
+                {
+
+                }
+                else if (split[i] == "pid")
+                {
+
+                }
+                else if (split[i] == "room")
+                {
+
+                }
+            }
+            return temp.ToArray();
+        }
+        public static byte[] PieceCommand(object[] parts)
+        {
+            var temp = new List<byte>();
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (parts[i].GetType().ToString().Contains("String"))
+                {
+                    byte[] dat = ASCIIEncoding.ASCII.GetBytes((string)parts[i]);
+                    byte[] len = BitConverter.GetBytes((Int16)dat.Length);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
+                } else if (parts[i].GetType().ToString().Contains("Byte"))
+                {
+                    temp.Add((byte)parts[i]);
+                } else if (parts[i].GetType().ToString().Contains("Int"))
+                {
+                    byte[] dat = BitConverter.GetBytes((Int32)parts[i]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
+                } else if (parts[i].GetType().ToString().Contains("Message"))
+                {
+                    byte[] dat = ((Message)parts[i]).ToBytes();
+                    byte[] len = BitConverter.GetBytes((Int16)dat.Length);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
+                } else if (parts[i].GetType().ToString().Contains("PID"))
+                {
+                    byte[] dat = ((PID)parts[i]).ToBytes();
+                    byte[] len = BitConverter.GetBytes((Int16)dat.Length);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
+                } else if (parts[i].GetType().ToString().Contains("Room"))
+                {
+                    byte[] dat = ((Room)parts[i]).ToBytes();
+                    byte[] len = BitConverter.GetBytes((Int16)dat.Length);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
+                }
+            }
+            return temp.ToArray();
+        }
     }
 }
