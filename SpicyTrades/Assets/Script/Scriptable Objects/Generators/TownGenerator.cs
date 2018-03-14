@@ -30,7 +30,7 @@ public class TownGenerator : FeatureGenerator
 		var capitalCandicateCenters = capitalCandidates.SelectMany(t => from Tile nt in t.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt);
 		var centerCandidates = from Tile t in capitalCandicateCenters where t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground") select t;
 		var ccA = centerCandidates.ToArray();
-		var capital = ccA[Random.Range(0, ccA.Length)];
+		var capital = ccA[Random.Range(0, ccA.Length-1)];
 		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
 		capital = map.MakeCapital(capital, CapitalTile);
 		int numTowns = Random.Range(minTowns, maxTowns);

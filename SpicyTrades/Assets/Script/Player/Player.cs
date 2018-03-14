@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
+	public Text resourceList;
 
 	private TownTile _curTile;
 	private SpriteRenderer _sprite;
@@ -20,6 +22,14 @@ public class Player : MonoBehaviour
 	{
 		_curTile = tile;
 		transform.position = _curTile.WolrdPos;
+		var res = tile.Resources;
+		if (res == null)
+			return;
+		if(resourceList == null)
+			resourceList = GameObject.Find("Text").GetComponent<Text>();
+		resourceList.text = "";
+		foreach (var r in res)
+			resourceList.text += "<b><color=#"+ColorUtility.ToHtmlStringRGB(r.color)+">" + r.ResourceName + "</color></b> [" + r.category.ToString() + "]: Y=" + r.yeild + " | W=" + r.requiredWorkers + "\n";
 	}
 
 	public void MoveTo(TownTile tile)
@@ -45,7 +55,7 @@ public class Player : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 		}
-		_curTile = path.Last() as TownTile;
+		SetTile(path.Last() as TownTile);
 		isMoving = false;
 	}
 }
