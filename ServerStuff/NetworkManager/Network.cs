@@ -227,7 +227,7 @@ namespace NetworkManager
         }
         public static void OnFriendRequest(DataEventArgs e)
         {
-            EventHandler<DataEventArgs> handler = FriendRequest;
+            EventHandler<DataEventArgs> handler = FriendRequested;
             handler(null, e);
         }
         public static void OnGameStarted(DataEventArgs e)
@@ -237,12 +237,12 @@ namespace NetworkManager
         }
         public static void OnPlayerJoined(DataEventArgs e)
         {
-            EventHandler<DataEventArgs> handler = PlayerJoined;
+            EventHandler<DataEventArgs> handler = PlayerJoinedRoom;
             handler(null, e);
         }
         public static void OnPlayerLeft(DataEventArgs e)
         {
-            EventHandler<DataEventArgs> handler = PlayerLeft;
+            EventHandler<DataEventArgs> handler = PlayerLeftRoom;
             handler(null, e);
         }
         public static void OnError(ErrorArgs e)
@@ -252,27 +252,11 @@ namespace NetworkManager
         }
         public static event EventHandler<DataRecievedArgs> DataRecieved;
         public static event EventHandler<DataEventArgs> Chat;
-        public static event EventHandler<DataEventArgs> FriendRequest;
+        public static event EventHandler<DataEventArgs> FriendRequested;
         public static event EventHandler<DataEventArgs> GameStarted;
-        public static event EventHandler<DataEventArgs> PlayerJoined;
-        public static event EventHandler<DataEventArgs> PlayerLeft;
+        public static event EventHandler<DataEventArgs> PlayerJoinedRoom;
+        public static event EventHandler<DataEventArgs> PlayerLeftRoom;
+        //public static event EventHandler<DataEventArgs> ; //TODO Add the eventargs for each callback
         public static event EventHandler<ErrorArgs> Error;
-    }
-    public class DataEventArgs : EventArgs
-    {
-        public string Response { get; set; }
-        public int errorcode { get; set; }
-        public byte[] RawResponse { get; set; }
-        public object ObjectRef { get; set; }
-    }
-    public class DataRecievedArgs : EventArgs
-    {
-        public string Response { get; set; }
-        public byte[] RawResponse { get; set; }
-    }
-    public class ErrorArgs : EventArgs
-    {
-        public int errorCode { get; set; }
-        public string errorMessage { get; set; }
     }
 }
