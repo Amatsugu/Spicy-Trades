@@ -37,8 +37,8 @@ namespace NetworkManager
                 CultureInfo MyCultureInfo = CultureInfo.CurrentCulture;//This may not work for non USA time... But for now we dont need to worry about that... I could use ticks as well but meh
                 string MyString = "12 July 2004 "+hour+":"+minute+":"+second;
                 time = DateTime.Parse(MyString, MyCultureInfo);
-                pid = new PID(messagedata.SubArray(6, 138));
-                message = NetUtils.ConvertByteToString(messagedata.SubArray(144, mSize));
+                pid = new PID(messagedata.SubArray(6, PID.PID_SIZE));
+                message = NetUtils.ConvertByteToString(messagedata.SubArray(PID.PID_SIZE+6, mSize));
             }
             else
             {

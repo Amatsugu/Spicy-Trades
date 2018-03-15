@@ -54,7 +54,7 @@ namespace NetworkManager
                 }
                 for(int i = 0; i < numOfPlayers; i++)
                 {
-                    members[i] = new PID(roomdata.SubArray(13+_pass, 138));
+                    members[i] = new PID(roomdata.SubArray(13+_pass, PID.PID_SIZE));
                 }
             }
             else

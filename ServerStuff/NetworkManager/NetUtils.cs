@@ -57,34 +57,47 @@ namespace NetworkManager
 
             return result;
         }
-        public static object[] BreakCommand(byte[] data,string[] split)
+        public static object[] FormCommand(byte[] data,string[] split)
         {
             var temp = new List<object>();
-            //TODO Finish PArsing this data
+            int pos = 0;
             for (int i = 0; i < split.Length; i++)
             {
-                if (split[i] == "string") // first 2 bytes length
+                if (split[i] == "string" || split[i]=="s") // first 2 bytes length
                 {
-
-                } else if (split[i] == "byte")
+                    Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    temp.Add(ConvertByteToString(data.SubArray(pos, len)));
+                    pos += len;
+                } else if (split[i] == "byte" || split[i]=="b")
                 {
-
+                    temp.Add(data[pos++]);
                 }
-                else if (split[i] == "int")
+                else if (split[i] == "int" || split[i] == "i") // first 2 bytes length
                 {
-
+                    temp.Add(BitConverter.ToInt32(data.SubArray(pos, 4), 0));
+                    pos += 4;
                 }
-                else if (split[i] == "message")
+                else if (split[i] == "message" || split[i] == "m") // first 2 bytes length
                 {
-
+                    Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    temp.Add(new Message(data.SubArray(pos, len)));
+                    pos += len;
                 }
-                else if (split[i] == "pid")
+                else if (split[i] == "pid" || split[i] == "p") // first 2 bytes length
                 {
-
+                    Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    temp.Add(new PID(data.SubArray(pos, len)));
+                    pos += len;
                 }
-                else if (split[i] == "room")
+                else if (split[i] == "room" || split[i] == "r") // first 2 bytes length
                 {
-
+                    Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    temp.Add(new Room(data.SubArray(pos, len)));
+                    pos += len;
                 }
             }
             return temp.ToArray();

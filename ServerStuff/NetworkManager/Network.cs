@@ -10,18 +10,18 @@ namespace NetworkManager
     static class Network
     {
         //Data Types
-        public static byte PID       = 0x00;
-        public static byte ROOM      = 0x01;
-        public static byte MESSAGE   = 0x02;
+        public static byte PID       = 0x00; //Player ID This is sent once, then player id's are used
+        public static byte ROOM      = 0x01; //Room data This is sent once then room id's are used
+        public static byte MESSAGE   = 0x02; //This is the message object that is sent when needed
         //Commands
-        public static byte HELLO        = 0x00;
-        public static byte LOGIN        = 0x01;
-        public static byte REGISTER     = 0x02;
-        public static byte UPDATES      = 0x03;
-        public static byte DOUPDATES    = 0x04;
-        public static byte LISTR        = 0x05;
-        public static byte JROOM        = 0x06;
-        public static byte CHAT         = 0x07;
+        public static byte HELLO        = 0x00; //The server needs to know if you're still there
+        public static byte LOGIN        = 0x01; //Logins in the user
+        public static byte REGISTER     = 0x02; //Register an account
+        public static byte UPDATES      = 0x03; //CheckFor updates
+        public static byte DOUPDATES    = 0x04; //Gets the update files from the server
+        public static byte LISTR        = 0x05; //Gets a list of rooms returns Room[] in callback
+        public static byte JROOM        = 0x06; //Joins a room
+        public static byte CHAT         = 0x07; //
         public static byte REQUEST      = 0x08;
         public static byte LISTF        = 0x09;
         public static byte LISTRF       = 0x0A;
@@ -34,6 +34,9 @@ namespace NetworkManager
         public static byte LEAVER       = 0x11;
         public static byte GRESORCE     = 0x12;
         public static byte INIT         = 0x13;
+        public static byte CHATDM       = 0x14;
+        public static byte CHATRM       = 0x15;
+        public static byte ROOMS        = 0x16; //Gets a room count
         //Error Codes
         public static byte NO_ERROR              = 0x00;
         public static byte UNKNOWN_ERROR         = 0x01;
@@ -51,8 +54,10 @@ namespace NetworkManager
         public static byte MESSAGE_TO_LARGE      = 0x0D;
         //Client stuff
         public static Client connection;
+        private static string self;
         public static void Connect(string ip, int port,string user,string pass)
-        {
+        {//We need to be able to log in
+            //self = Login(ip,port,user,pass);
             IPHostEntry ipHostInfo;
             IPAddress ipAddress;
             try
@@ -62,7 +67,6 @@ namespace NetworkManager
             }
             catch
             {
-                // Looks like we could not connect!
                 throw new Exception("Unable to connect to the server! Unknown Hostname: " + ip);
             }
             try
@@ -78,9 +82,115 @@ namespace NetworkManager
                 throw new Exception("Unable to connect to the server! Is the server running? " + ip + ":" + port);
             }
         }
-        public static void CreateRoom(string password)
+        public static string Login(string ip, int port, string user, string pass)
         {
-            SendData(new byte[] { });
+            return "";
+        }
+        public static void CreateRoom(string password) //This will trigger the player joined room event with you as the argument
+        {//Might need to send map data as well
+            byte[] temp = NetUtils.PieceCommand(new object[] {FORMR, self});
+            SendData(temp);
+        }
+        public static void JoinRoom(string roomid)
+        {//This will trigger the player joined room event with you as the argument
+            byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
+            SendData(temp);
+        }
+        public static void RegisterAccount(string user,string pass)
+        {
+            //TODO SSL connection to register 
+            byte[] temp = NetUtils.PieceCommand(new object[] { REGISTER, user, pass });
+            //DO IT
+        }
+        public static void HasUpdates()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { UPDATES });
+            //This can be done through Managed UDP or TCP
+        } 
+        public static void DoUpdates()
+        {
+            //Does the updates if any...
+        }
+        public static void GetNumberOfRooms()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { ROOMS, self });
+            SendData(temp);
+        }
+        public static void ListRooms(int pos, int count)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { LISTR, self, pos, count });
+            SendData(temp);
+        }
+        public static void SendFriendRequest(string playerid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { REQUEST, playerid });
+            SendData(temp);
+        }
+        public static void ListFriends()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { LISTF, self });
+            SendData(temp);
+        }
+        public static void AddFriend()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { ADDF, self });
+            SendData(temp);
+        }
+        public static void IsHostOf(string roomid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { IHOST, self , roomid });
+            SendData(temp);
+        }
+        public static void KickPlayer(string roomid,string playerid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { KICK, self , roomid, playerid });
+            SendData(temp);
+        }
+        public static void InviteFriend(string playerid, string roomid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self, playerid, roomid });
+            SendData(temp);
+        }
+        public static void SetReady(bool ready)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready });
+            SendData(temp);
+        }
+        public static void LeaveRoom(string roomid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self, roomid });
+            SendData(temp);
+        }
+        public static void GetResourceList()
+        {
+            //This will work interesting... The data returned by the callback will be in pieces... This will have items and recipies ill figure it out :P
+            byte[] temp = NetUtils.PieceCommand(new object[] { GRESORCE, self });
+            SendData(temp);
+        }
+        public static void INITCONNECTION()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { INIT });
+            SendData(temp);
+        }
+        public static void SatHello()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { HELLO });
+            SendData(temp);
+        }
+        public static void SendDM(Message msg,string playerid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHATDM, self, msg, playerid });
+            SendData(temp);
+        }
+        public static void SendRoomChat(Message msg, string roomid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg, roomid });
+            SendData(temp);
+        }
+        public static void SendChat(Message msg)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHAT, self, msg});
+            SendData(temp);
         }
         public static void SendData(byte[] data)
         {

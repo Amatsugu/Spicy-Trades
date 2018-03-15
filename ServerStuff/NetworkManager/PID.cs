@@ -12,6 +12,7 @@ namespace NetworkManager
         private int MAX_USERNAME_SIZE=128;
         private int MAX_ID_SIZE = 8;
         private int UID_BYTE_SIZE; // see constructor for how it is modified
+        public static int PID_SIZE;
         //Max Username 128 characters
         //Id size 8 characters
         //ToBytes() will be used 
@@ -28,6 +29,7 @@ namespace NetworkManager
             this.name = name;
             this.isFriend = isFriend;
             UID_BYTE_SIZE = 2 + MAX_ID_SIZE + MAX_USERNAME_SIZE;
+            PID_SIZE = UID_BYTE_SIZE;
         }
         public PID(byte[] piddata)
         {

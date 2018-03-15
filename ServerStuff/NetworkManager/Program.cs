@@ -10,7 +10,7 @@ namespace NetworkManager
             Network.DataRecieved += OnDataRecieved;
             try
             {
-                Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
+                //Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
                 //Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
             }
             catch (Exception e)
@@ -19,12 +19,14 @@ namespace NetworkManager
                 Console.ReadLine();
                 Environment.Exit(1);
             }
-            Network.SendData(new byte[] { 0 });
-            byte[] test = NetUtils.PieceCommand(new object[] { "Hello Whats up!", new byte[] { 0, 5, 0 }, 1234, new Message("Hello whats up", new PID("12345678", "epicknex", true))});
-            for(int i = 0; i < test.Length; i++)
+            //Network.SendData(new byte[] { 0 });
+            byte[] test = NetUtils.PieceCommand(new object[] { "Hello Whats up!", 1234, new Message("Hello whats up", new PID("12345678", "epicknex", true))});
+            object[] test2 = NetUtils.FormCommand(test, new string[] { "s", "i", "m" });
+            for (int i = 0; i < test2.Length; i++)
             {
-                Console.Write((char)test[i]);
+                Console.WriteLine(test2[i]);
             }
+            Console.ReadLine();
         }
         static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
