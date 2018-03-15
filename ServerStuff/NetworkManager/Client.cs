@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace NetworkManager
 {
-    class Client
+    public class Client
     {
         private Socket client;
         private IPEndPoint remoteEP;

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NetworkManager
 {
-    class Room
+    public class Room
     {
         private int MAX_MEMBERS = 4; //Max members that can be on a server
         private int MAX_ID_SIZE = 8;

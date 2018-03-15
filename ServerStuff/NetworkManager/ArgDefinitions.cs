@@ -21,4 +21,9 @@ namespace NetworkManager
         public int errorCode { get; set; }
         public string errorMessage { get; set; }
     }
+    public class MessageArgs : EventArgs
+    {
+        public string Message { get; set; }
+        public PID Player { get; set; }
+    }
 }

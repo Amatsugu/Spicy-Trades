@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NetworkManager
 {
-    class PID
+    public class PID
     {
         private string id;
         private string name;

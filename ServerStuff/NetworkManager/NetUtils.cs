@@ -5,7 +5,7 @@ using System.Text;
 
 namespace NetworkManager
 {
-    static class NetUtils
+    public static class NetUtils
     {
         public static T[] SubArray<T>(this T[] data, int index, int length)
         {

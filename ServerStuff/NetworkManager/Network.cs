@@ -7,7 +7,7 @@ using System.Threading;
 
 namespace NetworkManager
 {
-    static class Network
+    public static class Network
     {
         //Data Types
         public static byte PID       = 0x00; //Player ID This is sent once, then player id's are used

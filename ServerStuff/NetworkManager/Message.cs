@@ -5,7 +5,7 @@ using System.Globalization;
 
 namespace NetworkManager
 {
-    class Message
+    public class Message
     {
         private string message;
         private PID pid;
