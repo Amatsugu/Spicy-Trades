@@ -47,16 +47,20 @@ namespace NetworkManager
     }
     public class FriendsArgs : EventArgs
     {
-        public PID[] Players { get; set; }
+        public PID[] Friends { get; set; }
     }
     public class FriendRequestArgs : EventArgs
     {
-        public PID Player { get; set; }
+        public PID[] Requests { get; set; }
     }
     public class RoomIsHostArgs : EventArgs
     {
         public bool host { get; set; }
         public Room Room { get; set; }
+    }
+    public class RoomListArgs : EventArgs
+    {
+        public Room[] Rooms { get; set; }
     }
     public class ResourceListArgs : EventArgs
     {

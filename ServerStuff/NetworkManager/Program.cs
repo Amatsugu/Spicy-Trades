@@ -28,7 +28,7 @@ namespace NetworkManager
                 Console.WriteLine(temp1[i]);
             }
             Console.WriteLine(temp2);
-            Network.SendData(new byte[] { 0 });
+            //Network.SendData(new byte[] { 0 });
             Console.ReadLine();
         }
     }

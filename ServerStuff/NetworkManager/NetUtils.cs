@@ -100,7 +100,7 @@ namespace NetworkManager
                     temp.Add(new Room(data.SubArray(pos, len)));
                     pos += len;
                 }
-                else if (split[i] == "string[]" || split[i] == "s")
+                else if (split[i] == "string[]" || split[i] == "s[]")
                 {
                     var strArr = new List<string>();
                     Int16 slen = BitConverter.ToInt16(data.SubArray(pos, 2), 0);

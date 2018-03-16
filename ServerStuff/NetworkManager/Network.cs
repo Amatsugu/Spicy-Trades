@@ -13,6 +13,9 @@ namespace NetworkManager
         public const byte PID       = 0x00; //Player ID This is sent once, then player id's are used
         public const byte ROOM      = 0x01; //Room data This is sent once then room id's are used
         public const byte MESSAGE   = 0x02; //This is the message object that is sent when needed
+        //BOOLS
+        public const byte TRUE      = 0x00;
+        public const byte FALSE     = 0xFF;
         //Commands
         public const byte HELLO        = 0x00; //The server needs to know if you're still there
         public const byte LOGIN        = 0x01; //Logins in the user
@@ -61,8 +64,10 @@ namespace NetworkManager
         //Client stuff
         public static Client connection;
         private static string self;
-        private static Dictionary<string, PID> players;
-        private static Dictionary<string, Room> rooms;
+        public static PID player;
+        public static Dictionary<string, PID> players;
+        public static Dictionary<string, Room> rooms;
+        public static Room CurrentRoom;
         public static void Connect(string ip, int port,string user,string pass)
         {//We need to be able to log in
             DataManager.INIT();
@@ -133,6 +138,14 @@ namespace NetworkManager
         {
             //Log the user in and return its session token
             return "";
+        }
+        public static void Consume(byte cmd) //Consumes commands
+        {
+            //
+        }
+        public static void Retrieve(byte cmd) //Collects commands
+        {
+            //
         }
         public static void CreateRoom(string password) //This will trigger the player joined room event with you as the argument
         {//Might need to send map data as well
@@ -252,11 +265,7 @@ namespace NetworkManager
         }
         public static void SendData(byte[] data)
         {
-            //Add a way to ensure data goes where it needs to
-            connection.Send(data);
-        }
-        public static void SendDataUnMonitored(byte[] data)
-        {
+            Consume(data[0]);
             connection.Send(data);
         }
         public static void SendData(string data)
@@ -308,6 +317,21 @@ namespace NetworkManager
             EventHandler<ErrorArgs> handler = Error;
             handler(null, e);
         }
+        public static void OnRoomList(RoomListArgs e)
+        {
+            EventHandler<RoomListArgs> handler = RoomList;
+            handler(null, e);
+        }
+        public static void OnRoomCount(RoomCountArgs e)
+        {
+            EventHandler<RoomCountArgs> handler = RoomCount;
+            handler(null, e);
+        }
+        public static void OnFriendsList(FriendsArgs e)
+        {
+            EventHandler<FriendsArgs> handler = FriendsList;
+            handler(null, e);
+        }
         public static event EventHandler<DataRecievedArgs> DataRecieved;
         public static event EventHandler<ChatDataArgs> Chat;
         public static event EventHandler<FriendRequestArgs> FriendRequested;
@@ -315,6 +339,8 @@ namespace NetworkManager
         public static event EventHandler<RoomUpdateArgs> PlayerJoinedRoom;
         public static event EventHandler<RoomUpdateArgs> PlayerLeftRoom;
         public static event EventHandler<RoomCountArgs> RoomCount;
+        public static event EventHandler<RoomListArgs> RoomList;
+        public static event EventHandler<FriendsArgs> FriendsList;
         public static event EventHandler<ErrorArgs> Error;
     }
 }
