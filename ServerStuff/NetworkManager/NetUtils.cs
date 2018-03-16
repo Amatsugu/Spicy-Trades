@@ -57,19 +57,20 @@ namespace NetworkManager
 
             return result;
         }
-        public static object[] FormCommand(byte[] data,string[] split)
+        public static object[] FormCommand(byte[] data, string[] split)
         {
             var temp = new List<object>();
             int pos = 0;
             for (int i = 0; i < split.Length; i++)
             {
-                if (split[i] == "string" || split[i]=="s") // first 2 bytes length
+                if (split[i] == "string" || split[i] == "s") // first 2 bytes length
                 {
                     Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
                     pos += 2;
                     temp.Add(ConvertByteToString(data.SubArray(pos, len)));
                     pos += len;
-                } else if (split[i] == "byte" || split[i]=="b")
+                }
+                else if (split[i] == "byte" || split[i] == "b")
                 {
                     temp.Add(data[pos++]);
                 }
@@ -99,6 +100,20 @@ namespace NetworkManager
                     temp.Add(new Room(data.SubArray(pos, len)));
                     pos += len;
                 }
+                else if (split[i] == "string[]" || split[i] == "s")
+                {
+                    var strArr = new List<string>();
+                    Int16 slen = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    for (int j = 0; j < slen; j++)
+                    {
+                        Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                        pos += 2;
+                        strArr.Add(ConvertByteToString(data.SubArray(pos, len)));
+                        pos += len;
+                    }
+                    temp.Add(strArr.ToArray());
+                }
             }
             return temp.ToArray();
         }
@@ -107,7 +122,28 @@ namespace NetworkManager
             var temp = new List<byte>();
             for (int i = 0; i < parts.Length; i++)
             {
-                if (parts[i].GetType().ToString().Contains("String"))
+                if (parts[i].GetType().ToString().Contains("String[]"))
+                {
+                    string[] arr = (string[])parts[i];
+                    int slen = arr.Length;
+                    byte[] dat;
+                    byte[] len;
+                    len = BitConverter.GetBytes((Int16)slen);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < slen; j++)
+                    {
+                        dat = ASCIIEncoding.ASCII.GetBytes((string)arr[j]);
+                        len = BitConverter.GetBytes((Int16)dat.Length);
+                        temp.Add(len[0]);
+                        temp.Add(len[1]);
+                        for (int k = 0; k < dat.Length; k++)
+                        {
+                            temp.Add(dat[k]);
+                        }
+                    }
+                }
+                else if (parts[i].GetType().ToString().Contains("String"))
                 {
                     byte[] dat = ASCIIEncoding.ASCII.GetBytes((string)parts[i]);
                     byte[] len = BitConverter.GetBytes((Int16)dat.Length);
@@ -117,17 +153,20 @@ namespace NetworkManager
                     {
                         temp.Add(dat[j]);
                     }
-                } else if (parts[i].GetType().ToString().Contains("Byte"))
+                }
+                else if (parts[i].GetType().ToString().Contains("Byte"))
                 {
                     temp.Add((byte)parts[i]);
-                } else if (parts[i].GetType().ToString().Contains("Int"))
+                }
+                else if (parts[i].GetType().ToString().Contains("Int"))
                 {
                     byte[] dat = BitConverter.GetBytes((Int32)parts[i]);
                     for (int j = 0; j < dat.Length; j++)
                     {
                         temp.Add(dat[j]);
                     }
-                } else if (parts[i].GetType().ToString().Contains("Message"))
+                }
+                else if (parts[i].GetType().ToString().Contains("Message"))
                 {
                     byte[] dat = ((Message)parts[i]).ToBytes();
                     byte[] len = BitConverter.GetBytes((Int16)dat.Length);
@@ -137,7 +176,8 @@ namespace NetworkManager
                     {
                         temp.Add(dat[j]);
                     }
-                } else if (parts[i].GetType().ToString().Contains("PID"))
+                }
+                else if (parts[i].GetType().ToString().Contains("PID"))
                 {
                     byte[] dat = ((PID)parts[i]).ToBytes();
                     byte[] len = BitConverter.GetBytes((Int16)dat.Length);
@@ -147,7 +187,8 @@ namespace NetworkManager
                     {
                         temp.Add(dat[j]);
                     }
-                } else if (parts[i].GetType().ToString().Contains("Room"))
+                }
+                else if (parts[i].GetType().ToString().Contains("Room"))
                 {
                     byte[] dat = ((Room)parts[i]).ToBytes();
                     byte[] len = BitConverter.GetBytes((Int16)dat.Length);

@@ -7,7 +7,6 @@ namespace NetworkManager
     {
         static void Main(string[] args)
         {
-            Network.DataRecieved += OnDataRecieved;
             try
             {
                 //Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
@@ -19,30 +18,18 @@ namespace NetworkManager
                 Console.ReadLine();
                 Environment.Exit(1);
             }
-            //Network.SendData(new byte[] { 0 });
-            byte[] test = NetUtils.PieceCommand(new object[] { "Hello Whats up!", 1234, new Message("Hello whats up", new PID("12345678", "epicknex", true))});
-            object[] test2 = NetUtils.FormCommand(test, new string[] { "s", "i", "m" });
-            for (int i = 0; i < test2.Length; i++)
+            byte[] test = NetUtils.PieceCommand(new object[] { new string[] { "test1","test2","test3"}, 12345 });
+
+            object[] test2 = NetUtils.FormCommand(test,new string[] {"s[]","i" });
+            var temp1 = (string[])test2[0];
+            var temp2 = (int)test2[1];
+            for(int i = 0; i < temp1.Length; i++)
             {
-                Console.WriteLine(test2[i]);
+                Console.WriteLine(temp1[i]);
             }
+            Console.WriteLine(temp2);
+            Network.SendData(new byte[] { 0 });
             Console.ReadLine();
-        }
-        static void OnDataRecieved(object sender, DataRecievedArgs e)
-        {
-            byte command = e.RawResponse[0];
-            byte error = e.RawResponse[1];
-            if (error != Network.NO_ERROR)
-            {
-                ErrorArgs data = new ErrorArgs();
-                data.errorCode = error;
-                Network.OnError(data);
-            }
-            if (command == Network.HELLO)
-            {
-                Network.SendData(new byte[] { 0 }); // Send Hello command to server
-            }
-            Console.WriteLine("Got Response from server: "+command+"  "+error);
         }
     }
 }

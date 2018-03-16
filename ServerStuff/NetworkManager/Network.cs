@@ -10,54 +10,70 @@ namespace NetworkManager
     public static class Network
     {
         //Data Types
-        public static byte PID       = 0x00; //Player ID This is sent once, then player id's are used
-        public static byte ROOM      = 0x01; //Room data This is sent once then room id's are used
-        public static byte MESSAGE   = 0x02; //This is the message object that is sent when needed
+        public const byte PID       = 0x00; //Player ID This is sent once, then player id's are used
+        public const byte ROOM      = 0x01; //Room data This is sent once then room id's are used
+        public const byte MESSAGE   = 0x02; //This is the message object that is sent when needed
         //Commands
-        public static byte HELLO        = 0x00; //The server needs to know if you're still there
-        public static byte LOGIN        = 0x01; //Logins in the user
-        public static byte REGISTER     = 0x02; //Register an account
-        public static byte UPDATES      = 0x03; //CheckFor updates
-        public static byte DOUPDATES    = 0x04; //Gets the update files from the server
-        public static byte LISTR        = 0x05; //Gets a list of rooms returns Room[] in callback
-        public static byte JROOM        = 0x06; //Joins a room
-        public static byte CHAT         = 0x07; //
-        public static byte REQUEST      = 0x08;
-        public static byte LISTF        = 0x09;
-        public static byte LISTRF       = 0x0A;
-        public static byte ADDF         = 0x0B;
-        public static byte FORMR        = 0x0C;
-        public static byte IHOST        = 0x0D;
-        public static byte KICK         = 0x0E;
-        public static byte INVITEF      = 0x0F;
-        public static byte READY        = 0x10;
-        public static byte LEAVER       = 0x11;
-        public static byte GRESORCE     = 0x12;
-        public static byte INIT         = 0x13;
-        public static byte CHATDM       = 0x14;
-        public static byte CHATRM       = 0x15;
-        public static byte ROOMS        = 0x16; //Gets a room count
+        public const byte HELLO        = 0x00; //The server needs to know if you're still there
+        public const byte LOGIN        = 0x01; //Logins in the user
+        public const byte REGISTER     = 0x02; //Register an account
+        public const byte UPDATES      = 0x03; //CheckFor updates
+        public const byte DOUPDATES    = 0x04; //Gets the update files from the server
+        public const byte LISTR        = 0x05; //Gets a list of rooms returns Room[] in callback
+        public const byte JROOM        = 0x06; //Joins a room
+        public const byte CHAT         = 0x07; //Sends chat to global chat
+        public const byte REQUEST      = 0x08; //Sends a friend request
+        public const byte LISTF        = 0x09; //Gets list of friends
+        public const byte LISTRF       = 0x0A; //Gets list of friend requests
+        public const byte ADDF         = 0x0B; //Adds a friend who has sent you a request
+        public const byte FORMR        = 0x0C; //Creates a room
+        public const byte IHOST        = 0x0D; //Are you the host of a room
+        public const byte KICK         = 0x0E; //kick a player from a room
+        public const byte INVITEF      = 0x0F; //invites a friend to a room
+        public const byte READY        = 0x10; //Tell the server you are ready
+        public const byte LEAVER       = 0x11; //Leave a room
+        public const byte GRESORCE     = 0x12; //Get resource
+        public const byte INIT         = 0x13; //INIT
+        public const byte CHATDM       = 0x14; //sends a chat to a player
+        public const byte CHATRM       = 0x15; //sends a chat to a room
+        public const byte ROOMS        = 0x16; //Gets a room count
+        public const byte GROOM        = 0x17; //gets a room object from a roomid
+        public const byte GPID         = 0x18; //gets a pid object from a playerid
         //Error Codes
-        public static byte NO_ERROR              = 0x00;
-        public static byte UNKNOWN_ERROR         = 0x01;
-        public static byte INVALID_USERPASS      = 0x02;
-        public static byte INVALID_UID           = 0x03;
-        public static byte INVALID_FID           = 0x04;
-        public static byte INVALID_RID           = 0x05;
-        public static byte INVALID_EMAIL         = 0x06;
-        public static byte INVALID_CID           = 0x07;
-        public static byte CANT_FORM_ROOM        = 0x08;
-        public static byte CANT_SEND_CHAT        = 0x09;
-        public static byte CANNOT_KICK_PLAYER    = 0x0A;
-        public static byte NO_UPDATES            = 0x0B;
-        public static byte CANT_JOIN_ROOM        = 0x0C;
-        public static byte MESSAGE_TO_LARGE      = 0x0D;
+        public const byte NO_ERROR              = 0x00;
+        public const byte UNKNOWN_ERROR         = 0x01;
+        public const byte INVALID_USERPASS      = 0x02;
+        public const byte INVALID_UID           = 0x03;
+        public const byte INVALID_FID           = 0x04;
+        public const byte INVALID_RID           = 0x05;
+        public const byte INVALID_EMAIL         = 0x06;
+        public const byte INVALID_CID           = 0x07;
+        public const byte CANT_FORM_ROOM        = 0x08;
+        public const byte CANT_SEND_CHAT        = 0x09;
+        public const byte CANNOT_KICK_PLAYER    = 0x0A;
+        public const byte NO_UPDATES            = 0x0B;
+        public const byte CANT_JOIN_ROOM        = 0x0C;
+        public const byte MESSAGE_TO_LARGE      = 0x0D;
+        //Chat codes
+        public const byte CHAT_DM = 0x00;
+        public const byte CHAT_RM = 0x01;
+        public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
         public static Client connection;
         private static string self;
+        private static Dictionary<string, PID> players;
+        private static Dictionary<string, Room> rooms;
         public static void Connect(string ip, int port,string user,string pass)
         {//We need to be able to log in
-            //self = Login(ip,port,user,pass);
+            DataManager.INIT();
+            try
+            {
+                self = Login(ip,port,user,pass);
+            }
+            catch
+            {
+                throw new Exception("Invalid Login!");
+            }
             IPHostEntry ipHostInfo;
             IPAddress ipAddress;
             try
@@ -82,8 +98,40 @@ namespace NetworkManager
                 throw new Exception("Unable to connect to the server! Is the server running? " + ip + ":" + port);
             }
         }
+        public static PID GetPID(string pid)
+        {
+            if (players.ContainsKey(pid))
+            {
+                return players[pid];
+            } else
+            {
+                DownloadPID(pid);
+                while (!players.ContainsKey(pid))
+                {
+                    //Lets wait it out...
+                }
+                return players[pid];
+            }
+        }
+        public static Room GetRoom(string rid)
+        {
+            if (rooms.ContainsKey(rid))
+            {
+                return rooms[rid];
+            }
+            else
+            {
+                DownloadRoom(rid);
+                while (!rooms.ContainsKey(rid))
+                {
+                    //Lets wait it out...
+                }
+                return rooms[rid];
+            }
+        }
         public static string Login(string ip, int port, string user, string pass)
         {
+            //Log the user in and return its session token
             return "";
         }
         public static void CreateRoom(string password) //This will trigger the player joined room event with you as the argument
@@ -104,12 +152,12 @@ namespace NetworkManager
         }
         public static void HasUpdates()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { UPDATES });
-            //This can be done through Managed UDP or TCP
-        } 
+            //byte[] temp = NetUtils.PieceCommand(new object[] { UPDATES });
+            //This can be done through Managed UDP or TCP... This will probably not be implemented for the current project
+        }
         public static void DoUpdates()
         {
-            //Does the updates if any...
+            //Does the updates if any... This will probably not be implemented for the current project
         }
         public static void GetNumberOfRooms()
         {
@@ -192,6 +240,16 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { CHAT, self, msg});
             SendData(temp);
         }
+        public static void DownloadRoom(string roomid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, roomid });
+            SendData(temp);
+        }
+        public static void DownloadPID(string playerid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, playerid });
+            SendData(temp);
+        }
         public static void SendData(byte[] data)
         {
             //Add a way to ensure data goes where it needs to
@@ -220,29 +278,29 @@ namespace NetworkManager
             EventHandler<DataRecievedArgs> handler = DataRecieved;
             handler(null, e);
         }
-        public static void OnChat(DataEventArgs e)
+        public static void OnChat(ChatDataArgs e)
         {
-            EventHandler<DataEventArgs> handler = Chat;
+            EventHandler<ChatDataArgs> handler = Chat;
             handler(null, e);
         }
-        public static void OnFriendRequest(DataEventArgs e)
+        public static void OnFriendRequest(FriendRequestArgs e)
         {
-            EventHandler<DataEventArgs> handler = FriendRequested;
+            EventHandler<FriendRequestArgs> handler = FriendRequested;
             handler(null, e);
         }
-        public static void OnGameStarted(DataEventArgs e)
+        public static void OnGameStarted(BasicResponseArgs e)
         {
-            EventHandler<DataEventArgs> handler = GameStarted;
+            EventHandler<BasicResponseArgs> handler = GameStarted;
             handler(null, e);
         }
-        public static void OnPlayerJoined(DataEventArgs e)
+        public static void OnPlayerJoined(RoomUpdateArgs e)
         {
-            EventHandler<DataEventArgs> handler = PlayerJoinedRoom;
+            EventHandler<RoomUpdateArgs> handler = PlayerJoinedRoom;
             handler(null, e);
         }
-        public static void OnPlayerLeft(DataEventArgs e)
+        public static void OnPlayerLeft(RoomUpdateArgs e)
         {
-            EventHandler<DataEventArgs> handler = PlayerLeftRoom;
+            EventHandler<RoomUpdateArgs> handler = PlayerLeftRoom;
             handler(null, e);
         }
         public static void OnError(ErrorArgs e)
@@ -251,12 +309,12 @@ namespace NetworkManager
             handler(null, e);
         }
         public static event EventHandler<DataRecievedArgs> DataRecieved;
-        public static event EventHandler<DataEventArgs> Chat;
-        public static event EventHandler<DataEventArgs> FriendRequested;
-        public static event EventHandler<DataEventArgs> GameStarted;
-        public static event EventHandler<DataEventArgs> PlayerJoinedRoom;
-        public static event EventHandler<DataEventArgs> PlayerLeftRoom;
-        //public static event EventHandler<DataEventArgs> ; //TODO Add the eventargs for each callback
+        public static event EventHandler<ChatDataArgs> Chat;
+        public static event EventHandler<FriendRequestArgs> FriendRequested;
+        public static event EventHandler<BasicResponseArgs> GameStarted;
+        public static event EventHandler<RoomUpdateArgs> PlayerJoinedRoom;
+        public static event EventHandler<RoomUpdateArgs> PlayerLeftRoom;
+        public static event EventHandler<RoomCountArgs> RoomCount;
         public static event EventHandler<ErrorArgs> Error;
     }
 }
