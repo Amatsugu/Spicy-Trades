@@ -74,6 +74,10 @@ namespace NetworkManager
                 {
                     temp.Add(data[pos++]);
                 }
+                else if (split[i] == "bool" || split[i] == "bo")
+                {
+                    temp.Add(data[pos++] == 255);
+                }
                 else if (split[i] == "int" || split[i] == "i") // first 2 bytes length
                 {
                     temp.Add(BitConverter.ToInt32(data.SubArray(pos, 4), 0));
@@ -157,6 +161,17 @@ namespace NetworkManager
                 else if (parts[i].GetType().ToString().Contains("Byte"))
                 {
                     temp.Add((byte)parts[i]);
+                }
+                else if (parts[i].GetType().ToString().Contains("Bool"))
+                {
+                    bool _temp = (bool)parts[i];
+                    if (_temp)
+                    {
+                        temp.Add(255);
+                    } else
+                    {
+                        temp.Add(0);
+                    }
                 }
                 else if (parts[i].GetType().ToString().Contains("Int"))
                 {

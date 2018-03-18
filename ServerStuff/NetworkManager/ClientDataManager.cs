@@ -4,7 +4,7 @@ using System.Text;
 
 namespace NetworkManager
 {
-    public static class DataManager
+    public static class ClientDataManager
     {
         public static void INIT()
         {
@@ -126,16 +126,21 @@ namespace NetworkManager
                     //No need for this command... If a player joined you'll get a resopnse from JROOM
                     break;
                 case Network.READY:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "bool" });
+                    Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
                     break;
-                case Network.LEAVER:
-                    //
+                case Network.LEAVER: // only sent if you are in the room
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    roomargs = new RoomUpdateArgs();
+                    roomargs.Room = Network.GetRoom((string)objects[0]);
+                    roomargs.Player = Network.GetPID((string)objects[1]);
+                    Network.CurrentRoom.RemoveMember(roomargs.Player);
                     break;
                 case Network.GRESORCE:
-                    //
+                    // Need more data from kham
                     break;
                 case Network.INIT:
-                    //
+                    Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });

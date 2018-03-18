@@ -164,26 +164,58 @@ namespace NetworkManager
         }
         public void AddMember(PID member)
         {
-            // TODO Add member to the room, change local data and send command to the server
             members[numOfPlayers++] = member;
+            Network.InviteFriend(roomID, member.GetID()); // Its started
+        }
+        public void RemoveMember(PID member)
+        {
+            PID[] temp = new PID[MAX_MEMBERS];
+            int count = 0;
+            for (int i = 0; i < MAX_MEMBERS; i++)
+            {
+                if (members[i].GetID()!=member.GetID())
+                {
+                    temp[count++] = members[i];
+                }
+            }
+            members = temp;
         }
         public bool Kick(PID member)
         {
-            // TODO Kick Member from the room... Should this be host only or anyone...
+            if (host)
+            {
+                Network.KickPlayer(roomID, member.GetID()); // Its started
+                return true;
+            }
             return false;
+        }
+        public PID[] GetMembers()
+        {
+            return members;
         }
         public void LeaveRoom()
         {
-            // TODO Leave the room
+            Network.LeaveRoom(roomID); //Tells the server you are leaving
         }
         public void SetReady(bool b)
         {
             isReady = b;
-            // TODO send data to server
+            Network.SetReady(b); //DW Server will not mirror commands sent to you...
+        }
+        public void SetReady(bool b,PID player)
+        {
+            for(int i = 0; i < MAX_MEMBERS; i++)
+            {
+                if (player.GetID() == members[i].GetID())
+                {
+                    theyReady[i] = b;
+                    break;
+                }
+            }
         }
         public void SendChat(string message)
         {
-            // TODO add chatting support in rooms
+            Network.SendRoomChat(new Message(message,Network.player),roomID);
         }
     }
 }

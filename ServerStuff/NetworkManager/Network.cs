@@ -62,45 +62,51 @@ namespace NetworkManager
         public const byte CHAT_RM = 0x01;
         public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
-        public static Client connection;
+        public static UdpClient connection;
         private static string self;
         public static PID player;
         public static Dictionary<string, PID> players;
         public static Dictionary<string, Room> rooms;
         public static Room CurrentRoom;
+        public static bool HANDSHAKEDONE = false;
         public static void Connect(string ip, int port,string user,string pass)
-        {//We need to be able to log in
-            DataManager.INIT();
+        {
+            Login(ip, port, user, pass);
+            ClientDataManager.INIT();
+            connection = new UdpClient(port);
             try
             {
-                self = Login(ip,port,user,pass);
-            }
-            catch
-            {
-                throw new Exception("Invalid Login!");
-            }
-            IPHostEntry ipHostInfo;
-            IPAddress ipAddress;
-            try
-            {
-                ipHostInfo = Dns.GetHostEntry(ip);
-                ipAddress = ipHostInfo.AddressList[0];
-            }
-            catch
-            {
-                throw new Exception("Unable to connect to the server! Unknown Hostname: " + ip);
-            }
-            try
-            {
-                IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
-                Socket client = new Socket(ipAddress.AddressFamily, SocketType.Dgram, ProtocolType.Udp);
-                connection = new Client(client, remoteEP, ipHostInfo, ipAddress, ip, port);
+                connection.Connect(ip, port);
+                Byte[] sendBytes = new byte[] { 0, 0 };
+                SendData(sendBytes);
                 Thread t = new Thread(new ThreadStart(ThreadProc));
                 t.Start();
             }
-            catch
+            catch (Exception e)
             {
-                throw new Exception("Unable to connect to the server! Is the server running? " + ip + ":" + port);
+                Console.WriteLine(e.ToString());
+            }
+        }
+        public static void Host(int port)
+        {
+            ServerDataManager.INIT();
+            byte[] receiveBytes;
+            IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
+            connection = new UdpClient(ipep);
+
+            Console.WriteLine("Server Hosted on port: "+port+" Waiting for clients!");
+
+            IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
+
+            while (true) // No need to run the main loop in a thread, but processes will run on threads
+            {
+                receiveBytes = connection.Receive(ref sender);
+
+                string returnData=Encoding.ASCII.GetString(receiveBytes, 0, receiveBytes.Length);
+                DataRecievedArgs data = new DataRecievedArgs();
+                data.Response = returnData;
+                data.RawResponse = receiveBytes;
+                OnDataRecieved(data);
             }
         }
         public static PID GetPID(string pid)
@@ -134,6 +140,12 @@ namespace NetworkManager
                 return rooms[rid];
             }
         }
+        public static void RegisterAccount(string user, string pass)
+        {
+            //TODO SSL connection to register 
+            byte[] temp = NetUtils.PieceCommand(new object[] { REGISTER, user, pass });
+            //DO IT
+        }
         public static string Login(string ip, int port, string user, string pass)
         {
             //Log the user in and return its session token
@@ -149,19 +161,13 @@ namespace NetworkManager
         }
         public static void CreateRoom(string password) //This will trigger the player joined room event with you as the argument
         {//Might need to send map data as well
-            byte[] temp = NetUtils.PieceCommand(new object[] {FORMR, self});
+            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self });
             SendData(temp);
         }
         public static void JoinRoom(string roomid)
         {//This will trigger the player joined room event with you as the argument
             byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
             SendData(temp);
-        }
-        public static void RegisterAccount(string user,string pass)
-        {
-            //TODO SSL connection to register 
-            byte[] temp = NetUtils.PieceCommand(new object[] { REGISTER, user, pass });
-            //DO IT
         }
         public static void HasUpdates()
         {
@@ -184,7 +190,7 @@ namespace NetworkManager
         }
         public static void SendFriendRequest(string playerid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { REQUEST, playerid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { REQUEST, self, playerid });
             SendData(temp);
         }
         public static void ListFriends()
@@ -266,20 +272,22 @@ namespace NetworkManager
         public static void SendData(byte[] data)
         {
             Consume(data[0]);
-            connection.Send(data);
-        }
-        public static void SendData(string data)
-        {
-            connection.Send(data);
+            connection.Send(data,data.Length);
         }
         public static void ThreadProc()
         {
-            connection.Receive();
-            connection.sendDone.WaitOne();
+            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
-                //Keep the thread going
-                Thread.Sleep(10);
+                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+                if (receiveBytes.Length > 0)
+                {
+                    string returnData = Encoding.ASCII.GetString(receiveBytes);
+                    DataRecievedArgs data = new DataRecievedArgs();
+                    data.Response = returnData;
+                    data.RawResponse = receiveBytes;
+                    OnDataRecieved(data);
+                }
             }
         }
         public static void OnDataRecieved(DataRecievedArgs e)
