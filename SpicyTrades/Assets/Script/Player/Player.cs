@@ -22,14 +22,14 @@ public class Player : MonoBehaviour
 	{
 		_curTile = tile;
 		transform.position = _curTile.WolrdPos;
+		if(resourceList == null)
+			resourceList = GameObject.Find("Text").GetComponent<Text>();
+		resourceList.text = tile.Name + " [" + (tile.tileInfo as TownTileInfo).townType.ToString() + "] | Population: " + tile.Population + "\n";
 		var res = tile.Resources;
 		if (res == null)
 			return;
-		if(resourceList == null)
-			resourceList = GameObject.Find("Text").GetComponent<Text>();
-		resourceList.text = "";
 		foreach (var r in res)
-			resourceList.text += "<b><color=#"+ColorUtility.ToHtmlStringRGB(r.color)+">" + r.ResourceName + "</color></b> [" + r.category.ToString() + "]: Y=" + r.yeild + " | W=" + r.requiredWorkers + "\n";
+			resourceList.text += "<b><color=#"+ColorUtility.ToHtmlStringRGB(r.color)+">" + r.name + "</color></b> [" + r.category.ToString() + "]: Y=" + r.yeild + " | W=" + r.requiredWorkers + "\n";
 	}
 
 	public void MoveTo(TownTile tile)

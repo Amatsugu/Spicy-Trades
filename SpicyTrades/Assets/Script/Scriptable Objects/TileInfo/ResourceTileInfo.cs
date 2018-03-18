@@ -6,7 +6,6 @@ using UnityEngine;
 public class ResourceTileInfo : TileInfo
 {
 	public new readonly TileType tileType = TileType.Resource;
-	public string ResourceName;
 	public ResourceCategory category;
 	public int requiredWorkers;
 	public float yeild;

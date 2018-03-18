@@ -14,9 +14,14 @@ MonoBehaviour:
   TownTile: {fileID: 11400000, guid: 18523384643e1384fb079e9829d266a1, type: 2}
   VillageTile: {fileID: 11400000, guid: d9d065a4f8033b44aaf4be13a30f54cd, type: 2}
   CapitalTile: {fileID: 11400000, guid: b39c6d4b2a6a2544eb024777ddac23ab, type: 2}
+  townNames: {fileID: 11400000, guid: 23b2ce54fe986f24cbd8b3fd17b721a3, type: 2}
+  villageNames: {fileID: 11400000, guid: 9849feb45bba7e3439b49cc2842522c4, type: 2}
+  capitalNames: {fileID: 11400000, guid: b01b2ba7b19041c458162bbb397e0297, type: 2}
   RoadTile: {fileID: 11400000, guid: e315ff8c6d9e10d44b592a78602fd911, type: 2}
   maxGenerationCycles: 100
   maxTowns: 15
   minTowns: 5
+  maxVillages: 5
+  minVillages: 2
   minDistance: 5
   pathMethod: 2

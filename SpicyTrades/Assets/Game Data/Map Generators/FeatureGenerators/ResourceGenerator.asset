@@ -11,10 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58853d403c60cff448a5d6bd6399eea1, type: 3}
   m_Name: ResourceGenerator
   m_EditorClassIdentifier: 
-  maxResources: 3
+  maxResources: 6
   resourceTile: {fileID: 1295639896062918, guid: 8befeb34aae345649913de7ccd51f1cc,
     type: 2}
-  resources:
-  - {fileID: 11400000, guid: abf58effb97c4b144b14968b73ed263d, type: 2}
-  - {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
-  basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
+  resourceProvider: {fileID: 11400000, guid: 2cc54f8399e287341bb9e691c67a9175, type: 2}

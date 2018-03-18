@@ -17,26 +17,34 @@ public class TownGenerator : FeatureGenerator
 	public TownTileInfo TownTile;
 	public TownTileInfo VillageTile;
 	public TownTileInfo CapitalTile;
+	public NameProvider townNames;
+	public NameProvider villageNames;
+	public NameProvider capitalNames;
 	public TileInfo RoadTile;
 	public int maxGenerationCycles = 100;
 	public int maxTowns = 8;
 	public int minTowns = 4;
+	public int maxVillages = 5;
+	public int minVillages = 2;
 	public float minDistance = 5f;
 	public PathMethod pathMethod;
 	public override void Generate(Map map)
 	{
+		//Capital Selection
 		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		var capitalCandidates = from Tile t in map where t.Tag == "Ground" && t.GetNeighbors().Count(nt => nt != null && nt.Tag == "Water") == 3 select t;
 		var capitalCandicateCenters = capitalCandidates.SelectMany(t => from Tile nt in t.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt);
 		var centerCandidates = from Tile t in capitalCandicateCenters where t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground") select t;
 		var ccA = centerCandidates.ToArray();
-		var capital = ccA[Random.Range(0, ccA.Length-1)];
 		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
-		capital = map.MakeCapital(capital, CapitalTile);
+		var capital = map.MakeCapital(ccA[Random.Range(0, ccA.Length - 1)], CapitalTile);
+		capital.Name = capitalNames.GetNameList().GetNextName();
 		int numTowns = Random.Range(minTowns, maxTowns);
 		int curCycles = 0;
-		Tile[] towns = new Tile[numTowns];
+		TownTile[] towns = new TownTile[numTowns];
+		//Town Generation
 		Debug.Log(GeneratorName + "Slecting " + numTowns + " towns...");
+		var townNameProdider = townNames.GetNameList();
 		while (curCycles++ < maxGenerationCycles)
 		{
 			if (numTowns <= 0)
@@ -50,11 +58,40 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (towns.Any(t => t != null && t.DistanceTo(townCandidate) < minDistance))
 				continue;
-			towns[--numTowns] = map.MakeTown(townCandidate, TownTile).SetWeight(0);
+			var town = map.MakeTown(townCandidate, TownTile).SetWeight(0) as TownTile;
+			town.Name = townNameProdider.GetNextName();
+			towns[--numTowns] = town;
 		}
 		Debug.Log(GeneratorName + "Finished in " + curCycles + " cycles");
+		//Village Generator
+		int numVillages = Random.Range(minVillages, maxVillages);
+		TownTile[] villages = new TownTile[numVillages];
+		curCycles = 0;
+		Debug.Log(GeneratorName + "Slecting " + numVillages + " villages...");
+		var villageNameProdider = townNames.GetNameList();
+		while (curCycles++ < maxGenerationCycles)
+		{
+			if (numVillages <= 0)
+				break;
+			Tile villageCandidate = map[Random.Range(0, map.TileCount)];
+			if (villageCandidate.Tag != "Ground")
+				continue;
+			if (!villageCandidate.GetNeighbors().All(t => t != null && t.Tag == "Ground"))
+				continue;
+			if (villageCandidate.DistanceTo(capital) < minDistance)
+				continue;
+			if (towns.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance) && villages.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance))
+				continue;
+			var village = map.MakeTown(villageCandidate, VillageTile).SetWeight(0) as TownTile;
+			village.Name = villageNameProdider.GetNextName();
+			villages[--numVillages] = village;
+		}
+		Debug.Log(GeneratorName + "Finished in " + curCycles + " cycles");
+		//Generating Roads
+		Debug.Log(GeneratorName + "Generating Roads");
 		List<Tile> open = new List<Tile>();
 		open.AddRange(towns);
+		open.AddRange(villages);
 		List<Tile> closed = new List<Tile>
 		{
 			capital
@@ -123,7 +160,7 @@ public class TownGenerator : FeatureGenerator
 			RenderPath(path, map);
 
 		}*/
-
+		Debug.Log(GeneratorName + "Finished");
 	}
 
 
