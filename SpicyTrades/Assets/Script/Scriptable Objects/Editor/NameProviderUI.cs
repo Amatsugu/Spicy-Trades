@@ -19,22 +19,29 @@ class NameProviderUI : Editor
 
 	public override void OnInspectorGUI()
 	{
-		EditorGUI.BeginChangeCheck();
-		if(rawInput = GUILayout.Toggle(rawInput, "Raw Input"))
+		/*if(rawInput = GUILayout.Toggle(rawInput, "Raw Input"))
 		{
-			rawData = EditorGUILayout.TextArea(rawData);
 		}else
 		{
-			DrawDefaultInspector();
-		}
+			EditorGUI.BeginChangeCheck();
+		}*/
+		EditorGUI.BeginChangeCheck();
+		DrawDefaultInspector();
+		GUILayout.Label("Raw Input");
+		rawData = EditorGUILayout.TextArea(rawData);
 		if(EditorGUI.EndChangeCheck())
 		{
 			nameProvider.names = rawData.Replace(",", "\n").Split('\n');
-			for (int i = 0; i < nameProvider.names.Length; i++)
+			if (nameProvider.names.Length != 0)
 			{
-				var name = nameProvider.names[i];
-				if (name[0] == ' ')
-					nameProvider.names[i] = name.Remove(0, 1);
+				for (int i = 0; i < nameProvider.names.Length; i++)
+				{
+					var name = nameProvider.names[i];
+					if (name.Length == 0)
+						continue;
+					if (name[0] == ' ')
+						nameProvider.names[i] = name.Remove(0, 1);
+				}
 			}
 			rawData = string.Join("\n", nameProvider.names ?? (new string[0]));
 		}

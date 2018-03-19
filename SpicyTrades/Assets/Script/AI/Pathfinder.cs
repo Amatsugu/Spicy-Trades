@@ -7,7 +7,6 @@ public class Pathfinder {
 
 	public static Tile[] FindPath(Tile a, Tile b, string stopAt = null)
 	{
-		//Debug.Log("A: " + a.position.ToString() + " B: " + b.position.ToString());
 		List<PathNode> open = new List<PathNode>
 		{
 			new PathNode(a, 1)
@@ -15,23 +14,23 @@ public class Pathfinder {
 		var B = new PathNode(b, 1);
 		while (open.Count > 0)
 		{
+			if (closed.Contains(B))
+				break;
 			var n = open.Aggregate((c, d) => c.CalculateF(b) < d.CalculateF(b) ? c : d);
 			open.Remove(n);
 			closed.Add(n);
-			if (closed.Contains(B))
-				break;
-			if (stopAt != null && n.Tile.Tag == stopAt)
+			if (stopAt != null && n.Tag == stopAt)
 				break;
 			foreach (Tile t in n.Tile.GetNeighbors())
 			{
 				if (t == null)
 					continue;
 				var adj = new PathNode(t, n.G + 1, n);
-				if (closed.Contains(adj))
+				if (closed.Any(adjT => adjT.Tile == t))
 				{
 					continue;
 				}
-				if (!open.Contains(adj))
+				if (!open.Any(adjT => adjT.Tile == t))
 				{
 					open.Add(adj);
 				}else
@@ -59,6 +58,7 @@ public class Pathfinder {
 public class PathNode
 {
 	public Tile Tile { get; private set; }
+	public string Tag;
 	public int G;
 	public PathNode src;
 
@@ -66,18 +66,14 @@ public class PathNode
 	{
 		Tile = tile;
 		G = g;
+		Tag = tile.Tag;
 		src = srcNode;
-	}
-
-	public float CalculateH(Tile b)
-	{
-		var d = (Tile.WolrdPos - b.WolrdPos);
-		return Mathf.Abs(d.x) + Mathf.Abs(d.y);
 	}
 
 	public float CalculateF(Tile b)
 	{
-		return (G * Tile.Cost) + CalculateH(b) ;
+		var d = (Tile.WolrdPos - b.WolrdPos);
+		return (G) + ((Mathf.Abs(d.x) + Mathf.Abs(d.y)) * Tile.Cost);
 	}
 
 	// override object.Equals

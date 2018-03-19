@@ -11,4 +11,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc18dd78b57034742ae80a70c013e038, type: 3}
   m_Name: CapitalNames
   m_EditorClassIdentifier: 
-  names: []
+  names:
+  - Advont
+  - Astar
+  - Brightpeaks
+  - Castrum
+  - Durgatar
+  - Dragvir
+  - Eldinburg
+  - Eideas
+  - Glimmer
+  - High Peak
+  - Ignar
+  - Inaris
+  - Kalastrum
+  - Kaladon
+  - Krewanya
+  - Ludonia
+  - Lorestin
+  - Lunaran
+  - Miralla
+  - Nevermore
+  - Ondar
+  - Pyderav
+  - Sinodar
+  - Tora
+  - Trorend
+  - Unykar
+  - Wargneth
+  - Yevar
+  - "Zenith\r"

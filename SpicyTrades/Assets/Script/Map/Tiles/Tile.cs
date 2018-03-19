@@ -138,7 +138,6 @@ public class Tile
 	public Tile SetWeight(float cost)
 	{
 		this.Cost = cost;
-		//_pText.text = cost.ToString();
 		return this;
 	}
 

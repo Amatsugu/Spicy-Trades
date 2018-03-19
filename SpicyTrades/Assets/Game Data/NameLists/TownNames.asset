@@ -11,4 +11,94 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc18dd78b57034742ae80a70c013e038, type: 3}
   m_Name: TownNames
   m_EditorClassIdentifier: 
-  names: []
+  names:
+  - Archmouth
+  - Alestir
+  - Amendor
+  - Azrot
+  - Boredon
+  - Bijin
+  - Bortrin
+  - Bellenau
+  - Cheapshore
+  - Chillpool
+  - Careal
+  - Contair
+  - Durgatan
+  - Diremaw
+  - Dustweight
+  - Davomar
+  - Eiry
+  - Epenbar
+  - Elkson
+  - Fletchton
+  - Fenbore
+  - Felshire
+  - Forelore
+  - Genovar
+  - Grandir
+  - Grandlog
+  - Great Lake
+  - Gearston
+  - Hillton
+  - Hocem
+  - Hijamon
+  - Illabaston
+  - Iilion
+  - Ionthar
+  - Irantion
+  - Jovaston
+  - Jasou
+  - Jaguthan
+  - Jenilma
+  - Kilastron
+  - Kromdom
+  - Koshalas
+  - Kuradov
+  - Lanstrim
+  - Long Ley
+  - "Lil\u2019Shire"
+  - Leerstorm
+  - Mogpond
+  - Millstore
+  - Mhiliv
+  - Migour
+  - Nabinov
+  - Navin
+  - Nose Keep
+  - Nilhiem
+  - Odiarm
+  - Ontivar
+  - Ore Town
+  - Outostim
+  - Pyre
+  - Pilaazwa
+  - Poyberon
+  - Prayir
+  - Qirbin
+  - Quarter
+  - Quelon
+  - Quetzal
+  - Rlanmar
+  - Rakmir
+  - Rothmaw
+  - Rhalgor
+  - Sandmaw
+  - The Shire
+  - Shavir
+  - Spivinar
+  - Thanaran
+  - Thaldren
+  - Thorstorm
+  - Thothsaw
+  - Uugard
+  - Unbrigar
+  - "U\u2019valin"
+  - Valin
+  - Vellen
+  - Vorac
+  - "Wind\u2019s Peak"
+  - "Willow\u2019s Peak"
+  - Wallow
+  - Yeshir
+  - Yallrev

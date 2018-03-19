@@ -80,7 +80,7 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (villageCandidate.DistanceTo(capital) < minDistance)
 				continue;
-			if (towns.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance) && villages.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance))
+			if (towns.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance) || villages.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance))
 				continue;
 			var village = map.MakeTown(villageCandidate, VillageTile).SetWeight(0) as TownTile;
 			village.Name = villageNameProdider.GetNextName();
