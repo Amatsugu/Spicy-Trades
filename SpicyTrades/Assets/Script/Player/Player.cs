@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,9 +9,9 @@ public class Player : MonoBehaviour
 {
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
-	public Text resourceList;
+	public Text hudText;
 
-	private TownTile _curTile;
+	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
 
 	private void Start()
@@ -18,21 +19,29 @@ public class Player : MonoBehaviour
 		_sprite = GetComponent<SpriteRenderer>();
 	}
 
-	public void SetTile(TownTile tile)
+	public void SetTile(SettlementTile tile)
 	{
 		_curTile = tile;
 		transform.position = _curTile.WolrdPos;
-		if(resourceList == null)
-			resourceList = GameObject.Find("Text").GetComponent<Text>();
-		resourceList.text = tile.Name + " [" + (tile.tileInfo as TownTileInfo).townType.ToString() + "] | Population: " + tile.Population + "\n";
-		var res = tile.Resources;
-		if (res == null)
-			return;
-		foreach (var r in res)
-			resourceList.text += "<b><color=#"+ColorUtility.ToHtmlStringRGB(r.color)+">" + r.name + "</color></b> [" + r.category.ToString() + "]: Y=" + r.yeild + " | W=" + r.requiredWorkers + "\n";
+		if(hudText == null)
+			hudText = GameObject.Find("Text").GetComponent<Text>();
+		var sb = new StringBuilder();
+		sb.AppendLine(tile.Name + " [" + (tile.tileInfo as SettlementTileInfo).settlementType.ToString() + "] | Population: " + tile.Population);
+		var res = tile.ResourceCache;
+		if (res != null)
+		{
+			foreach (var r in res)
+				sb.AppendLine("<b><color=#"+ColorUtility.ToHtmlStringRGB(r.Key.color)+">" + r.Key.name + "</color></b> [" + r.Key.category.ToString() + "]:" + r.Value[0] + " | Value=" + r.Value[1] * 100 + "%");
+		}
+		if(tile.ResourceNeeds != null)
+		{
+			foreach (var r in tile.ResourceNeeds)
+				sb.AppendLine("<b>" + r.Resource+ "</b> [" + r.PackageType.ToString() + "]:" + r.ResourceUnits + " | $=" + r.Money);
+		}
+		hudText.text = sb.ToString();
 	}
 
-	public void MoveTo(TownTile tile)
+	public void MoveTo(SettlementTile tile)
 	{
 		if (isMoving)
 			return;
@@ -55,7 +64,7 @@ public class Player : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 		}
-		SetTile(path.Last() as TownTile);
+		SetTile(path.Last() as SettlementTile);
 		isMoving = false;
 	}
 }

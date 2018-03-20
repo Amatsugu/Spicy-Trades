@@ -8,6 +8,7 @@ public class ResourceTileInfo : TileInfo
 	public new readonly TileType tileType = TileType.Resource;
 	public ResourceCategory category;
 	public int requiredWorkers;
+	public float basePrice;
 	public float yeild;
 
 }

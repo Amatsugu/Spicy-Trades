@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TileData
+public class ResourceNeed
 {
 	
 }

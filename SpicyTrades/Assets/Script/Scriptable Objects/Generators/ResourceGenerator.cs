@@ -14,10 +14,10 @@ public class ResourceGenerator : FeatureGenerator
 		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		var towns = map.GetTowns();
 		var resources = resourceProvider.GetResourceList();
-		foreach(TownTile t in towns)
+		foreach(SettlementTile t in towns)
 		{
-			var curTown = (t.tileInfo as TownTileInfo);
-			if (curTown.townType == TownType.Town)
+			var curTown = (t.tileInfo as SettlementTileInfo);
+			if (curTown.settlementType == SettlementType.Town)
 			{
 				var candicadates = t.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
 				var numResources = Random.Range(1, maxResources + 1);
@@ -33,7 +33,7 @@ public class ResourceGenerator : FeatureGenerator
 					candicadates.RemoveAt(c);
 				}
 				//Allocate Food
-				float foodPerPop = .5f;
+				float foodPerPop = curTown.foodPerPop;
 				float requiredFood = t.Population * foodPerPop;
 				float foodTotal = placedResources.Sum(res => res.category == ResourceCategory.Food ? res.yeild : 0);
 				if(requiredFood > foodTotal)
@@ -57,7 +57,7 @@ public class ResourceGenerator : FeatureGenerator
 				}
 
 				
-			}else if(curTown.townType == TownType.Village)
+			}else if(curTown.settlementType == SettlementType.Village)
 			{
 				var candicadates = t.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
 				var numResources = Random.Range(1, maxResources + 1);
@@ -73,6 +73,7 @@ public class ResourceGenerator : FeatureGenerator
 					t.Population += res.requiredWorkers;
 					candicadates.RemoveAt(c);
 				}
+				t.Population = Mathf.CeilToInt(t.Population * .8f);
 			}
 		}
 	}

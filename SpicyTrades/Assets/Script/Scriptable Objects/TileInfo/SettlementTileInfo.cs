@@ -4,14 +4,15 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Tile/Town")]
-public class TownTileInfo : TileInfo
+[CreateAssetMenu(menuName = "Tile/Settlement")]
+public class SettlementTileInfo : TileInfo
 {
 	public new readonly TileType tileType = TileType.Town;
-	public TownType townType;
+	public SettlementType settlementType;
+	public float foodPerPop = 0.5f;
 }
 
-public enum TownType
+public enum SettlementType
 {
 	Town,
 	Village,

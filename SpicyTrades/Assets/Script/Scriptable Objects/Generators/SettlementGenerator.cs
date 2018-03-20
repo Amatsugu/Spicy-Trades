@@ -11,12 +11,12 @@ public enum PathMethod
 	None
 }
 
-[CreateAssetMenu(menuName = "Feature Generator/Towns")]
-public class TownGenerator : FeatureGenerator
+[CreateAssetMenu(menuName = "Feature Generator/Settlements")]
+public class SettlementGenerator : FeatureGenerator
 {
-	public TownTileInfo TownTile;
-	public TownTileInfo VillageTile;
-	public TownTileInfo CapitalTile;
+	public SettlementTileInfo TownTile;
+	public SettlementTileInfo VillageTile;
+	public SettlementTileInfo CapitalTile;
 	public NameProvider townNames;
 	public NameProvider villageNames;
 	public NameProvider capitalNames;
@@ -41,7 +41,7 @@ public class TownGenerator : FeatureGenerator
 		capital.Name = capitalNames.GetNameList().GetNextName();
 		int numTowns = Random.Range(minTowns, maxTowns);
 		int curCycles = 0;
-		TownTile[] towns = new TownTile[numTowns];
+		SettlementTile[] towns = new SettlementTile[numTowns];
 		//Town Generation
 		Debug.Log(GeneratorName + "Slecting " + numTowns + " towns...");
 		var townNameProdider = townNames.GetNameList();
@@ -58,14 +58,14 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (towns.Any(t => t != null && t.DistanceTo(townCandidate) < minDistance))
 				continue;
-			var town = map.MakeTown(townCandidate, TownTile).SetWeight(0) as TownTile;
+			var town = map.MakeTown(townCandidate, TownTile).SetWeight(0) as SettlementTile;
 			town.Name = townNameProdider.GetNextName();
 			towns[--numTowns] = town;
 		}
 		Debug.Log(GeneratorName + "Finished in " + curCycles + " cycles");
 		//Village Generator
 		int numVillages = Random.Range(minVillages, maxVillages);
-		TownTile[] villages = new TownTile[numVillages];
+		SettlementTile[] villages = new SettlementTile[numVillages];
 		curCycles = 0;
 		Debug.Log(GeneratorName + "Slecting " + numVillages + " villages...");
 		var villageNameProdider = townNames.GetNameList();
@@ -82,7 +82,7 @@ public class TownGenerator : FeatureGenerator
 				continue;
 			if (towns.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance) || villages.Any(t => t != null && t.DistanceTo(villageCandidate) < minDistance))
 				continue;
-			var village = map.MakeTown(villageCandidate, VillageTile).SetWeight(0) as TownTile;
+			var village = map.MakeTown(villageCandidate, VillageTile).SetWeight(0) as SettlementTile;
 			village.Name = villageNameProdider.GetNextName();
 			villages[--numVillages] = village;
 		}

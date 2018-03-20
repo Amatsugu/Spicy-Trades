@@ -8,8 +8,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e9f7025dffb04504ab3b76955cdb655a, type: 3}
-  m_Name: TownGenerator
+  m_Script: {fileID: 11500000, guid: 33019f0e792de144fb40abac9a5a9fc5, type: 3}
+  m_Name: SettlementGenerator
   m_EditorClassIdentifier: 
   TownTile: {fileID: 11400000, guid: 18523384643e1384fb079e9829d266a1, type: 2}
   VillageTile: {fileID: 11400000, guid: d9d065a4f8033b44aaf4be13a30f54cd, type: 2}

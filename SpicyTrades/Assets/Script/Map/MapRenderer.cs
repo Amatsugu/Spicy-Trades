@@ -22,6 +22,7 @@ public class MapRenderer : MonoBehaviour
 			t.TileRender();
 			t.PostRender();
 		}
+		map.Simulate(1);
 		Debug.Log("Generation Time: " + (System.DateTime.Now - startTime).TotalMilliseconds + "ms");
     }
 
@@ -42,9 +43,9 @@ public class MapRenderer : MonoBehaviour
 
 	public static void TouchTile(Tile tile)
 	{
-		if(tile.GetType() == typeof(TownTile))
+		if(tile.GetType() == typeof(SettlementTile))
 		{
-			Instance.map.CurrentPlayer.MoveTo(tile as TownTile); 
+			Instance.map.CurrentPlayer.MoveTo(tile as SettlementTile); 
 		}
 #if DEBUG
 		var n = tile.GetNeighbors();
