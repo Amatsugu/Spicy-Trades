@@ -189,12 +189,12 @@ public class Tile
 	public static Tile[] GetNeighbors(int x, int y, int z)
 	{
 		var tiles = new Tile[6];
-		tiles[0] = MapRenderer.GetTile(x - 1, y, z + 1); //Left
-		tiles[1] = MapRenderer.GetTile(x - 1, y + 1, z); //Top Left
-		tiles[2] = MapRenderer.GetTile(x, y + 1, z - 1); //Top Right
-		tiles[3] = MapRenderer.GetTile(x + 1, y, z - 1); //Right
-		tiles[4] = MapRenderer.GetTile(x + 1, y - 1, z); //Bottom Right
-		tiles[5] = MapRenderer.GetTile(x, y - 1, z + 1); //Bottom Left
+		tiles[0] = GameMaster.GetTile(x - 1, y, z + 1); //Left
+		tiles[1] = GameMaster.GetTile(x - 1, y + 1, z); //Top Left
+		tiles[2] = GameMaster.GetTile(x, y + 1, z - 1); //Top Right
+		tiles[3] = GameMaster.GetTile(x + 1, y, z - 1); //Right
+		tiles[4] = GameMaster.GetTile(x + 1, y - 1, z); //Bottom Right
+		tiles[5] = GameMaster.GetTile(x, y - 1, z + 1); //Bottom Left
 		return tiles;
 	}
 

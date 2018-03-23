@@ -11,6 +11,14 @@ public class ResourceTileInfo : TileInfo
 	public float basePrice;
 	public float yeild;
 
+	public string PrettyName
+	{
+		get
+		{
+			return "<color=#" + ColorUtility.ToHtmlStringRGB(color) + name + "/<color>";
+		}
+	}
+
 }
 
 public enum ResourceCategory

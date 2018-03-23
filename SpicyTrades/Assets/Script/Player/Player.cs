@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
-	public Text hudText;
+	public TextMeshProUGUI hudText;
 
 	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
+	private Coroutine _curAnimation;
 
 	private void Start()
 	{
@@ -22,23 +24,25 @@ public class Player : MonoBehaviour
 	public void SetTile(SettlementTile tile)
 	{
 		_curTile = tile;
+		GameMaster.CachePrices(tile);
+		UIManager.ShowPricePanel(tile);
 		transform.position = _curTile.WolrdPos;
-		if(hudText == null)
-			hudText = GameObject.Find("Text").GetComponent<Text>();
+		/*if(hudText == null)
+			hudText = GameObject.Find("Text").GetComponent<TextMeshProUGUI>();
 		var sb = new StringBuilder();
-		sb.AppendLine(tile.Name + " [" + (tile.tileInfo as SettlementTileInfo).settlementType.ToString() + "] | Population: " + tile.Population);
+		sb.AppendLine(tile.Name + " [" + tile.tileInfo.settlementType.ToString() + "] | Population: " + tile.Population);
 		var res = tile.ResourceCache;
 		if (res != null)
 		{
 			foreach (var r in res)
-				sb.AppendLine("<b><color=#"+ColorUtility.ToHtmlStringRGB(r.Key.color)+">" + r.Key.name + "</color></b> [" + r.Key.category.ToString() + "]:" + r.Value[0] + " | Value=" + r.Value[1] * 100 + "%");
+				sb.AppendLine("<b>" + r.Key.PrettyName + "</b> [" + r.Key.category.ToString() + "]:" + r.Value[0] + " | Value=" + r.Value[1] * 100 + "%");
 		}
 		if(tile.ResourceNeeds != null)
 		{
 			foreach (var r in tile.ResourceNeeds)
 				sb.AppendLine("<b>" + r.Resource+ "</b> [" + r.PackageType.ToString() + "]:" + r.ResourceUnits + " | $=" + r.Money);
 		}
-		hudText.text = sb.ToString();
+		hudText.text = sb.ToString();*/
 	}
 
 	public void MoveTo(SettlementTile tile)
@@ -46,7 +50,9 @@ public class Player : MonoBehaviour
 		if (isMoving)
 			return;
 		isMoving = true;
-		StartCoroutine(MoveAnimation(Pathfinder.FindPath(_curTile, tile)));
+		if (_curAnimation != null)
+			StopCoroutine(_curAnimation);
+		StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile)));
 	}
 
 	IEnumerator MoveAnimation(Tile[] path)

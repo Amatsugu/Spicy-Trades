@@ -8,7 +8,7 @@ public class TileToucher : MonoBehaviour
 
 	private void OnMouseUpAsButton()
 	{
-		MapRenderer.TouchTile(target);
+		GameMaster.TouchTile(target);
 	}
 
 	private void OnMouseEnter()

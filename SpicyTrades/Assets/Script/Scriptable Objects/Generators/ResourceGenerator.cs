@@ -26,7 +26,7 @@ public class ResourceGenerator : FeatureGenerator
 				for (int i = 0; i < numResources; i++)
 				{
 					int c = Random.Range(0, candicadates.Count);
-					var res = map.ReplaceTile(candicadates[c], resources[Random.Range(0, resources.Length)], false, true).tileInfo as ResourceTileInfo;
+					var res = map.ReplaceTile<ResourceTile>(candicadates[c], resources[Random.Range(0, resources.Length)], false, true).tileInfo;
 					placedResources.Add(res);
 					t.AddResource(res);
 					t.Population += res.requiredWorkers;
@@ -49,7 +49,7 @@ public class ResourceGenerator : FeatureGenerator
 							break;
 						}
 						int c = Random.Range(0, candicadates.Count); 
-						var f = map.ReplaceTile(candicadates[c], resourceProvider.basicFood, false, true).tileInfo as ResourceTileInfo;
+						var f = map.ReplaceTile<ResourceTile>(candicadates[c], resourceProvider.basicFood, false, true).tileInfo;
 						t.Population += resourceProvider.basicFood.requiredWorkers;
 						t.AddResource(f);
 						candicadates.RemoveAt(c);
@@ -67,7 +67,7 @@ public class ResourceGenerator : FeatureGenerator
 				for (int i = 0; i < numResources; i++)
 				{
 					int c = Random.Range(0, candicadates.Count);
-					var res = map.ReplaceTile(candicadates[c], foods[Random.Range(0, foods.Length)], false, true).tileInfo as ResourceTileInfo;
+					var res = map.ReplaceTile<ResourceTile>(candicadates[c], foods[Random.Range(0, foods.Length)], false, true).tileInfo;
 					placedResources.Add(res);
 					t.AddResource(res);
 					t.Population += res.requiredWorkers;

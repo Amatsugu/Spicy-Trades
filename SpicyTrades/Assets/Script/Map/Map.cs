@@ -164,34 +164,38 @@ public class Map : IEnumerable<Tile>
 
 	public Tile ReplaceTile(Tile oldTile, TileInfo newTile, bool preserveColor = false, bool preserveCost = false)
 	{
+		return ReplaceTile<Tile>(oldTile, newTile, preserveColor, preserveCost);
+	}
+
+	public T ReplaceTile<T>(Tile oldTile, TileInfo newTile, bool preserveColor = false, bool preserveCost = false) where T : Tile
+	{
 		var pos = oldTile.Position;
 		var wPos = oldTile.WolrdPos;
 		//var wRot = oldTile.transform.rotation;
 		var cost = oldTile.Cost;
 		var col = oldTile.tileInfo.color;
 		oldTile.Destroy();
-		Tile nTile;
+		T nTile = null;
 		switch(newTile.tileType)
 		{
 			case TileType.Tile:
-				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 			case TileType.Resource:
-				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 			case TileType.Town:
-				nTile = new SettlementTile(newTile as SettlementTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new SettlementTile(newTile as SettlementTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 			default:
-				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 		}
-		//var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
 		if (preserveColor)
 			nTile.SetColor(col, true);
-		this[pos.ToIndex()] = nTile;
 		if (preserveCost)
 			nTile.SetWeight(cost);
+		this[pos.ToIndex()] = nTile;
 		return nTile;
 	}
 }

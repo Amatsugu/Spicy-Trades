@@ -13,9 +13,11 @@ public class SettlementTile : Tile
 	public const int maxResourceStorage = 1000;
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<TradePackage> ResourceNeeds { get; private set; }
+	public new SettlementTileInfo tileInfo;
 
 	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
+		this.tileInfo = tileInfo;
 	}
 
 
@@ -174,6 +176,11 @@ public class SettlementTile : Tile
 
 	//TODO: Trades
 	public void NegotiateTrade()
+	{
+
+	}
+
+	public void Buy(ResourceTileInfo resource)
 	{
 
 	}
