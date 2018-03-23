@@ -69,7 +69,6 @@ public class RandomGenerator : MapGenerator {
 		{
 			seed = (int)(new System.DateTime(1990, 1, 1) - System.DateTime.Now).TotalSeconds; 
 		}
-		Debug.Log(seed);
 		Map map = new Map((int)Size.y, (int)Size.x, seed);
 		position = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
 		rotation = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));

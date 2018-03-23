@@ -8,7 +8,7 @@ public class TileInfo : ScriptableObject
 	public Sprite sprite;
 	public Color color = Color.white;
 	public int cost;
-	public readonly TileType tileType = TileType.Tile;
+	public TileType TileType { get; protected set; }
 
 	public List<TileRenderer> tileRenderers = new List<TileRenderer>();
 }
@@ -16,6 +16,6 @@ public class TileInfo : ScriptableObject
 public enum TileType
 {
 	Tile,
-	Town,
+	Settlement,
 	Resource
 }

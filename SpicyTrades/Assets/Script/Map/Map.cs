@@ -34,7 +34,6 @@ public class Map : IEnumerable<Tile>
 
 	public Map(int height, int width, int seed = 0)
 	{
-		Debug.Log(seed);
 		UnityEngine.Random.InitState(seed);
 		Height = height;
 		Width = width;
@@ -172,19 +171,17 @@ public class Map : IEnumerable<Tile>
 		var pos = oldTile.Position;
 		var wPos = oldTile.WolrdPos;
 		//var wRot = oldTile.transform.rotation;
-		var cost = oldTile.Cost;
-		var col = oldTile.tileInfo.color;
 		oldTile.Destroy();
-		T nTile = null;
-		switch(newTile.tileType)
+		T nTile;
+		switch(newTile.TileType)
 		{
-			case TileType.Tile:
-				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
-				break;
 			case TileType.Resource:
 				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
-			case TileType.Town:
+			case TileType.Tile:
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
+				break;
+			case TileType.Settlement:
 				nTile = new SettlementTile(newTile as SettlementTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 			default:
@@ -192,9 +189,9 @@ public class Map : IEnumerable<Tile>
 				break;
 		}
 		if (preserveColor)
-			nTile.SetColor(col, true);
+			nTile.SetColor(oldTile.tileInfo.color, true);
 		if (preserveCost)
-			nTile.SetWeight(cost);
+			nTile.SetWeight(oldTile.Cost);
 		this[pos.ToIndex()] = nTile;
 		return nTile;
 	}

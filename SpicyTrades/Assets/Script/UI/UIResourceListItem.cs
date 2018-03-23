@@ -9,6 +9,4 @@ public class UIResourceListItem : MonoBehaviour
 	public TextMeshProUGUI nameText;
 	public TextMeshProUGUI priceText;
 	public Image iconImage;
-
-
 }

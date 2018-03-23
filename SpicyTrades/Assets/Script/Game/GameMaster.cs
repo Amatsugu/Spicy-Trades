@@ -55,25 +55,31 @@ public class GameMaster
 	
 	public static void CachePrices(SettlementTile settlement)
 	{
-		var rvc = Instance._resourceValueCache;
-		var rc = settlement.ResourceCache;
-		if(rvc.ContainsKey(settlement))
+		if (Instance._resourceValueCache == null)
+			Instance._resourceValueCache = new Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>>();
+		var resourceValueCache = Instance._resourceValueCache;
+		var resourceCache = settlement.ResourceCache;
+		if (resourceCache == null)
+			return;
+		if(resourceValueCache.ContainsKey(settlement))
 		{
-			AddToCache(rvc[settlement], rc);
+			AddToCache(resourceValueCache[settlement], resourceCache);
 		}else
 		{
-			AddToCache(rvc[settlement], rc);
+			var valueCache = new Dictionary<ResourceTileInfo, float>();
+			resourceValueCache.Add(settlement, valueCache);
+			AddToCache(valueCache, resourceCache);
 		}
 	}
 
-	private static void AddToCache(Dictionary<ResourceTileInfo, float> vc, Dictionary<ResourceTileInfo, float[]> rc)
+	private static void AddToCache(Dictionary<ResourceTileInfo, float> valueCache, Dictionary<ResourceTileInfo, float[]> resourceCache)
 	{
-		foreach (var res in rc.Keys)
+		foreach (var res in resourceCache.Keys)
 		{
-			if (vc.ContainsKey(res))
-				vc[res] = rc[res][1];
+			if (valueCache.ContainsKey(res))
+				valueCache[res] = resourceCache[res][1];
 			else
-				vc.Add(res, rc[res][1]);
+				valueCache.Add(res, resourceCache[res][1]);
 		}
 	}
 

@@ -7,9 +7,13 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tile/Settlement")]
 public class SettlementTileInfo : TileInfo
 {
-	public new readonly TileType tileType = TileType.Town;
 	public SettlementType settlementType;
 	public float foodPerPop = 0.5f;
+
+	private void OnEnable()
+	{
+		TileType = TileType.Settlement;
+	}
 }
 
 public enum SettlementType
