@@ -1,14 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace NetworkManager
 {
+    public class CID
+    {
+        private PID player;
+        private IPEndPoint connection;
+        private Room currentRoom;
+        public CID(PID self,IPEndPoint conn)
+        {
+            player = self;
+            connection = conn;
+        }
+        public PID GetPID()
+        {
+            return player;
+        }
+        public IPEndPoint GetConn()
+        {
+            return connection;
+        }
+        public void SetCurrentRoom(Room room)
+        {
+            currentRoom = room;
+        }
+        public Room GetCurrentRoom()
+        {
+            return currentRoom;
+        }
+    }
     public static class ServerDataManager
     {
         //Unlike the client data will live in this class
         private static Dictionary<string, Room> Rooms = new Dictionary<string, Room>();
         private static Dictionary<string, PID> PIDs = new Dictionary<string, PID>();
+        public static Dictionary<string, CID> Connections = new Dictionary<string, CID>(); // the string here is the users session key
         public static void INIT()
         {
             Network.DataRecieved += OnDataRecieved;
@@ -18,8 +47,10 @@ namespace NetworkManager
             byte command = e.RawResponse[0];
             Network.Retrieve(command);
             byte[] data = e.RawResponse.SubArray(1, e.RawResponse.Length-2);
+            IPEndPoint send = e.SenderRef;
             object[] objects;
             string pid;
+            string self;
             switch (command)
             {
                 case Network.HELLO:
@@ -27,10 +58,23 @@ namespace NetworkManager
                     //Handle data for this
                     break;
                 case Network.LOGIN:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
+                    self = (string)objects[0];
+                    string username = (string)objects[1];
+                    string password = (string)objects[2];
+                    //Handled by the TCP manager
+                    string key="";
+                    //Need to get the players name... You are not a friend of yourself are you?
+                    Connections[key] = new CID(new PID(key, "", false), send);
                     break;
                 case Network.REGISTER:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s", "s" });//user pass, email
+                    self = (string)objects[0];
+                    string reg_username = (string)objects[1];
+                    string reg_password = (string)objects[2];
+                    string reg_email = (string)objects[3];
+                    //Handled by the TCP manager
+                    //GenUniqueSessionKey();
                     break;
                 case Network.UPDATES:
                     //NOT IMPLEMENTED IN THIS VERSION
@@ -39,7 +83,10 @@ namespace NetworkManager
                     //NOT IMPLEMENTED IN THIS VERSION
                     break;
                 case Network.LISTR: //Gets the roomids
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "i", "i" });
+                    self = (string)objects[0];
+                    int pos = (int)objects[1];
+                    int rcount = (int)objects[2];
                     break;
                 case Network.JROOM:
                     //
@@ -81,7 +128,6 @@ namespace NetworkManager
                     // Need more data from kham
                     break;
                 case Network.INIT:
-                    //
                     break;
                 case Network.CHATDM:
                     //
@@ -102,6 +148,10 @@ namespace NetworkManager
                     Console.WriteLine("Unknown command!");
                     break;
             }
+        }
+        public static string GenUniqueSessionKey()
+        {
+            return Guid.NewGuid().ToString("N");
         }
     }
 }

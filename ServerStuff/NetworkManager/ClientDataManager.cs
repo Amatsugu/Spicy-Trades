@@ -36,8 +36,9 @@ namespace NetworkManager
                     Network.SendData(new byte[] { 0 });
                     break;
                 case Network.LOGIN:
-                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
                     Network.player = (PID)objects[0];
+                    Network.self = (string)objects[1];
                     break;
                 case Network.REGISTER:
                     //Registering was successful! Nothing is needed!

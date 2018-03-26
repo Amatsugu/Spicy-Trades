@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace NetworkManager
@@ -9,12 +10,12 @@ namespace NetworkManager
         public string Response { get; set; }
         public int Errorcode { get; set; }
         public byte[] RawResponse { get; set; }
-        public object ObjectRef { get; set; }
     }
     public class DataRecievedArgs : EventArgs
     {
         public string Response { get; set; }
         public byte[] RawResponse { get; set; }
+        public IPEndPoint SenderRef { get; set; }
     }
     public class ErrorArgs : EventArgs
     {
