@@ -63,7 +63,7 @@ namespace NetworkManager
         public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
         public static UdpClient connection;
-        private static string self;
+        public static string self;
         public static PID player;
         public static Dictionary<string, PID> players;
         public static Dictionary<string, Room> rooms;
@@ -273,6 +273,11 @@ namespace NetworkManager
         {
             Consume(data[0]);
             connection.Send(data,data.Length);
+        }
+        public static void SendData(byte[] data, IPEndPoint sender)
+        {
+            Consume(data[0]);
+            connection.Send(data, data.Length, sender);
         }
         public static void ThreadProc()
         {
