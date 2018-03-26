@@ -10,8 +10,8 @@ using UnityEngine;
 public class Map : IEnumerable<Tile>
 {
 	public Tile[] Tiles { get; private set; }
-	public List<TownTile> Towns { get; private set; }
-	public TownTile Capital { get; private set; }
+	public List<SettlementTile> Towns { get; private set; }
+	public SettlementTile Capital { get; private set; }
 	public List<Player> Players { get; private set; }
 	public Player CurrentPlayer { get; private set; }
 	public int Height { get; private set; }
@@ -34,12 +34,11 @@ public class Map : IEnumerable<Tile>
 
 	public Map(int height, int width, int seed = 0)
 	{
-		Debug.Log(seed);
 		UnityEngine.Random.InitState(seed);
 		Height = height;
 		Width = width;
 		Tiles = new Tile[height * width];
-		Towns = new List<TownTile>();
+		Towns = new List<SettlementTile>();
 		Players = new List<Player>();
 	}
 
@@ -52,6 +51,14 @@ public class Map : IEnumerable<Tile>
 		get
 		{
 			return Tiles[i];
+		}
+	}
+
+	public Tile this[HexCoords tile]
+	{
+		get
+		{
+			return this[tile.X, tile.Y, tile.Z];
 		}
 	}
 
@@ -79,9 +86,9 @@ public class Map : IEnumerable<Tile>
 		return this[x, y, z];
 	}
 
-	public IEnumerable<TownTile> GetTowns()
+	public IEnumerable<SettlementTile> GetTowns()
 	{
-		return from Tile t in Tiles where t.GetType() == typeof(TownTile) select t as TownTile;
+		return from Tile t in Tiles where t.GetType() == typeof(SettlementTile) select t as SettlementTile;
 	}
 
 	public string ToJSON() //TODO: Implement Proper Serialization
@@ -104,18 +111,18 @@ public class Map : IEnumerable<Tile>
 		return ((IEnumerable<Tile>)Tiles).GetEnumerator();
 	}
 
-	public TownTile MakeTown(Tile tile, TownTileInfo town)
+	public SettlementTile MakeTown(Tile tile, SettlementTileInfo town)
 	{
-		var t = new TownTile(town, tile.parent, tile.Position, tile.outerRadius);
+		var t = new SettlementTile(town, tile.parent, tile.Position, tile.outerRadius);
 		this[tile.Position.ToIndex()] = t;
 		Towns.Add(t);
 		return t;
 	}
 
-	public TownTile MakeCapital(Tile tile, TownTileInfo capital)
+	public SettlementTile MakeCapital(Tile tile, SettlementTileInfo capital)
 	{
 		tile.Destroy();
-		this[tile.Position.ToIndex()] = Capital = new TownTile(capital, tile.parent, tile.Position, tile.outerRadius);
+		this[tile.Position.ToIndex()] = Capital = new SettlementTile(capital, tile.parent, tile.Position, tile.outerRadius);
 		foreach (Tile t in tile.GetNeighbors())
 			ReplaceTile(t, capital);
 		return Capital;
@@ -137,36 +144,55 @@ public class Map : IEnumerable<Tile>
 			UnityEngine.Object.Destroy(player.gameObject);
 	}
 
+	public byte[] Simulate(int ticks)
+	{
+		for (int i = 0; i < ticks; i++)
+		{
+			foreach (var town in Towns)
+				town.Simulate();
+			foreach (var town in Towns) //TODO: Do we do this
+				town.NegotiateTrade();
+		}
+		return null;
+	}
+
+	public void Sync(byte[] simData)
+	{
+
+	}
+
 	public Tile ReplaceTile(Tile oldTile, TileInfo newTile, bool preserveColor = false, bool preserveCost = false)
+	{
+		return ReplaceTile<Tile>(oldTile, newTile, preserveColor, preserveCost);
+	}
+
+	public T ReplaceTile<T>(Tile oldTile, TileInfo newTile, bool preserveColor = false, bool preserveCost = false) where T : Tile
 	{
 		var pos = oldTile.Position;
 		var wPos = oldTile.WolrdPos;
 		//var wRot = oldTile.transform.rotation;
-		var cost = oldTile.Cost;
-		var col = oldTile.tileInfo.color;
 		oldTile.Destroy();
-		Tile nTile;
-		switch(newTile.tileType)
+		T nTile;
+		switch(newTile.TileType)
 		{
-			case TileType.Tile:
-				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
-				break;
 			case TileType.Resource:
-				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
-			case TileType.Town:
-				nTile = new TownTile(newTile as TownTileInfo, oldTile.parent, pos, oldTile.outerRadius);
+			case TileType.Tile:
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
+				break;
+			case TileType.Settlement:
+				nTile = new SettlementTile(newTile as SettlementTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 			default:
-				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius);
+				nTile = new Tile(newTile, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;
 		}
-		//var g = GameObject.Instantiate(newTile, wPos, wRot, oldTile.transform.parent);
 		if (preserveColor)
-			nTile.SetColor(col, true);
-		this[pos.ToIndex()] = nTile;
+			nTile.SetColor(oldTile.tileInfo.color, true);
 		if (preserveCost)
-			nTile.SetWeight(cost);
+			nTile.SetWeight(oldTile.Cost);
+		this[pos.ToIndex()] = nTile;
 		return nTile;
 	}
 }

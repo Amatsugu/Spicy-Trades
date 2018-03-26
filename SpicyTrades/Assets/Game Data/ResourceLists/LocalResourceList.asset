@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5068571cf6cbfab458d9d7a967dd44fb, type: 3}
+  m_Name: LocalResourceList
+  m_EditorClassIdentifier: 
+  basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
+  resources:
+  - {fileID: 11400000, guid: abf58effb97c4b144b14968b73ed263d, type: 2}
+  - {fileID: 11400000, guid: abbd03ab306d8bd4590791ae0821d7f2, type: 2}
+  - {fileID: 11400000, guid: efa5d50ed9123f74982f4f4269ce6887, type: 2}
+  - {fileID: 11400000, guid: d45d6b248e2117b4491a66c0687c418a, type: 2}
+  - {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}

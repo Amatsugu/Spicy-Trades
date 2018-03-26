@@ -1,43 +1,58 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class Player : MonoBehaviour
 {
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
-	public Text resourceList;
+	public TextMeshProUGUI hudText;
 
-	private TownTile _curTile;
+	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
+	private Coroutine _curAnimation;
 
 	private void Start()
 	{
 		_sprite = GetComponent<SpriteRenderer>();
 	}
 
-	public void SetTile(TownTile tile)
+	public void SetTile(SettlementTile tile)
 	{
 		_curTile = tile;
+		GameMaster.CachePrices(tile);
+		UIManager.ShowPricePanel(tile);
 		transform.position = _curTile.WolrdPos;
-		var res = tile.Resources;
-		if (res == null)
-			return;
-		if(resourceList == null)
-			resourceList = GameObject.Find("Text").GetComponent<Text>();
-		resourceList.text = "";
-		foreach (var r in res)
-			resourceList.text += "<b><color=#"+ColorUtility.ToHtmlStringRGB(r.color)+">" + r.ResourceName + "</color></b> [" + r.category.ToString() + "]: Y=" + r.yeild + " | W=" + r.requiredWorkers + "\n";
+		/*if(hudText == null)
+			hudText = GameObject.Find("Text").GetComponent<TextMeshProUGUI>();
+		var sb = new StringBuilder();
+		sb.AppendLine(tile.Name + " [" + tile.tileInfo.settlementType.ToString() + "] | Population: " + tile.Population);
+		var res = tile.ResourceCache;
+		if (res != null)
+		{
+			foreach (var r in res)
+				sb.AppendLine("<b>" + r.Key.PrettyName + "</b> [" + r.Key.category.ToString() + "]:" + r.Value[0] + " | Value=" + r.Value[1] * 100 + "%");
+		}
+		if(tile.ResourceNeeds != null)
+		{
+			foreach (var r in tile.ResourceNeeds)
+				sb.AppendLine("<b>" + r.Resource+ "</b> [" + r.PackageType.ToString() + "]:" + r.ResourceUnits + " | $=" + r.Money);
+		}
+		hudText.text = sb.ToString();*/
 	}
 
-	public void MoveTo(TownTile tile)
+	public void MoveTo(SettlementTile tile)
 	{
 		if (isMoving)
 			return;
 		isMoving = true;
-		StartCoroutine(MoveAnimation(Pathfinder.FindPath(_curTile, tile)));
+		if (_curAnimation != null)
+			StopCoroutine(_curAnimation);
+		StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile)));
 	}
 
 	IEnumerator MoveAnimation(Tile[] path)
@@ -55,7 +70,7 @@ public class Player : MonoBehaviour
 				yield return new WaitForEndOfFrame();
 			}
 		}
-		SetTile(path.Last() as TownTile);
+		SetTile(path.Last() as SettlementTile);
 		isMoving = false;
 	}
 }

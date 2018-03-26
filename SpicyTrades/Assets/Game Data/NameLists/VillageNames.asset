@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fc18dd78b57034742ae80a70c013e038, type: 3}
+  m_Name: VillageNames
+  m_EditorClassIdentifier: 
+  names:
+  - Arks
+  - Asimps
+  - Altins
+  - Abinastra
+  - Axefell
+  - Billow
+  - Bends
+  - "Captain\u2019s Way"
+  - Center
+  - Callows
+  - Deadrir
+  - Dirtlight
+  - Deepmond
+  - Drydock
+  - Embermaw
+  - Etherim
+  - "Elk\u2019s Crossing"
+  - "Fate\u2019s Watch"
+  - Farshore
+  - Fendil
+  - Flarestin
+  - Forges
+  - "Fool\u2019s Dock"
+  - Gallows
+  - Greenpeak
+  - Galstin Farm
+  - High Helm
+  - Horizon
+  - Hazelfront
+  - Indall
+  - Illbrood
+  - Malore
+  - Meadows
+  - Mildew
+  - Mire
+  - Nodestrum
+  - Nilreach
+  - Orestruck
+  - Odurgar
+  - Porestin
+  - Pinefall
+  - Purelake
+  - Questguard
+  - Redmaw
+  - Rimehill
+  - Runemire
+  - Sprouts
+  - Stone Shore
+  - Smoothstone
+  - The Shrouds
+  - Tooth
+  - Tallmire
+  - Undercall
+  - Winterguard
+  - "Wolf\u2019s Bane"
+  - Whiterock

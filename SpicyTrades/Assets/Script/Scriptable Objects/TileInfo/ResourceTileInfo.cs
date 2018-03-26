@@ -5,11 +5,23 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Tile/Resource")]
 public class ResourceTileInfo : TileInfo
 {
-	public new readonly TileType tileType = TileType.Resource;
-	public string ResourceName;
 	public ResourceCategory category;
 	public int requiredWorkers;
+	public float basePrice;
 	public float yeild;
+
+	public string PrettyName
+	{
+		get
+		{
+			return "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">"+ name + "</color>";
+		}
+	}
+
+	public void OnEnable()
+	{
+		TileType = TileType.Resource;
+	}
 
 }
 

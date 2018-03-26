@@ -1,0 +1,23 @@
+struct HexCoords
+{
+    X:int;
+    Y:int;
+}
+
+struct Vector3
+{
+    x:float;
+    y:float;
+    z:float;
+}
+
+table TownTile
+{
+    Position:HexCoords;
+    Cost:float;
+    WorldPos:Vector3;
+    townType:TownType;
+    Name:string;
+    Population:int;
+    
+}
