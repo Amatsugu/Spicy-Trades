@@ -25,7 +25,6 @@ public class Player : MonoBehaviour
 	{
 		_curTile = tile;
 		GameMaster.CachePrices(tile);
-		UIManager.ShowPricePanel(tile);
 		transform.position = _curTile.WolrdPos;
 		/*if(hudText == null)
 			hudText = GameObject.Find("Text").GetComponent<TextMeshProUGUI>();

@@ -97,7 +97,9 @@ public class GameMaster
 	{
 		if (tile.GetType() == typeof(SettlementTile))
 		{
-			Instance._map.CurrentPlayer.MoveTo(tile as SettlementTile);
+
+			UIManager.ShowPricePanel(tile as SettlementTile);
+			//Instance._map.CurrentPlayer.MoveTo(tile as SettlementTile);
 		}
 #if DEBUG
 		var n = tile.GetNeighbors();

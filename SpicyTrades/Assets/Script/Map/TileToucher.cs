@@ -11,6 +11,7 @@ public class TileToucher : MonoBehaviour
 		GameMaster.TouchTile(target);
 	}
 
+#if DEBUG
 	private void OnMouseEnter()
 	{
 		target.Hover();	
@@ -20,4 +21,5 @@ public class TileToucher : MonoBehaviour
 	{
 		target.Blur();
 	}
+#endif
 }
