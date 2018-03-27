@@ -9,6 +9,7 @@ public class UISettlementPricePanel : UIPanel
 	public TextMeshProUGUI titleText;
 	public RectTransform contentBase;
 	public GameObject resourceListItem;
+	public TextMeshProUGUI noPriceText;
 	public Button travelButton;
 
 	public void Show(SettlementTile tile)
@@ -16,20 +17,6 @@ public class UISettlementPricePanel : UIPanel
 		Show();
 		DestroyChildren(contentBase);
 		titleText.text = tile.Name;
-		var rCache = tile.ResourceCache;
-		if (rCache == null)
-			return;
-		var i = 0;
-		foreach (var res in rCache.Keys)
-		{
-			var li = Instantiate(resourceListItem, contentBase).GetComponent<UIResourceListItem>();
-			li.nameText.text = res.PrettyName;
-			li.priceText.text = (res.basePrice * rCache[res][1]).ToString();
-			li.iconImage.sprite = res.sprite;
-			var rt = li.GetComponent<RectTransform>();
-			rt.anchoredPosition = new Vector2(70, i++ * -50);
-		}
-		contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rCache.Count * 50);
 		var clickEvent = new Button.ButtonClickedEvent();
 		clickEvent.AddListener(() =>
 		{
@@ -37,10 +24,28 @@ public class UISettlementPricePanel : UIPanel
 			Hide();
 		});
 		travelButton.onClick = clickEvent;
+		if (!GameMaster.PriceCache.ContainsKey(tile))
+		{
+			noPriceText.gameObject.SetActive(true);
+			return;
+		}
+		var rCache = GameMaster.PriceCache[tile];
+		var i = 0;
+		foreach (var res in rCache.Keys)
+		{
+			var li = Instantiate(resourceListItem, contentBase).GetComponent<UIResourceListItem>();
+			li.nameText.text = res.PrettyName;
+			li.priceText.text = (res.basePrice * rCache[res]).ToString();
+			li.iconImage.sprite = res.sprite;
+			var rt = li.GetComponent<RectTransform>();
+			rt.anchoredPosition = new Vector2(70, i++ * -50);
+		}
+		contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, rCache.Count * 50);
 	}
 
 	public override void Hide()
 	{
+		noPriceText.gameObject.SetActive(false);
 		base.Hide();
 		DestroyChildren(contentBase);
 

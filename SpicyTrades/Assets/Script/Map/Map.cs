@@ -58,7 +58,11 @@ public class Map : IEnumerable<Tile>
 	{
 		get
 		{
-			return this[tile.X, tile.Y, tile.Z];
+			return this[tile.ToIndex()];
+		}
+		set
+		{
+			this[tile.ToIndex()] = value;
 		}
 	}
 

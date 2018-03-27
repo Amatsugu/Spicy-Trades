@@ -39,6 +39,8 @@ public class SettlementGenerator : FeatureGenerator
 		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
 		var capital = map.MakeCapital(ccA[Random.Range(0, ccA.Length - 1)], CapitalTile);
 		capital.Name = capitalNames.GetNameList().GetNextName();
+		foreach (var c in capital.GetNeighbors())
+			(c as SettlementTile).Center = capital;
 		int numTowns = Random.Range(minTowns, maxTowns);
 		int curCycles = 0;
 		SettlementTile[] towns = new SettlementTile[numTowns];

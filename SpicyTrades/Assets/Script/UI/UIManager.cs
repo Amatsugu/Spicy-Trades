@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
 	public new Camera camera;
 
 	public UISettlementPricePanel pricePanel;
+	public UISettlementPanel settlementPanel;
 
 	private Vector3 priceWindowPos;
 	private UIList windowList;
@@ -24,9 +25,22 @@ public class UIManager : MonoBehaviour
 
 	public static void ShowPricePanel(SettlementTile tile)
 	{
+		if (Instance.settlementPanel.IsOpen)
+			return;
 		Instance.priceWindowPos = tile.WolrdPos;
 		Instance.pricePanel.Show(tile);
 	}
+
+	public static void ShowInventory()
+	{
+
+	}
+
+	public static void ShowSettlementPanel(SettlementTile tile)
+	{
+		Instance.settlementPanel.Show(tile);
+	}
+
 
 	private void Update()
 	{

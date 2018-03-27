@@ -25,23 +25,8 @@ public class Player : MonoBehaviour
 	{
 		_curTile = tile;
 		GameMaster.CachePrices(tile);
+		UIManager.ShowSettlementPanel(tile);
 		transform.position = _curTile.WolrdPos;
-		/*if(hudText == null)
-			hudText = GameObject.Find("Text").GetComponent<TextMeshProUGUI>();
-		var sb = new StringBuilder();
-		sb.AppendLine(tile.Name + " [" + tile.tileInfo.settlementType.ToString() + "] | Population: " + tile.Population);
-		var res = tile.ResourceCache;
-		if (res != null)
-		{
-			foreach (var r in res)
-				sb.AppendLine("<b>" + r.Key.PrettyName + "</b> [" + r.Key.category.ToString() + "]:" + r.Value[0] + " | Value=" + r.Value[1] * 100 + "%");
-		}
-		if(tile.ResourceNeeds != null)
-		{
-			foreach (var r in tile.ResourceNeeds)
-				sb.AppendLine("<b>" + r.Resource+ "</b> [" + r.PackageType.ToString() + "]:" + r.ResourceUnits + " | $=" + r.Money);
-		}
-		hudText.text = sb.ToString();*/
 	}
 
 	public void MoveTo(SettlementTile tile)
@@ -51,7 +36,7 @@ public class Player : MonoBehaviour
 		isMoving = true;
 		if (_curAnimation != null)
 			StopCoroutine(_curAnimation);
-		StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile)));
+		StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile.Center)));
 	}
 
 	IEnumerator MoveAnimation(Tile[] path)

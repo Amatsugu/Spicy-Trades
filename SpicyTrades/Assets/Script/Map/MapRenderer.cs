@@ -13,8 +13,8 @@ public class MapRenderer : MonoBehaviour
     void Awake()
     {
 		var startTime = System.DateTime.Now;
-		GameMaster.SetGenerator(generator);
-		GameMaster.SetMap(map = generator.GenerateMap(transform));
+		GameMaster.Generator = generator;
+		GameMaster.GameMap = map = generator.GenerateMap(transform);
 		generator.GenerateFeatures(map);
 		foreach (Tile t in map)
 		{

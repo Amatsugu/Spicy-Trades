@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class UIPanel : MonoBehaviour
 {
 
 	public RectTransform PanelBase { get; private set; }
+	public Button closeButton;
 	public bool hideOnStart = true;
 	public bool hideOnBlur = true;
 
@@ -22,6 +24,12 @@ public abstract class UIPanel : MonoBehaviour
 		PanelBase = GetComponent<RectTransform>();
 		if(hideOnStart)
 			Hide();
+		if(closeButton != null)
+		{
+			var click = new Button.ButtonClickedEvent();
+			click.AddListener(Hide);
+			closeButton.onClick = click;
+		}
 	}
 
 	private void Update()

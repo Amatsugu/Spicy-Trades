@@ -11,47 +11,38 @@ public class GameMaster
 			return _instance ?? (_instance = new GameMaster());
 		}
 	}
-	public static Map GameMap
-	{
-		get
-		{
-			return Instance._map;
-		}
-	}
+	public static Map GameMap { get; set; }
 	public static Player Player
 	{
 		get
 		{
-			return Instance._map.CurrentPlayer;
+			return GameMap.CurrentPlayer;
 		}
 	}
+
+	public static Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>> PriceCache
+	{
+		get
+		{
+			return Instance._resourceValueCache;
+		}
+	}
+
+	public static CameraPan CameraPan { get; set; }
 
 	public static List<Player> Players
 	{
 		get
 		{
-			return Instance._map.Players;
+			return GameMap.Players;
 		}
 	}
 
-	public static MapGenerator Generator
-	{
-		get
-		{
-			return Instance._generator;
-		}
-	}
+	public static MapGenerator Generator { get; set; }
 
 	private static GameMaster _instance;
 
-	private Map _map;
-	private MapGenerator _generator;
 	private Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>> _resourceValueCache;
-
-	public static void SetGenerator(MapGenerator generator)
-	{
-		Instance._generator = generator;
-	}
 	
 	public static void CachePrices(SettlementTile settlement)
 	{
@@ -83,14 +74,9 @@ public class GameMaster
 		}
 	}
 
-	public static void SetMap(Map map)
-	{
-		Instance._map = map;
-	}
-
 	public static Tile GetTile(int x, int y, int z)
 	{
-		return Instance._map[x, y, z];
+		return GameMap[x, y, z];
 	}
 
 	public static void TouchTile(Tile tile)
@@ -98,7 +84,7 @@ public class GameMaster
 		if (tile.GetType() == typeof(SettlementTile))
 		{
 
-			UIManager.ShowPricePanel(tile as SettlementTile);
+			UIManager.ShowPricePanel((tile as SettlementTile).Center);
 			//Instance._map.CurrentPlayer.MoveTo(tile as SettlementTile);
 		}
 #if DEBUG

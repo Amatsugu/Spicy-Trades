@@ -11,6 +11,7 @@ public class CameraPan : MonoBehaviour
 	public float scrollSpeed = 1;
 	public float scrollSensitivity = 1;
 	public AnimationCurve zoomRotationCurve = new AnimationCurve();
+	public bool isPaused = false;
 
 	private Vector3 _curPos;
 	private Vector3 _sPos;
@@ -26,11 +27,14 @@ public class CameraPan : MonoBehaviour
 		_curPos.y = Mathf.Lerp(0, GameMaster.Generator.Size.y, .25f);
 		_cam = GetComponent<Camera>();
 		_zoom = Mathf.Lerp(minZoom, maxZoom, .5f);
+		GameMaster.CameraPan = this;
 	}
 
 	// Update is called once per frame
 	void Update()
 	{
+		if (isPaused)
+			return;
 		var zoomDamping = Mathf.Max(.1f, (_zoom - minZoom) / (maxZoom - minZoom));
 		var touches = Input.touches;
 		if (touches.Length == 1)

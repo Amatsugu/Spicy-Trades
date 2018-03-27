@@ -8,6 +8,7 @@ public class SettlementTile : Tile
 	public SettlementType townType;
 	public string Name;
 	public int Population { get; set; }
+	public SettlementTile Center { get; set; }
 	public List<ResourceTileInfo> Resources { get; private set; }
 	public float Money = 500000;
 	public const int maxResourceStorage = 1000;
@@ -15,11 +16,11 @@ public class SettlementTile : Tile
 	public List<TradePackage> ResourceNeeds { get; private set; }
 	public new SettlementTileInfo tileInfo;
 
-	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius) : base(tileInfo, parent, hexCoords, outerRadius)
+	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius, SettlementTile center = null) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
+		Center = center ?? this;
 		this.tileInfo = tileInfo;
 	}
-
 
 	public SettlementTile AddResource(ResourceTileInfo resource)
 	{
