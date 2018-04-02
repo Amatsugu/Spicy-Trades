@@ -15,14 +15,18 @@ public class SettlementTile : Tile
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<TradePackage> ResourceNeeds { get; private set; }
 	public new SettlementTileInfo tileInfo;
+	public List<SettlementEvent> eventPool; //TODO: make event list
+	public List<SettlementEvent> currentEvents;
 
 	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius, SettlementTile center = null) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
 		Center = center ?? this;
 		this.tileInfo = tileInfo;
+		eventPool = new List<SettlementEvent>();
+		currentEvents = new List<SettlementEvent>();
 	}
 
-	public SettlementTile AddResource(ResourceTileInfo resource)
+	public SettlementTile AddResource(ResourceTileInfo resource, int units = -1)
 	{
 		if (Resources == null)
 		{
@@ -32,7 +36,10 @@ public class SettlementTile : Tile
 		}
 		Resources.Add(resource);
 		if (!ResourceCache.ContainsKey(resource))
-			ResourceCache.Add(resource, new float[] { resource.yeild, 1f });
+		{
+			var f = 0;
+			ResourceCache.Add(resource, new float[] { f, Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (f / maxResourceStorage))))});
+		}
 		return this;
 	}
 
@@ -54,6 +61,28 @@ public class SettlementTile : Tile
 		}
 		//Satisfy Needs
 		SatisfyNeeds();
+	}
+
+	public void PickEvents()
+	{
+		var groupedEvents = eventPool.GroupBy(e => e.Chance, e => e);
+		var pick = Random.Range(0, 1f);
+		pick = 1f - (pick * pick);
+		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
+		var pickedEvents = groupedEvents.Aggregate((e1, e2) => Mathf.Abs(e1.Key - pick) < Mathf.Abs(e2.Key - pick) ? e1 : e2).ToArray();
+		currentEvents.Add(pickedEvents[Random.Range(0, pickedEvents.Length - 1)]);
+	}
+
+	public bool TakeResource(ResourceTileInfo resource, int units)
+	{
+		float[] res;
+		if (!ResourceCache.TryGetValue(resource, out res))
+			return false;
+		if (res[0] < units)
+			return false;
+		res[0] -= units;
+		res[1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (res[0] / maxResourceStorage))));
+		return true;
 	}
 
 	private void SatisfyNeeds()
@@ -181,9 +210,28 @@ public class SettlementTile : Tile
 
 	}
 
-	public void Buy(ResourceTileInfo resource)
+	public bool Buy(ResourceTileInfo resource, int units, Player player = null)
 	{
-
+		if (player == null)
+			player = GameMaster.Player;
+		var cost = units * ResourceCache[resource][1];
+		if (player.Money < cost)
+			return false;
+		if (TakeResource(resource, units))
+		{
+			player.AddItem(new InventoryItem
+			{
+				Package = new TradePackage
+				{
+					Resource = resource.name,
+					ResourceUnits = units
+				},
+				Cost = cost
+			});
+			player.TakeMoney(cost);
+			return true;
+		}
+		return false;
 	}
 
 }

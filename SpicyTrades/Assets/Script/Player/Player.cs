@@ -11,14 +11,18 @@ public class Player : MonoBehaviour
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
 	public TextMeshProUGUI hudText;
+	public float Money { get; private set; }
 
 	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
 	private Coroutine _curAnimation;
+	private List<InventoryItem> _inventory;
 
 	private void Start()
 	{
 		_sprite = GetComponent<SpriteRenderer>();
+		_inventory = new List<InventoryItem>();
+		Money = 10000;
 	}
 
 	public void SetTile(SettlementTile tile)
@@ -36,7 +40,7 @@ public class Player : MonoBehaviour
 		isMoving = true;
 		if (_curAnimation != null)
 			StopCoroutine(_curAnimation);
-		StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile.Center)));
+		_curAnimation = StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile.Center)));
 	}
 
 	IEnumerator MoveAnimation(Tile[] path)
@@ -57,4 +61,75 @@ public class Player : MonoBehaviour
 		SetTile(path.Last() as SettlementTile);
 		isMoving = false;
 	}
+
+	public void AddItem(InventoryItem item)
+	{
+		var invItem = _inventory.FirstOrDefault(i => i.Package.Resource == item.Package.Resource);
+		if (invItem == null)
+		{
+			invItem = new InventoryItem
+			{
+				Package = item.Package,
+				Cost = item.Cost
+			};
+			_inventory.Add(invItem);
+		}else
+		{
+			invItem.Cost = invItem.Cost + invItem.Cost;
+			invItem.Cost /= 2f;
+			var p = invItem.Package;
+			p.ResourceUnits = p.ResourceUnits + item.Package.ResourceUnits;
+			invItem.Package = p;
+		}
+	}
+
+	public bool TakeItem(InventoryItem item)
+	{
+		var invItem = _inventory.First(i => i.Package.Resource == item.Package.Resource);
+		if (invItem == null)
+			return false;
+		else
+		{
+			if(invItem.Package.ResourceUnits < item.Package.ResourceUnits)
+				return false;
+			else
+			{
+				if (invItem.Package.ResourceUnits == item.Package.ResourceUnits)
+				{
+					_inventory.Remove(invItem);
+					return true;
+				}else
+				{
+					var p = invItem.Package;
+					p.ResourceUnits -= item.Package.ResourceUnits;
+					invItem.Package = p;
+					return true;
+				}
+			}
+		}
+	}
+
+	public void AddMoney(float ammount)
+	{
+		ammount = Mathf.Abs(ammount);
+		Money += ammount; 
+	}
+
+	public bool TakeMoney(float ammount)
+	{
+		ammount = Mathf.Abs(ammount);
+		if (ammount > Money)
+			return false;
+		Money -= ammount;
+		return true;
+	}
+
+#if DEBUG
+	public void LogItems()
+	{
+		foreach (var p in _inventory)
+			Debug.Log(p.Package.Resource + " : " + p.Package.ResourceUnits);
+	}
+#endif
+
 }

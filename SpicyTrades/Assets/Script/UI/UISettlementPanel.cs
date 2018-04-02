@@ -11,15 +11,16 @@ public class UISettlementPanel : UIPanel
 	public GameObject resourceItemPanel;
 	public TextMeshProUGUI infoText;
 	public Button buyButton;
+	public TMP_InputField buyCountInput;
 
-	public void Show(SettlementTile tile)
+	public void Show(SettlementTile settlement)
 	{
 		Show();
 		if(GameMaster.CameraPan != null)
 			GameMaster.CameraPan.isPaused = true;
-		titleText.text = tile.Name;
+		titleText.text = settlement.Name;
 		infoText.text = "Select an Item";
-		var rCache = tile.ResourceCache;
+		var rCache = settlement.ResourceCache;
 		if (rCache == null)
 			return;
 		int i = 0;
@@ -38,9 +39,20 @@ public class UISettlementPanel : UIPanel
 				buyButton.interactable = true;
 				var sb = new StringBuilder();
 				sb.AppendLine(res.PrettyName);
-				sb.AppendLine(li.priceText.text);
-				sb.AppendLine((rCache[res][1] * 100) + "%");
+				sb.AppendLine("Cost: " + li.priceText.text);
+				sb.AppendLine("Value: " + (rCache[res][1] * 100) + "%");
+				sb.AppendLine("Supply: " + rCache[res][0]);
 				infoText.text = sb.ToString();
+				buyButton.onClick = new Button.ButtonClickedEvent();
+				buyButton.onClick.AddListener(() =>
+				{
+					Debug.Log("Buy " + res.name);
+					settlement.Buy(res, int.Parse(buyCountInput.text));
+#if DEBUG
+					GameMaster.Player.LogItems();
+#endif
+					btn.onClick.Invoke();
+				});
 			});
 			btn.onClick = btnClick;
 		}

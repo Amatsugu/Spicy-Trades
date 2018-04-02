@@ -99,9 +99,9 @@ public class SettlementGenerator : FeatureGenerator
 			capital
 		};
 		var paths = new List<Tile[]>();
-		int y = (map.Height / 2), x = (map.Width / 2) - (y/2), z = -x - y;
-		var center = map[x,y,z].SetColor(Color.black);
-		var middle = towns.Aggregate((a, b) => a.DistanceTo(center) < b.DistanceTo(center) ? a : b).SetColor(Color.cyan);
+		//int y = (map.Height / 2), x = (map.Width / 2) - (y/2), z = -x - y;
+		//var center = map[x,y,z].SetColor(Color.black);
+		//var middle = towns.Aggregate((a, b) => a.DistanceTo(center) < b.DistanceTo(center) ? a : b).SetColor(Color.cyan);
 		switch (pathMethod)
 		{
 			case PathMethod.ShortestPath:

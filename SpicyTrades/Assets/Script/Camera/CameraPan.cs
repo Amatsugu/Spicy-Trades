@@ -33,6 +33,7 @@ public class CameraPan : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
+		
 		if (isPaused)
 			return;
 		var zoomDamping = Mathf.Max(.1f, (_zoom - minZoom) / (maxZoom - minZoom));

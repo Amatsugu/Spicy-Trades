@@ -12,8 +12,8 @@ public struct TradePackage
 
 public enum TradePackageType
 {
-	Money,
 	Resource,
+	Money,
 	Mixed,
 	Food
 }
