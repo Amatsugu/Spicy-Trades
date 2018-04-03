@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 	public float moveSpeed = 1f;
 	public bool isMoving = false;
 	public TextMeshProUGUI hudText;
-	public float Money { get; private set; }
+	public Coin Money { get; private set; }
 
 	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
@@ -22,7 +22,7 @@ public class Player : MonoBehaviour
 	{
 		_sprite = GetComponent<SpriteRenderer>();
 		_inventory = new List<InventoryItem>();
-		Money = 10000;
+		Money = new Coin(10000f);
 	}
 
 	public void SetTile(SettlementTile tile)

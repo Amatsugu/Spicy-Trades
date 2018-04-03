@@ -35,7 +35,7 @@ public class UISettlementPricePanel : UIPanel
 		{
 			var li = Instantiate(resourceListItem, contentBase).GetComponent<UIResourceListItem>();
 			li.nameText.text = res.PrettyName;
-			li.priceText.text = (res.basePrice * rCache[res]).ToString();
+			li.priceText.text = new Coin((res.basePrice * rCache[res])).ToString();
 			li.iconImage.sprite = res.sprite;
 			var rt = li.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(70, i++ * -50);

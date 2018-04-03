@@ -18,5 +18,6 @@ MonoBehaviour:
   tileRenderers: []
   category: 0
   requiredWorkers: 25
-  basePrice: 1000
+  basePrice: 10
   yeild: 4
+  description: 

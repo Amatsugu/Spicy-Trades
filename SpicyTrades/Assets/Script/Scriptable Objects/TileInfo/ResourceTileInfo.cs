@@ -9,12 +9,13 @@ public class ResourceTileInfo : TileInfo
 	public int requiredWorkers;
 	public float basePrice;
 	public float yeild;
+	public string description;
 
 	public string PrettyName
 	{
 		get
 		{
-			return "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">"+ name + "</color>";
+			return "<color=#" + ColorUtility.ToHtmlStringRGB(color) + ">" + name + "</color>";
 		}
 	}
 
