@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Text;
 
@@ -38,6 +39,8 @@ namespace NetworkManager
         private static Dictionary<string, Room> Rooms = new Dictionary<string, Room>();
         private static Dictionary<string, PID> PIDs = new Dictionary<string, PID>();
         public static Dictionary<string, CID> Connections = new Dictionary<string, CID>(); // the string here is the users session key
+        private static uint ROOMID = 0; // when converted to hex we get our 8byte id
+        private static uint PLAYERID = 0; // when converted to hex we get our 8byte id
         public static void INIT()
         {
             Network.DataRecieved += OnDataRecieved;
@@ -51,6 +54,7 @@ namespace NetworkManager
             object[] objects;
             string pid;
             string self;
+            Message msg;
             switch (command)
             {
                 case Network.HELLO:
@@ -58,14 +62,15 @@ namespace NetworkManager
                     //Handle data for this
                     break;
                 case Network.LOGIN:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
-                    self = (string)objects[0];
-                    string username = (string)objects[1];
-                    string password = (string)objects[2];
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    string username = (string)objects[0];
+                    string password = (string)objects[1];
                     //Handled by the TCP manager
+                    //COMPARE LOGINDATA
                     string key="";
                     //Need to get the players name... You are not a friend of yourself are you?
                     Connections[key] = new CID(new PID(key, "", false), send);
+                    Network.SendData(NetUtils.PieceCommand(new object[] {Network.LOGIN, Network.NO_ERROR, key }),send);
                     break;
                 case Network.REGISTER:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s", "s" });//user pass, email
@@ -87,12 +92,23 @@ namespace NetworkManager
                     self = (string)objects[0];
                     int pos = (int)objects[1];
                     int rcount = (int)objects[2];
+                    string[] roomlist = new string[rcount];
+                    int c = 0;
+                    foreach (var kvp in Rooms.ToArray())
+                    {
+                        roomlist[c++] = Rooms[kvp.Key].GetRoomID();
+                    }
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.LISTR, Network.NO_ERROR, roomlist}),send);
                     break;
                 case Network.JROOM:
                     //
                     break;
                 case Network.CHAT:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "m" });
+                    self = (string)objects[0];
+                    msg = (Message)objects[1];
+                    byte[] dat = NetUtils.PieceCommand(new object[] {Network.CHAT, Network.NO_ERROR });
+                    SendToAll(dat);
                     break;
                 case Network.REQUEST:
                     // Nothing is needed here
@@ -148,6 +164,18 @@ namespace NetworkManager
                     Console.WriteLine("Unknown command!");
                     break;
             }
+        }
+        public static void SendToAll(byte[] data)
+        {
+            // Send to all connected clients
+        }
+        public static void SendToRoom(byte[] data, string roomid)
+        {
+            // Send to all connected clients
+        }
+        public static void SendToPlayer(byte[] data, string playerid)
+        {
+            // Send to all connected clients
         }
         public static string GenUniqueSessionKey()
         {
