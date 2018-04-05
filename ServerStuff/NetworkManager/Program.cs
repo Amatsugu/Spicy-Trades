@@ -13,7 +13,7 @@ namespace NetworkManager
             try
             {
                 //Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
-                //Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
+                Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
             }
             catch (Exception e)
             {

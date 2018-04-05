@@ -45,6 +45,11 @@ namespace NetworkManager
         {
             Network.DataRecieved += OnDataRecieved;
         }
+        public static string GenRoomID()
+        {
+            ROOMID++;
+            return ROOMID.ToString("X8");
+        }
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
             byte command = e.RawResponse[0];
@@ -101,7 +106,8 @@ namespace NetworkManager
                     Network.SendData(NetUtils.PieceCommand(new object[] { Network.LISTR, Network.NO_ERROR, roomlist}),send);
                     break;
                 case Network.JROOM:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s"});
+                    //TODO FINISH THIS!
                     break;
                 case Network.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m" });
@@ -111,54 +117,83 @@ namespace NetworkManager
                     SendToAll(dat);
                     break;
                 case Network.REQUEST:
-                    // Nothing is needed here
+                    //self, playerid 
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.LISTF:
-                    //
+                    //self
+                    objects = NetUtils.FormCommand(data, new string[] { "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.LISTRF:
-                    //
+                    //self
+                    objects = NetUtils.FormCommand(data, new string[] { "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.ADDF:
-                    //Not needed
+                    //self, playerid
+                    objects = NetUtils.FormCommand(data, new string[] { "s","s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.FORMR:
-                    //
+                    //self
+                    objects = NetUtils.FormCommand(data, new string[] { "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.IHOST:
                     //Command not needed, server handles and sends this data over
                     break;
                 case Network.KICK:
-                    //
+                    //self, roomid, playerid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.INVITEF:
-                    //
+                    //self, playerid, roomid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.READY:
-                    //
+                    //self, isready
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "bo" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.LEAVER: // only sent if you are in the room
-                    //
+                    //self, roomid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.GRESORCE:
                     // Need more data from kham
                     break;
                 case Network.INIT:
+                    //TODO FIGURE THIS OUT
                     break;
                 case Network.CHATDM:
-                    //
+                    //self, msg, playerid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.CHATRM:
-                    //
+                    //self, msg, roomid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
+                    //TODO FINISH THIS!
                     break;
                 case Network.ROOMS:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s" });
+                    self = (string)objects[0];
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.ROOMS, Rooms.Count), send);
                     break;
                 case Network.GROOM:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    self = (string)objects[0];
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.GROOM, Rooms[(string)objects[1]]}),send);
                     break;
                 case Network.GPID:
-                    //
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    self = (string)objects[0];
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.GROOM, PIDs[(string)objects[1]] }), send);
                     break;
                 default:
                     Console.WriteLine("Unknown command!");
