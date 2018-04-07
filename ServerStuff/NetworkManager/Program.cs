@@ -12,8 +12,8 @@ namespace NetworkManager
         {
             try
             {
-                Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
-                //Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
+                //Network.Connect("192.168.1.6", 12344,"epicknex","password"); // local
+                Network.Connect("69.113.198.118", 12344,"epicknex","password"); //external
             }
             catch (Exception e)
             {
@@ -21,7 +21,11 @@ namespace NetworkManager
                 Console.ReadLine();
                 Environment.Exit(1);
             }
-            Network.SendData(new byte[] { 0 });
+            // Network.SendData(new byte[] { 0 });
+            uint test = 234523;
+            string hexValue = test.ToString("X8");
+            Console.WriteLine(hexValue);
+            Console.ReadLine();
         }
     }
 }

@@ -213,6 +213,10 @@ namespace NetworkManager
                 }
             }
         }
+        public string GetRoomID()
+        {
+            return roomID;
+        }
         public void SendChat(string message)
         {
             Network.SendRoomChat(new Message(message,Network.player),roomID);

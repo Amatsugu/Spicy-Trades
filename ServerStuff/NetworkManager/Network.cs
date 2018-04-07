@@ -198,9 +198,14 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTF, self });
             SendData(temp);
         }
-        public static void AddFriend()
+        public static void ListRequestedFriends()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { ADDF, self });
+            byte[] temp = NetUtils.PieceCommand(new object[] { LISTRF, self });
+            SendData(temp);
+        }
+        public static void AddFriend(string playerid)
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { ADDF, self, playerid });
             SendData(temp);
         }
         public static void IsHostOf(string roomid)
