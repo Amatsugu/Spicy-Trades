@@ -12,4 +12,6 @@ public class SettlementEvent : ScriptableObject
 	public List<TradePackage> resourceDemands = new List<TradePackage>();
 	public int duration;
 
+	public EventCompletion completionEffect;
+
 }

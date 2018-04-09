@@ -66,10 +66,8 @@ public class SettlementTile : Tile
 			PackageType = TradePackageType.Food,
 			ResourceUnits = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
-		ResourceNeeds.AddRange(currentEvents.SelectMany(e => e.Event.resourceDemands));
+		//Event Resources
 	}
-
-
 
 	public void PickEvent()
 	{

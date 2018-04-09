@@ -32,6 +32,9 @@ public class Map : IEnumerable<Tile>
 		}
 	}
 
+	public event SimulateEventHandler OnMapSimulate;
+	public delegate void SimulateEventHandler(Map map);
+
 	public Map(int height, int width, int seed = 0)
 	{
 		UnityEngine.Random.InitState(seed);
@@ -152,11 +155,14 @@ public class Map : IEnumerable<Tile>
 	{
 		for (int i = 0; i < ticks; i++)
 		{
+			GameMaster.CurrentTick++;
 			foreach (var town in Towns)
 				town.Simulate();
 			foreach (var town in Towns) //TODO: Do we do this
 				town.NegotiateTrade();
 		}
+		if(OnMapSimulate != null)
+			OnMapSimulate.Invoke(this);
 		return null;
 	}
 

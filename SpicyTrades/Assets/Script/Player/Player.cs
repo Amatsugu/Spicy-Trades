@@ -12,6 +12,13 @@ public class Player : MonoBehaviour
 	public bool isMoving = false;
 	public TextMeshProUGUI hudText;
 	public Coin Money { get; private set; }
+	public SettlementTile CurrentTile
+	{
+		get
+		{
+			return _curTile;
+		}
+	}
 
 	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;

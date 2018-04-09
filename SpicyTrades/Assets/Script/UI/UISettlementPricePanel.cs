@@ -24,12 +24,12 @@ public class UISettlementPricePanel : UIPanel
 			Hide();
 		});
 		travelButton.onClick = clickEvent;
-		if (!GameMaster.PriceCache.ContainsKey(tile))
+		if (!GameMaster.PriceKnowledge.ContainsKey(tile))
 		{
 			noPriceText.gameObject.SetActive(true);
 			return;
 		}
-		var rCache = GameMaster.PriceCache[tile];
+		var rCache = GameMaster.PriceKnowledge[tile].Cache;
 		var i = 0;
 		foreach (var res in rCache.Keys)
 		{
