@@ -6,7 +6,7 @@ namespace NetworkManager
 {
     public class Room
     {
-        private int MAX_MEMBERS = 4; //Max members that can be on a server
+        public const int MAX_MEMBERS = 4; //Max members that can be on a server
         private int MAX_ID_SIZE = 8;
         private string roomID;//nedds to be sent
         private string roomPass;//needs to be sent
@@ -167,6 +167,10 @@ namespace NetworkManager
             members[numOfPlayers++] = member;
             Network.InviteFriend(roomID, member.GetID()); // Its started
         }
+        public void AddMember(PID member,bool noprob)
+        {
+            members[numOfPlayers++] = member;
+        }
         public void RemoveMember(PID member)
         {
             PID[] temp = new PID[MAX_MEMBERS];
@@ -200,7 +204,7 @@ namespace NetworkManager
         public void SetReady(bool b)
         {
             isReady = b;
-            Network.SetReady(b); //DW Server will not mirror commands sent to you...
+            Network.SetReady(b,roomID); //DW Server will not mirror commands sent to you...
         }
         public void SetReady(bool b,PID player)
         {

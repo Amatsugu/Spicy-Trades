@@ -223,9 +223,9 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self, playerid, roomid });
             SendData(temp);
         }
-        public static void SetReady(bool ready)
+        public static void SetReady(bool ready,string roomid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready });
+            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready, roomid });
             SendData(temp);
         }
         public static void LeaveRoom(string roomid)

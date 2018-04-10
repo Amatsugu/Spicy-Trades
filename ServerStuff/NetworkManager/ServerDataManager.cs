@@ -57,9 +57,13 @@ namespace NetworkManager
             byte[] data = e.RawResponse.SubArray(1, e.RawResponse.Length-2);
             IPEndPoint send = e.SenderRef;
             object[] objects;
+            PID player;
             string pid;
             string self;
             Message msg;
+            string roomid;
+            string playerid;
+            byte[] dat;
             switch (command)
             {
                 case Network.HELLO:
@@ -107,13 +111,24 @@ namespace NetworkManager
                     break;
                 case Network.JROOM:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s"});
-                    //TODO FINISH THIS!
+                    roomid = (string)objects[1];
+                    self = (string)objects[0];
+                    player = GetPlayerPID(self);
+                    playerid = player.GetID();
+                    if (RoomExists(roomid) && Rooms[roomid].GetNumPlayers() != Room.MAX_MEMBERS)
+                    {
+                        Rooms[roomid].AddMember(player,true);
+                        SendToRoom(NetUtils.PieceCommand(new object[] { Network.JROOM, Network.NO_ERROR, roomid, playerid }),roomid);
+                    } else
+                    {
+                        Network.SendData(NetUtils.PieceCommand(new object[] { Network.JROOM, Network.CANT_JOIN_ROOM })); // Error, invalid room
+                    }
                     break;
                 case Network.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m" });
                     self = (string)objects[0];
                     msg = (Message)objects[1];
-                    byte[] dat = NetUtils.PieceCommand(new object[] {Network.CHAT, Network.NO_ERROR });
+                    dat = NetUtils.PieceCommand(new object[] {Network.CHAT, Network.NO_ERROR });
                     SendToAll(dat);
                     break;
                 case Network.REQUEST:
@@ -137,9 +152,11 @@ namespace NetworkManager
                     //TODO FINISH THIS!
                     break;
                 case Network.FORMR:
-                    //self
-                    objects = NetUtils.FormCommand(data, new string[] { "s" });
-                    //TODO FINISH THIS!
+                    //self, roompassword
+                    objects = NetUtils.FormCommand(data, new string[] { "s","s" });
+                    roomid = GenRoomID();
+                    Rooms[roomid] = new Room(roomid, "", true);// Server is always a "host"
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.GROOM, Rooms[roomid] }), send);//Send a copy of the room data to the player
                     break;
                 case Network.IHOST:
                     //Command not needed, server handles and sends this data over
@@ -147,7 +164,12 @@ namespace NetworkManager
                 case Network.KICK:
                     //self, roomid, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    roomid = (string)objects[1];
+                    playerid = (string)objects[2];
+                    Rooms[roomid].Kick(PIDs[playerid]);
+                    dat = NetUtils.PieceCommand(new object[] { Network.KICK, Network.NO_ERROR, roomid, playerid });
+                    SendToRoom(dat, roomid);
                     break;
                 case Network.INVITEF:
                     //self, playerid, roomid
@@ -155,14 +177,23 @@ namespace NetworkManager
                     //TODO FINISH THIS!
                     break;
                 case Network.READY:
-                    //self, isready
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "bo" });
-                    //TODO FINISH THIS!
+                    //self, isready. roomid
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "bo", "s" });
+                    self = (string)objects[0];
+                    bool isReady = (bool)objects[1];
+                    roomid = (string)objects[2];
+                    Rooms[roomid].SetReady(isReady,GetPlayerPID(self));
+                    dat = NetUtils.PieceCommand(new object[] { Network.READY, Network.NO_ERROR, isReady, GetPlayerPID(self).GetID() });
+                    SendToRoom(dat, roomid);
                     break;
                 case Network.LEAVER: // only sent if you are in the room
                     //self, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    roomid = (string)objects[1];
+                    Rooms[roomid].RemoveMember(GetPlayerPID(self));
+                    dat = NetUtils.PieceCommand(new object[] { Network.LEAVER,Network.NO_ERROR, GetPlayerPID(self).GetID()});
+                    SendToRoom(dat,roomid);
                     break;
                 case Network.GRESORCE:
                     // Need more data from kham
@@ -173,12 +204,20 @@ namespace NetworkManager
                 case Network.CHATDM:
                     //self, msg, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    msg = (Message)objects[1];
+                    playerid = (string)objects[2];
+                    dat = NetUtils.PieceCommand(new object[] { Network.CHAT, Network.NO_ERROR });
+                    SendToRoom(dat, playerid);
                     break;
                 case Network.CHATRM:
                     //self, msg, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    msg = (Message)objects[1];
+                    roomid = (string)objects[2];
+                    dat = NetUtils.PieceCommand(new object[] { Network.CHAT, Network.NO_ERROR });
+                    SendToRoom(dat,roomid);
                     break;
                 case Network.ROOMS:
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
@@ -200,11 +239,31 @@ namespace NetworkManager
                     break;
             }
         }
+        public static PID GetPlayerPID(string cid)
+        {
+            return Connections[cid].GetPID(); //Get the playerid from self(the cid)
+        }
+        public static bool RoomExists(string roomid0)
+        {
+            return Rooms[roomid0] != null;
+        }
+        public static bool PlayerExists(string roomid0)
+        {
+            return PIDs[roomid0] != null;
+        }
         public static void SendToAll(byte[] data)
         {
             // Send to all connected clients
         }
         public static void SendToRoom(byte[] data, string roomid)
+        {
+            // Send to all connected clients
+        }
+        public static void SendToAll(byte[] data,string self)
+        {
+            // Send to all connected clients
+        }
+        public static void SendToRoom(byte[] data, string roomid,string self)
         {
             // Send to all connected clients
         }
