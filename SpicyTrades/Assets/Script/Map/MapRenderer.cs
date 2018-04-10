@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -8,6 +9,8 @@ public class MapRenderer : MonoBehaviour
 	public MapGenerator generator;
 	public GameObject smartTile;
 	public Map map;
+	public float nextTick;
+	private float f = 0;
 
     // Use this for initialization
     void Awake()
@@ -22,12 +25,20 @@ public class MapRenderer : MonoBehaviour
 			t.PostRender();
 		}
 		map.Simulate(1);
-		Debug.Log("Generation Time: " + (System.DateTime.Now - startTime).TotalMilliseconds + "ms");
+		nextTick = Time.time + GameMaster.TickRate;
+		Debug.Log("Generation Time: " + (DateTime.Now - startTime).TotalMilliseconds + "ms");
     }
 
     // Update is called once per frame
     void Update()
     {
+		if(nextTick <= Time.time)
+		{
+			Debug.Log("Simulate");
+			var time = DateTime.Now;
+			map.Simulate(50);
+			nextTick = Time.time + GameMaster.TickRate;
+		}
 		if (!generator.Regen)
 			return;
 		generator.Regen = false;
@@ -35,5 +46,11 @@ public class MapRenderer : MonoBehaviour
 		Awake();
     }
 
-	
+	private void OnGUI()
+	{
+		GUILayout.Label("Time to next Tick " + (nextTick - Time.time));
+		GUILayout.Label(GameMaster.CurrentTick.ToString());
+	}
+
+
 }

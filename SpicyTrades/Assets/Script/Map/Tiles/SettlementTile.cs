@@ -16,14 +16,14 @@ public class SettlementTile : Tile
 	public List<TradePackage> ResourceNeeds { get; private set; }
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; //TODO: make event list
-	public List<SettlementEvent> currentEvents;
+	public List<ActiveEvent> currentEvents;
 
 	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius, SettlementTile center = null) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
 		Center = center ?? this;
 		this.tileInfo = tileInfo;
 		eventPool = new List<SettlementEvent>();
-		currentEvents = new List<SettlementEvent>();
+		currentEvents = new List<ActiveEvent>();
 	}
 
 	public SettlementTile AddResource(ResourceTileInfo resource, int units = -1)
@@ -45,32 +45,38 @@ public class SettlementTile : Tile
 
 	public void Simulate()
 	{
+		DetermineNeeds();
+		//Work Resources
+		foreach(var res in Resources)
+		{
+			ResourceCache[res][0] += res.yeild;
+			if (ResourceCache[res][0] > maxResourceStorage)
+				ResourceCache[res][0] = maxResourceStorage;
+			ResourceCache[res][1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (ResourceCache[res][0] / maxResourceStorage)))); //Recalculate Value
+		}
+		//Satisfy Needs
+		SatisfyNeeds();
+	}
+
+	private void DetermineNeeds()
+	{
 		//Make Food Need
 		ResourceNeeds.Add(new TradePackage
 		{
 			PackageType = TradePackageType.Food,
 			ResourceUnits = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
-		//Work Resources
-		foreach(var res in Resources)
-		{
-			ResourceCache[res][0] += res.yeild;
-			/*if (_resourceCache[res.name][0] > maxResourceStorage)
-				_resourceCache[res.name][0] = maxResourceStorage;*/
-			ResourceCache[res][1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (ResourceCache[res][0] / maxResourceStorage))));
-		}
-		//Satisfy Needs
-		SatisfyNeeds();
+		//Event Resources
 	}
 
-	public void PickEvents()
+	public void PickEvent()
 	{
 		var groupedEvents = eventPool.GroupBy(e => e.Chance, e => e);
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
 		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
 		var pickedEvents = groupedEvents.Aggregate((e1, e2) => Mathf.Abs(e1.Key - pick) < Mathf.Abs(e2.Key - pick) ? e1 : e2).ToArray();
-		currentEvents.Add(pickedEvents[Random.Range(0, pickedEvents.Length - 1)]);
+		currentEvents.Add(new ActiveEvent(pickedEvents[Random.Range(0, pickedEvents.Length - 1)]));
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
@@ -202,12 +208,20 @@ public class SettlementTile : Tile
 		}
 		ResourceNeeds.Clear();
 		ResourceNeeds.AddRange(extraNeeds);
+		RecalculateAssetValue();
+	}
+
+	private void RecalculateAssetValue()
+	{
+		foreach(var res in ResourceCache.Keys)
+		{
+			ResourceCache[res][1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (ResourceCache[res][0] / maxResourceStorage)))); //Recalculate Value
+		}
 	}
 
 	//TODO: Trades
 	public void NegotiateTrade()
 	{
-
 	}
 
 	public bool Buy(ResourceTileInfo resource, int units, Player player = null)

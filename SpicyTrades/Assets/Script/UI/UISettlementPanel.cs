@@ -29,7 +29,7 @@ public class UISettlementPanel : UIPanel
 			var li = Instantiate(resourceItemPanel, contentBase).GetComponent<UIResourceListItem>();
 			li.nameText.text = res.PrettyName;
 			li.priceText.text = new Coin((res.basePrice * rCache[res][1])).ToString();
-			li.iconImage.sprite = res.sprite;
+			li.iconImage.sprite = res.icon;
 			var rt = li.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(0, i++ * -100);
 			var btn = li.GetComponent<Button>();
@@ -39,6 +39,7 @@ public class UISettlementPanel : UIPanel
 				buyButton.interactable = true;
 				var sb = new StringBuilder();
 				sb.AppendLine(res.PrettyName);
+				sb.AppendLine("Base: " + new Coin(res.basePrice));
 				sb.AppendLine("Cost: " + li.priceText.text.Replace('\n', ' '));
 				sb.AppendLine("Value: " + (rCache[res][1] * 100) + "%");
 				sb.AppendLine("Supply: " + rCache[res][0]);

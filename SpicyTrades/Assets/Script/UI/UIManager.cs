@@ -20,6 +20,14 @@ public class UIManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
+		GameMaster.GameMap.OnMapSimulate += m =>
+		{
+			if(settlementPanel.IsOpen)
+			{
+				settlementPanel.Hide();
+				ShowSettlementPanel(GameMaster.Player.CurrentTile);
+			}
+		};
 		windowList = pricePanel.contentBase.GetComponent<UIList>();
 	}
 

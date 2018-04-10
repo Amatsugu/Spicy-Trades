@@ -1,9 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMaster
 {
+	public const float TickRate = 10;
 	public static GameMaster Instance
 	{
 		get
@@ -20,11 +22,13 @@ public class GameMaster
 		}
 	}
 
-	public static Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>> PriceCache
+	public static int CurrentTick { get; set; }
+
+	public static Dictionary<SettlementTile, TradeKnowledge> PriceKnowledge
 	{
 		get
 		{
-			return Instance._resourceValueCache;
+			return Instance._tradeKnowledge;
 		}
 	}
 
@@ -39,38 +43,40 @@ public class GameMaster
 	}
 
 	public static MapGenerator Generator { get; set; }
-
 	private static GameMaster _instance;
+	private Dictionary<SettlementTile, TradeKnowledge> _tradeKnowledge;
 
-	private Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>> _resourceValueCache;
 	
 	public static void CachePrices(SettlementTile settlement)
 	{
-		if (Instance._resourceValueCache == null)
-			Instance._resourceValueCache = new Dictionary<SettlementTile, Dictionary<ResourceTileInfo, float>>();
-		var resourceValueCache = Instance._resourceValueCache;
+		if (Instance._tradeKnowledge == null)
+			Instance._tradeKnowledge = new Dictionary<SettlementTile, TradeKnowledge>();
+		var tradeKnowledge = Instance._tradeKnowledge;
+
 		var resourceCache = settlement.ResourceCache;
 		if (resourceCache == null)
 			return;
-		if(resourceValueCache.ContainsKey(settlement))
+		if(tradeKnowledge.ContainsKey(settlement))
 		{
-			AddToCache(resourceValueCache[settlement], resourceCache);
+			AddToCache(tradeKnowledge[settlement], resourceCache);
+
 		}else
 		{
-			var valueCache = new Dictionary<ResourceTileInfo, float>();
-			resourceValueCache.Add(settlement, valueCache);
+			var valueCache = new TradeKnowledge();
+			tradeKnowledge.Add(settlement, valueCache);
 			AddToCache(valueCache, resourceCache);
 		}
 	}
 
-	private static void AddToCache(Dictionary<ResourceTileInfo, float> valueCache, Dictionary<ResourceTileInfo, float[]> resourceCache)
+	private static void AddToCache(TradeKnowledge knowledgeCache, Dictionary<ResourceTileInfo, float[]> resourceCache)
 	{
+		knowledgeCache.AquisitionTick = CurrentTick;
 		foreach (var res in resourceCache.Keys)
 		{
-			if (valueCache.ContainsKey(res))
-				valueCache[res] = resourceCache[res][1];
+			if (knowledgeCache.Cache.ContainsKey(res))
+				knowledgeCache.Cache[res] = resourceCache[res][1];
 			else
-				valueCache.Add(res, resourceCache[res][1]);
+				knowledgeCache.Cache.Add(res, resourceCache[res][1]);
 		}
 	}
 

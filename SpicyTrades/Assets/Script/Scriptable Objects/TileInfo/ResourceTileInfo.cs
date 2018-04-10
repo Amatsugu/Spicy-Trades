@@ -10,6 +10,7 @@ public class ResourceTileInfo : TileInfo
 	public float basePrice;
 	public float yeild;
 	public string description;
+	public Sprite icon;
 
 	public string PrettyName
 	{
