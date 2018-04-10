@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -32,9 +32,9 @@ public class SettlementGenerator : FeatureGenerator
 	{
 		//Capital Selection
 		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
-		var capitalCandidates = from Tile t in map where t.Tag == "Ground" && t.GetNeighbors().Count(nt => nt != null && nt.Tag == "Water") == 3 select t;
-		var capitalCandicateCenters = capitalCandidates.SelectMany(t => from Tile nt in t.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt);
-		var centerCandidates = from Tile t in capitalCandicateCenters where t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground") select t;
+		var capitalCandidates = map.Where(t => t.Tag == "Ground" && t.GetNeighbors().Count(nt => nt != null && nt.Tag == "Water") == 3);
+		var capitalCandicateCenters = capitalCandidates.SelectMany(t => t.GetNeighbors().Where(nt => nt != null && nt.Tag == "Ground"));
+		var centerCandidates = capitalCandicateCenters.Where(t => t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground"));
 		var ccA = centerCandidates.ToArray();
 		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
 		var capital = map.MakeCapital(ccA[Random.Range(0, ccA.Length - 1)], CapitalTile);

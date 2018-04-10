@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,10 +10,10 @@ public class SettlementTile : Tile
 	public int Population { get; set; }
 	public SettlementTile Center { get; set; }
 	public List<ResourceTileInfo> Resources { get; private set; }
-	public float Money = 500000;
+	public Coin Money = new Coin(500000);
 	public const int maxResourceStorage = 1000;
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
-	public List<TradePackage> ResourceNeeds { get; private set; }
+	public List<ResourceNeed> ResourceNeeds { get; private set; }
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; //TODO: make event list
 	public List<ActiveEvent> currentEvents;
@@ -32,7 +32,7 @@ public class SettlementTile : Tile
 		{
 			Resources = new List<ResourceTileInfo>();
 			ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
-			ResourceNeeds = new List<TradePackage>();
+			ResourceNeeds = new List<ResourceNeed>();
 		}
 		Resources.Add(resource);
 		if (!ResourceCache.ContainsKey(resource))
@@ -61,10 +61,11 @@ public class SettlementTile : Tile
 	private void DetermineNeeds()
 	{
 		//Make Food Need
-		ResourceNeeds.Add(new TradePackage
+		ResourceNeeds.Add(new ResourceNeed
 		{
-			PackageType = TradePackageType.Food,
-			ResourceUnits = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
+			Type = NeedType.Category,
+			Resource = "Food",
+			Count = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
 		//Event Resources
 	}
@@ -93,121 +94,62 @@ public class SettlementTile : Tile
 
 	private void SatisfyNeeds()
 	{
-		List<TradePackage> extraNeeds = new List<TradePackage>();
 		foreach (var need in ResourceNeeds)
 		{
-			int unitsNeeded;
-			if (need.PackageType == TradePackageType.Food) //Foods
+			if(need.Type == NeedType.Category) //Categoric Needs
 			{
-				unitsNeeded = need.ResourceUnits;
+				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.Resource);
 				foreach (var res in ResourceCache.Keys)
 				{
-					if (res.category != ResourceCategory.Food)
+					if (res.category != cat)
 						continue;
 					var curCache = ResourceCache[res];
-					if (curCache[0] >= unitsNeeded)
+					if (curCache[0] >= need.Count)
 					{
-						curCache[0] -= unitsNeeded;
-						unitsNeeded = 0;
+						curCache[0] -= need.Count;
+						need.Count = 0;
 					}
 					else
 					{
 						var unitsTaken = Mathf.FloorToInt(curCache[0]);
-						unitsNeeded -= unitsTaken;
+						need.Count -= unitsTaken;
 						curCache[0] -= unitsTaken;
 					}
-					if (unitsNeeded == 0)
+					if (need.Count == 0)
 						break;
-					extraNeeds.Add(new TradePackage
-					{
-						PackageType = TradePackageType.Food,
-						ResourceUnits = unitsNeeded
-					});
 				}
 			}
-			else if (need.PackageType == TradePackageType.Money) //Money
+			else if (need.Type == NeedType.Money) //Money
 			{
-				if (Money > need.Money)
-					Money -= need.Money;
-				else
+				if (Money >= need.Count)
 				{
-					extraNeeds.Add(new TradePackage
-					{
-						PackageType = TradePackageType.Money,
-						Money = need.Money - Money
-					});
-					Money = 0;
-				}
-			}
-			else if (need.PackageType == TradePackageType.Mixed) //Mixed
-			{
-				var moneyNeeded = need.Money;
-				if (Money > moneyNeeded)
-				{
-					Money -= moneyNeeded;
-					moneyNeeded = 0;
+					Money -= need.Count;
+					need.Count = 0;
 				}
 				else
 				{
-					extraNeeds.Add(new TradePackage
-					{
-						PackageType = TradePackageType.Money,
-						Money = moneyNeeded - Money
-					});
-					Money = 0;
-				}
-				unitsNeeded = need.ResourceUnits;
-				var curCache = (from ResourceTileInfo res in ResourceCache.Keys where res.name == need.Resource select ResourceCache[res]).First();
-				if (curCache[0] >= unitsNeeded)
-				{
-					curCache[0] = 0;
-					unitsNeeded = 0;
-				}
-				else
-				{
-					var unitsTaken = Mathf.FloorToInt(curCache[0]);
-					unitsNeeded -= unitsTaken;
-					curCache[0] -= unitsTaken;
-				}
-				if (unitsNeeded > 0)
-				{
-					extraNeeds.Add(new TradePackage
-					{
-						PackageType = need.PackageType,
-						Resource = need.Resource,
-						ResourceUnits = unitsNeeded
-					});
+					need.Count = (need.Count - Money).Value;
+					Money = new Coin(0);
 				}
 			}
 			else //Resources
 			{
-				unitsNeeded = need.ResourceUnits;
-				var curCache = (from ResourceTileInfo res in ResourceCache.Keys where res.name == need.Resource select ResourceCache[res]).First();
-				if (curCache[0] >= unitsNeeded)
+				var curCache = ResourceCache[ResourceCache.Keys.Single(res => res.name == need.Resource)];
+				if (curCache[0] >= need.Count)
 				{
 					curCache[0] = 0;
-					unitsNeeded = 0;
+					need.Count = 0;
 				}
 				else
 				{
 					var unitsTaken = Mathf.FloorToInt(curCache[0]);
-					unitsNeeded -= unitsTaken;
+					need.Count -= unitsTaken;
 					curCache[0] -= unitsTaken;
-				}
-				if (unitsNeeded > 0)
-				{
-					extraNeeds.Add(new TradePackage
-					{
-						PackageType = need.PackageType,
-						Resource = need.Resource,
-						ResourceUnits = unitsNeeded
-					});
 				}
 			}
 
 		}
-		ResourceNeeds.Clear();
-		ResourceNeeds.AddRange(extraNeeds);
+		ResourceNeeds.RemoveAll(n => n.Count == 0);
 		RecalculateAssetValue();
 	}
 

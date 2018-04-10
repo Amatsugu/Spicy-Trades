@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -94,6 +94,21 @@ public struct Coin
 		return a.Value > b;
 	}
 
+	public static bool operator >=(Coin a, Coin b)
+	{
+		return (a > b) || (a == b);
+	}
+
+	public static bool operator >=(float a, Coin b)
+	{
+		return (a > b) || (a == b);
+	}
+
+	public static bool operator >=(Coin a, float b)
+	{
+		return (a > b) || (a == b);
+	}
+
 	public static bool operator <(Coin a, Coin b)
 	{
 		return b > a;
@@ -109,14 +124,49 @@ public struct Coin
 		return a.Value < b;
 	}
 
+	public static bool operator <=(Coin a, Coin b)
+	{
+		return (a > b) || (a == b);
+	}
+
+	public static bool operator <=(float a, Coin b)
+	{
+		return (a > b) || (a == b);
+	}
+
+	public static bool operator <=(Coin a, float b)
+	{
+		return (a > b) || (a == b);
+	}
+
 	public static bool operator ==(Coin a, Coin b)
 	{
 		return a.Value == b.Value;
 	}
 
+	public static bool operator ==(Coin a, float b)
+	{
+		return a.Value == b;
+	}
+
+	public static bool operator ==(float a, Coin b)
+	{
+		return a == b.Value;
+	}
+
 	public static bool operator !=(Coin a, Coin b)
 	{
 		return !(a == b);
+	}
+
+	public static bool operator !=(Coin a, float b)
+	{
+		return !(a.Value == b);
+	}
+
+	public static bool operator !=(float a, Coin b)
+	{
+		return !(a == b.Value);
 	}
 
 	// override object.Equals
