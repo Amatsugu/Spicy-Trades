@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -48,7 +48,6 @@ public class UISettlementPricePanel : UIPanel
 		noPriceText.gameObject.SetActive(false);
 		base.Hide();
 		DestroyChildren(contentBase);
-
 	}
 
 	public void Move(Vector2 position, bool centered = true)

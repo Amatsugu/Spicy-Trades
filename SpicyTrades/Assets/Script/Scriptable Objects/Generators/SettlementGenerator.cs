@@ -31,7 +31,6 @@ public class SettlementGenerator : FeatureGenerator
 	public override void Generate(Map map)
 	{
 		//Capital Selection
-		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		var capitalCandidates = map.Where(t => t.Tag == "Ground" && t.GetNeighbors().Count(nt => nt != null && nt.Tag == "Water") == 3);
 		var capitalCandicateCenters = capitalCandidates.SelectMany(t => t.GetNeighbors().Where(nt => nt != null && nt.Tag == "Ground"));
 		var centerCandidates = capitalCandicateCenters.Where(t => t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground"));
@@ -141,27 +140,6 @@ public class SettlementGenerator : FeatureGenerator
 				}
 				break;
 		}
-		/*int extra = Random.Range(0, minTowns/2);
-		Debug.Log(extra);
-		for (int i = 0; i < extra; i++)
-		{
-			var tileIndex = Random.Range(0, closed.Count);
-			int min, max = min = 0;
-			if (tileIndex >= closed.Count / 2)
-			{
-				max = (closed.Count / 2) -1;
-				min = 0;
-			}else
-			{
-				min = closed.Count / 2;
-				max = closed.Count - 1;
-			}
-			var tileIndex2 = Random.Range(min, max);
-			var path = Pathfinder.FindPath(closed[tileIndex], closed[tileIndex2]);
-
-			RenderPath(path, map);
-
-		}*/
 		Debug.Log(GeneratorName + "Finished");
 	}
 

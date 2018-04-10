@@ -14,5 +14,6 @@ MonoBehaviour:
   tag: Road
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
   color: {r: 1, g: 1, b: 1, a: 1}
+  cost: 0
   tileRenderers:
   - {fileID: 11400000, guid: b9a232ef39e53a541b7e5e4df162cc68, type: 2}

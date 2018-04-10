@@ -1,11 +1,11 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Pathfinder {
 
-	public static Tile[] FindPath(Tile a, Tile b, string stopAt = null)
+	public static Tile[] FindPath(Tile a, Tile b, string stopAt = null, string[] ignore = null)
 	{
 		List<PathNode> open = new List<PathNode>
 		{
@@ -16,7 +16,8 @@ public class Pathfinder {
 		{
 			if (closed.Contains(B))
 				break;
-			var n = open.Aggregate((c, d) => c.CalculateF(b) < d.CalculateF(b) ? c : d);
+			PathNode n;
+			n = open.Aggregate((c, d) => c.CalculateF(b) < d.CalculateF(b) ? c : d);
 			open.Remove(n);
 			closed.Add(n);
 			if (stopAt != null && n.Tag == stopAt)
@@ -25,6 +26,9 @@ public class Pathfinder {
 			{
 				if (t == null)
 					continue;
+				if (ignore != null)
+					if (ignore.Contains(t.Tag))
+						continue;
 				var adj = new PathNode(t, n.G + 1, n);
 				if (closed.Any(adjT => adjT.Tile == t))
 				{

@@ -1,11 +1,22 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = 10;
+	public const float TickRate = 10000;
+	public static event Action GameReady
+	{
+		add
+		{
+			Instance._gameReady += value;
+		}
+		remove
+		{
+			Instance._gameReady -= value;
+		}
+	}
 	public static GameMaster Instance
 	{
 		get
@@ -13,7 +24,18 @@ public class GameMaster
 			return _instance ?? (_instance = new GameMaster());
 		}
 	}
-	public static Map GameMap { get; set; }
+	public static Map GameMap
+	{
+		get
+		{
+			return Instance._gameMap;
+		}
+		set
+		{
+			Instance._gameMap = value;
+			Instance._gameReady.Invoke();
+		}
+	}
 	public static Player Player
 	{
 		get
@@ -45,6 +67,8 @@ public class GameMaster
 	public static MapGenerator Generator { get; set; }
 	private static GameMaster _instance;
 	private Dictionary<SettlementTile, TradeKnowledge> _tradeKnowledge;
+	private event Action _gameReady;
+	private Map _gameMap;
 
 	
 	public static void CachePrices(SettlementTile settlement)

@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -11,7 +11,6 @@ public class ResourceGenerator : FeatureGenerator
 	public ResourceListProvider resourceProvider;
 	public override void Generate(Map map)
 	{
-		GeneratorName = "<b>" + this.GetType().ToString() + ":</b> ";
 		var towns = map.GetTowns();
 		var resources = resourceProvider.GetResourceList();
 		foreach(SettlementTile t in towns)

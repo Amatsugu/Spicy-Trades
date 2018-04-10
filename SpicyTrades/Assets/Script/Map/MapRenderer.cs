@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,7 +36,7 @@ public class MapRenderer : MonoBehaviour
 		{
 			Debug.Log("Simulate");
 			var time = DateTime.Now;
-			map.Simulate(50);
+			map.Simulate(1);
 			nextTick = Time.time + GameMaster.TickRate;
 		}
 		if (!generator.Regen)

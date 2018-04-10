@@ -1,4 +1,4 @@
-﻿using LuminousVector;
+using LuminousVector;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,9 +20,9 @@ public class UIManager : MonoBehaviour
 	private void Awake()
 	{
 		Instance = this;
-		GameMaster.GameMap.OnMapSimulate += m =>
+		GameMaster.GameReady += () => GameMaster.GameMap.OnMapSimulate += m =>
 		{
-			if(settlementPanel.IsOpen)
+			if (settlementPanel.IsOpen)
 			{
 				settlementPanel.Hide();
 				ShowSettlementPanel(GameMaster.Player.CurrentTile);
