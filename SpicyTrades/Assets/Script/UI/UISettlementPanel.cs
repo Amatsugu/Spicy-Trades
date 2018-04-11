@@ -57,7 +57,7 @@ public class UISettlementPanel : UIPanel
 		var sb = new StringBuilder();
 		sb.AppendLine(res.PrettyName);
 		sb.AppendLine("Base: " + new Coin(res.basePrice));
-		sb.AppendLine("Cost: " + new Coin((res.basePrice * values[1])).ToString().Replace("\n", " "));
+		sb.AppendLine("Cost: " + new Coin((res.basePrice * values[1])).ToString(" "));
 		sb.AppendLine("Value: " + (values[1] * 100) + "%");
 		sb.AppendLine("Supply: " + values[0]);
 		infoText.text = sb.ToString();

@@ -1,15 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
 
 [Serializable]
 public struct Coin
 {
-	public int Chip { get { return (int)((Value - (Gold * silverPerGold) - Silver) * chipPerSilver); } }
-	public int Silver { get { return (int)(Value - (Gold * silverPerGold)); } }
-	public int Gold { get { return (int)(Value / silverPerGold); } }
+	public int Chip { get { return (int)((Value - (Royal * silverPerGold) - Silver) * chipPerSilver); } }
+	public int Silver { get { return (int)(Value - (Royal * silverPerGold)); } }
+	public int Royal { get { return (int)(Value / silverPerGold); } }
 
 	public float Value { get; private set; }
 
@@ -188,25 +189,18 @@ public struct Coin
 
 	public override string ToString()
 	{
-		var sb = new StringBuilder();
-		if(Gold > 0)
-		{
-			sb.Append("<color=#fcc100>");
-			sb.Append(Gold);
-			sb.AppendLine("</color>");
-		}
-		if (Silver > 0)
-		{
-			sb.Append("<color=#cccccc>");
-			sb.Append(Silver);
-			sb.AppendLine("</color>");
-		}
-		if (Chip > 0)
-		{
-			sb.Append("<color=#8c4800>");
-			sb.Append(Chip);
-			sb.AppendLine("</color>");
-		}
-		return sb.ToString();
+		return ToString("\n");
+	}
+
+	public string ToString(string separator)
+	{
+		string[] s = new string[3];
+		if(Royal != 0)
+			s[0] = "<color=#fcc100>" + Royal + "</color>";
+		if(Silver != 0)
+			s[1] = "<color=#cccccc>" + Silver + "</color>";
+		if(Chip != 0)
+			s[2] = "<color=#8c4800>" + Chip + "</color>";
+		return string.Join(separator, s.Where(i => i != null).ToArray());
 	}
 }
