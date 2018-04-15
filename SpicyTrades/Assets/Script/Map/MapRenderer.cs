@@ -8,6 +8,7 @@ public class MapRenderer : MonoBehaviour
 {
 	public MapGenerator generator;
 	public GameObject smartTile;
+	public GameRegistry registry;
 	public Map map;
 	public float nextTick;
 	private float f = 0;
@@ -18,6 +19,7 @@ public class MapRenderer : MonoBehaviour
 		var startTime = System.DateTime.Now;
 		GameMaster.Generator = generator;
 		GameMaster.GameMap = map = generator.GenerateMap(transform);
+		GameMaster.Registry = registry;
 		generator.GenerateFeatures(map);
 		foreach (Tile t in map)
 		{

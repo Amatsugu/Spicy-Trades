@@ -1658,6 +1658,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1065663901}
   - component: {fileID: 1065663902}
+  - component: {fileID: 1065663903}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged
@@ -1691,6 +1692,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   generator: {fileID: 11400000, guid: e74de6b860c16434db1dac92e840177c, type: 2}
   smartTile: {fileID: 1295639896062918, guid: af5b873760546474aaedfb7d291caf6d, type: 2}
+  registry: {fileID: 1065663903}
+  nextTick: 0
+--- !u!114 &1065663903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1065663900}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1a5122944d2e074c8d2ea82373ffb51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventPool: {fileID: 11400000, guid: 43ca4ec0d52b9794db38038e376ba195, type: 2}
 --- !u!1 &1074954451
 GameObject:
   m_ObjectHideFlags: 0
@@ -2299,7 +2314,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1389274705}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.99999964
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3001,7 +3016,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.00003255481}
+  m_AnchoredPosition: {x: 0, y: 0.000030893065}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1496226782
@@ -3080,7 +3095,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1518426897}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -3320,7 +3335,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000011065796}
+  m_AnchoredPosition: {x: 0, y: 0.000007237132}
   m_SizeDelta: {x: 0, y: 181.3}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1543747306

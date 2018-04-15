@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = 10000;
+	public const float TickRate = 2;
 	public static event Action GameReady
 	{
 		add
@@ -17,6 +17,18 @@ public class GameMaster
 			Instance._gameReady -= value;
 		}
 	}
+	public static GameRegistry Registry
+	{
+		get
+		{
+			return Instance._registry;
+		}
+		set
+		{
+			Instance._registry = value;
+		}
+}
+
 	public static GameMaster Instance
 	{
 		get
@@ -69,6 +81,7 @@ public class GameMaster
 	private Dictionary<SettlementTile, TradeKnowledge> _tradeKnowledge;
 	private event Action _gameReady;
 	private Map _gameMap;
+	private GameRegistry _registry;
 
 	
 	public static void CachePrices(SettlementTile settlement)

@@ -8,8 +8,11 @@ using UnityEngine;
 [Serializable]
 public struct Coin
 {
+	[SerializeField]
 	public int Chip { get { return (int)((Value - (Royal * silverPerGold) - Silver) * chipPerSilver); } }
+	[SerializeField]
 	public int Silver { get { return (int)(Value - (Royal * silverPerGold)); } }
+	[SerializeField]
 	public int Royal { get { return (int)(Value / silverPerGold); } }
 
 	public float Value { get; private set; }

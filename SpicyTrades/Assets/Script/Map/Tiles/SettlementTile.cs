@@ -17,13 +17,14 @@ public class SettlementTile : Tile
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; //TODO: make event list
 	public List<ActiveEvent> currentEvents;
+	private int _nextEventTick;
 
 	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius, SettlementTile center = null) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
 		Center = center ?? this;
 		this.tileInfo = tileInfo;
-		eventPool = new List<SettlementEvent>();
 		currentEvents = new List<ActiveEvent>();
+		_nextEventTick = GameMaster.CurrentTick;
 	}
 
 	public SettlementTile AddResource(ResourceTileInfo resource, int units = -1)
@@ -45,6 +46,7 @@ public class SettlementTile : Tile
 
 	public void Simulate()
 	{
+		//Determine Resource Needs
 		DetermineNeeds();
 		//Work Resources
 		foreach(var res in Resources)
@@ -52,32 +54,43 @@ public class SettlementTile : Tile
 			ResourceCache[res][0] += res.yeild;
 			if (ResourceCache[res][0] > maxResourceStorage)
 				ResourceCache[res][0] = maxResourceStorage;
-			ResourceCache[res][1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (ResourceCache[res][0] / maxResourceStorage)))); //Recalculate Value
+			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 0.5f, 1.5f); //Recalculate Value
 		}
 		//Satisfy Needs
 		SatisfyNeeds();
+		//Select Events
+		if (_nextEventTick <= GameMaster.CurrentTick)
+			PickEvent();
 	}
 
 	private void DetermineNeeds()
 	{
-		//Make Food Need
+		//Make Food Needs
 		ResourceNeeds.Add(new ResourceNeed
 		{
 			Type = NeedType.Category,
 			Resource = "Food",
 			Count = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
-		//Event Resources
 	}
 
 	public void PickEvent()
 	{
+		if (eventPool == null)
+			eventPool = GameMaster.Registry.eventPool.events;
+		Debug.Log("Picking Event");
 		var groupedEvents = eventPool.GroupBy(e => e.Chance, e => e);
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
 		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
 		var pickedEvents = groupedEvents.Aggregate((e1, e2) => Mathf.Abs(e1.Key - pick) < Mathf.Abs(e2.Key - pick) ? e1 : e2).ToArray();
-		currentEvents.Add(new ActiveEvent(pickedEvents[Random.Range(0, pickedEvents.Length - 1)]));
+		var pickedEvent = pickedEvents[Random.Range(0, pickedEvents.Length - 1)];
+		if (currentEvents.Any(e => e.Event == pickedEvent))
+			return;
+		_nextEventTick = GameMaster.CurrentTick + pickedEvent.cooldown;
+		currentEvents.Add(new ActiveEvent(pickedEvent));
+		ResourceNeeds.AddRange(pickedEvent.resourceDemands);
+		Debug.Log(pickedEvent.name);
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
@@ -88,7 +101,7 @@ public class SettlementTile : Tile
 		if (res[0] < units)
 			return false;
 		res[0] -= units;
-		res[1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (res[0] / maxResourceStorage))));
+		res[1] = (float)MathUtils.Map(res[0], 0, maxResourceStorage, 0.5f, 1.5f);
 		return true;
 	}
 
@@ -157,7 +170,7 @@ public class SettlementTile : Tile
 	{
 		foreach(var res in ResourceCache.Keys)
 		{
-			ResourceCache[res][1] = Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (ResourceCache[res][0] / maxResourceStorage)))); //Recalculate Value
+			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 0.5f, 1.5f); //Recalculate Value
 		}
 	}
 
