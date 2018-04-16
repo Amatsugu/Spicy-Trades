@@ -68,9 +68,9 @@ public class SettlementTile : Tile
 		//Make Food Needs
 		ResourceNeeds.Add(new ResourceNeed
 		{
-			Type = NeedType.Category,
-			Resource = "Food",
-			Count = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
+			type = NeedType.Category,
+			resource = "Food",
+			count = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
 	}
 
@@ -83,14 +83,19 @@ public class SettlementTile : Tile
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
 		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
+		Debug.Log(pick);
 		var pickedEvents = groupedEvents.Aggregate((e1, e2) => Mathf.Abs(e1.Key - pick) < Mathf.Abs(e2.Key - pick) ? e1 : e2).ToArray();
+		if (Mathf.Abs(pickedEvents.First().Chance - pick) > 5)
+			return;
 		var pickedEvent = pickedEvents[Random.Range(0, pickedEvents.Length - 1)];
 		if (currentEvents.Any(e => e.Event == pickedEvent))
 			return;
 		_nextEventTick = GameMaster.CurrentTick + pickedEvent.cooldown;
 		currentEvents.Add(new ActiveEvent(pickedEvent));
+		foreach(var d in pickedEvent.resourceDemands)
+			d.source = pickedEvent;
 		ResourceNeeds.AddRange(pickedEvent.resourceDemands);
-		Debug.Log(pickedEvent.name);
+		Debug.Log(pickedEvent.name + " Picked");
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
@@ -109,60 +114,65 @@ public class SettlementTile : Tile
 	{
 		foreach (var need in ResourceNeeds)
 		{
-			if(need.Type == NeedType.Category) //Categoric Needs
+			if (need.source != null)
+				Debug.Log("Src: " + need.source.name);
+			if(need.type == NeedType.Category) //Categoric Needs
 			{
-				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.Resource);
+				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
 				foreach (var res in ResourceCache.Keys)
 				{
 					if (res.category != cat)
 						continue;
 					var curCache = ResourceCache[res];
-					if (curCache[0] >= need.Count)
+					if (curCache[0] >= need.count)
 					{
-						curCache[0] -= need.Count;
-						need.Count = 0;
+						curCache[0] -= need.count;
+						need.count = 0;
 					}
 					else
 					{
 						var unitsTaken = Mathf.FloorToInt(curCache[0]);
-						need.Count -= unitsTaken;
+						need.count -= unitsTaken;
 						curCache[0] -= unitsTaken;
 					}
-					if (need.Count == 0)
+					if (need.count == 0)
 						break;
 				}
 			}
-			else if (need.Type == NeedType.Money) //Money
+			else if (need.type == NeedType.Money) //Money
 			{
-				if (Money >= need.Count)
+				if (Money >= need.count)
 				{
-					Money -= need.Count;
-					need.Count = 0;
+					Money -= need.count;
+					need.count = 0;
 				}
 				else
 				{
-					need.Count = (need.Count - Money).Value;
+					need.count = (need.count - Money).Value;
 					Money = new Coin(0);
 				}
 			}
 			else //Resources
 			{
-				var curCache = ResourceCache[ResourceCache.Keys.Single(res => res.name == need.Resource)];
-				if (curCache[0] >= need.Count)
+				var key = ResourceCache.Keys.SingleOrDefault(res => res.name == need.resource);
+				if (key == null)
+					continue;
+				var curCache = ResourceCache[key];
+				if (curCache[0] >= need.count)
 				{
 					curCache[0] = 0;
-					need.Count = 0;
+					need.count = 0;
 				}
 				else
 				{
 					var unitsTaken = Mathf.FloorToInt(curCache[0]);
-					need.Count -= unitsTaken;
+					need.count -= unitsTaken;
 					curCache[0] -= unitsTaken;
 				}
 			}
 
 		}
-		ResourceNeeds.RemoveAll(n => n.Count == 0);
+		ResourceNeeds.RemoveAll(n => n.count == 0);
 		RecalculateAssetValue();
 	}
 

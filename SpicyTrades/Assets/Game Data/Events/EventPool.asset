@@ -12,4 +12,64 @@ MonoBehaviour:
   m_Name: EventPool
   m_EditorClassIdentifier: 
   events:
-  - {fileID: 11400000, guid: 0670da07eac41c44a828946555f3bcfb, type: 2}
+  - name: Test Event
+    description: dsad
+    Chance: 50
+    resourceDemands:
+    - Resource: Iron
+      Count: 3000
+      Type: 0
+      Source:
+        name: Test Event
+        description: dsad
+        Chance: 0
+        resourceDemands:
+        - Resource: Iron
+          Count: 3000
+          Type: 0
+          Source:
+            name: Test Event
+            description: dsad
+            Chance: 0
+            resourceDemands:
+            - Resource: Iron
+              Count: 3000
+              Type: 0
+              Source:
+                name: Test Event
+                description: dsad
+                Chance: 0
+                resourceDemands:
+                - Resource: Iron
+                  Count: 3000
+                  Type: 0
+                duration: 600
+                cooldown: 10
+                completionEffect: {fileID: 0}
+            duration: 600
+            cooldown: 10
+            completionEffect: {fileID: 0}
+        duration: 600
+        cooldown: 10
+        completionEffect: {fileID: 0}
+    duration: 600
+    cooldown: 10
+    completionEffect: {fileID: 0}
+  - name: Event 2
+    description: dsad
+    Chance: 90
+    resourceDemands:
+    - Resource: Coal
+      Count: 2000
+      Type: 0
+      Source:
+        name: 
+        description: 
+        Chance: 0
+        resourceDemands: []
+        duration: 0
+        cooldown: 0
+        completionEffect: {fileID: 0}
+    duration: 100
+    cooldown: 20
+    completionEffect: {fileID: 0}

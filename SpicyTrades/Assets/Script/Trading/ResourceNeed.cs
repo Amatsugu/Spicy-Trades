@@ -6,10 +6,11 @@ using UnityEngine;
 [Serializable]
 public class ResourceNeed
 {
-	public string Resource { get; set; }
-	public float Count { get; set; }
-	public NeedType Type { get; set; }
-	public SettlementEvent Source { get; set; }
+	public string resource;
+	public float count;
+	public NeedType type;
+	[HideInInspector]
+	public SettlementEvent source;
 }
 
 public enum NeedType
