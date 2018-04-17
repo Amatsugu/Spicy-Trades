@@ -30,6 +30,7 @@ public class Player : MonoBehaviour
 		_sprite = GetComponent<SpriteRenderer>();
 		_inventory = new List<InventoryItem>();
 		Money = new Coin(10000f);
+		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
 
 	public void SetTile(SettlementTile tile)
