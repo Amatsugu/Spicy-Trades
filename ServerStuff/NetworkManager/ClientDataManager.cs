@@ -124,7 +124,9 @@ namespace NetworkManager
                     Network.OnPlayerLeft(roomargs);
                     break;
                 case Network.INVITEF:
-                    //No need for this command... If a player joined you'll get a resopnse from JROOM
+                    objects = NetUtils.FormCommand(data, new string[] {  "s" });
+                    string playerid = (string)objects[0];
+                    //HOOK EVENT
                     break;
                 case Network.READY:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool" });

@@ -134,22 +134,25 @@ namespace NetworkManager
                 case Network.REQUEST:
                     //self, playerid 
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    playerid = (string)objects[1];
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.REQUEST, Network.NO_ERROR, GetPlayerPID(self).GetID()));
+                    //TODO FINISH THIS! This needs the database, but will alert the user if online
                     break;
                 case Network.LISTF:
                     //self
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
-                    //TODO FINISH THIS!
+                    //TODO FINISH THIS! Needs database
                     break;
                 case Network.LISTRF:
                     //self
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
-                    //TODO FINISH THIS!
+                    //TODO FINISH THIS! Needs database
                     break;
                 case Network.ADDF:
                     //self, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s","s" });
-                    //TODO FINISH THIS!
+                    //TODO FINISH THIS! Needs database
                     break;
                 case Network.FORMR:
                     //self, roompassword
@@ -174,7 +177,16 @@ namespace NetworkManager
                 case Network.INVITEF:
                     //self, playerid, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
-                    //TODO FINISH THIS!
+                    self = (string)objects[0];
+                    playerid = (string)objects[1];
+                    roomid = (string)objects[2];
+                    if (PlayerExists(playerid) && RoomExists(roomid) && ISOnfriendList(self,playerid))
+                    {
+                        SendToPlayer(NetUtils.PieceCommand(new object[] { Network.INVITEF, Network.NO_ERROR, playerid, roomid}),playerid);
+                    } else
+                    {
+                        Network.SendData(NetUtils.PieceCommand(new object[] { Network.INVITEF, Network.INVALID_FID }),send);
+                    }
                     break;
                 case Network.READY:
                     //self, isready. roomid
@@ -250,6 +262,10 @@ namespace NetworkManager
         public static bool PlayerExists(string roomid0)
         {
             return PIDs[roomid0] != null;
+        }
+        public static bool ISOnfriendList(string cid, string player)
+        {
+            return true; // FIX THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         }
         public static void SendToAll(byte[] data)
         {
