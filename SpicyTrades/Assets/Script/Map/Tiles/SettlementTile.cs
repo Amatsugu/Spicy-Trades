@@ -31,9 +31,12 @@ public class SettlementTile : Tile
 		this.tileInfo = tileInfo;
 		currentEvents = new List<ActiveEvent>();
 		_nextEventTick = GameMaster.CurrentTick;
+		Resources = new List<ResourceTileInfo>();
+		ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
+		ResourceNeeds = new List<ResourceNeed>();
 	}
 
-	public SettlementTile AddResource(ResourceTileInfo resource, int units = -1)
+	public SettlementTile RegisterResource(ResourceTileInfo resource)
 	{
 		if (Resources == null)
 		{
@@ -45,9 +48,44 @@ public class SettlementTile : Tile
 		if (!ResourceCache.ContainsKey(resource))
 		{
 			var f = 0;
-			ResourceCache.Add(resource, new float[] { f, (float)MathUtils.Map(f, 0, maxResourceStorage, 1.5f, .5f) });
+			ResourceCache.Add(resource, new float[] { f, GetResourceValue(f) });
 		}
 		return this;
+	}
+
+	public void AddResource(ResourceTileInfo resource, float count)
+	{
+		count = Mathf.Floor(count);
+		if (!ResourceCache.ContainsKey(resource))
+		{
+			if(SettlementType != SettlementType.Capital && count > maxResourceStorage)
+			{
+				var extra = count - maxResourceStorage;
+				GameMaster.GameMap.Capital.AddResource(resource, extra);
+				count = maxResourceStorage;
+			}
+			ResourceCache.Add(resource, new float[] { count, GetResourceValue(count) });
+		}
+		else
+		{
+			var cache = ResourceCache[resource];
+			if (SettlementType != SettlementType.Capital && cache[0] + count > maxResourceStorage)
+			{
+				var extra = (cache[0] + count) - maxResourceStorage;
+				GameMaster.GameMap.Capital.AddResource(resource, extra);
+				count -= extra;
+			}
+			cache[0] += count;
+			cache[1] = GetResourceValue(count);
+		}
+	}
+
+	private float GetResourceValue(float supply)
+	{
+		if (SettlementType != SettlementType.Capital)
+			return (float)MathUtils.Map(supply, 0, maxResourceStorage, 1.5f, .5f);
+		else
+			return 1f;
 	}
 
 	public void Simulate()
@@ -57,10 +95,7 @@ public class SettlementTile : Tile
 		//Work Resources
 		foreach(var res in Resources)
 		{
-			ResourceCache[res][0] += res.yeild;
-			if (ResourceCache[res][0] > maxResourceStorage)
-				ResourceCache[res][0] = maxResourceStorage;
-			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 1.5f, .5f); //Recalculate Value
+			AddResource(res, res.yeild);
 		}
 		//Satisfy Needs
 		SatisfyNeeds();
@@ -146,7 +181,7 @@ public class SettlementTile : Tile
 		if (res[0] < units)
 			return false;
 		res[0] -= units;
-		res[1] = (float)MathUtils.Map(res[0], 0, maxResourceStorage, 1.5f, .5f);
+		res[1] = GetResourceValue(res[0]); 
 		return true;
 	}
 
@@ -154,8 +189,6 @@ public class SettlementTile : Tile
 	{
 		foreach (var need in ResourceNeeds)
 		{
-			if (need.source != null)
-				Debug.Log("Src: " + need.source.Name);
 			if (need.count == 0)
 				continue;
 			if(need.type == NeedType.Category) //Categoric Needs
@@ -232,9 +265,9 @@ public class SettlementTile : Tile
 
 	private void RecalculateAssetValue()
 	{
-		foreach(var res in ResourceCache.Keys)
+		foreach(var res in ResourceCache.Values)
 		{
-			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 1.5f, .5f); //Recalculate Value
+			res[1] = GetResourceValue(res[0]); //Recalculate Value
 		}
 	}
 

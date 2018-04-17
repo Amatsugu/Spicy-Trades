@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = 2;
+	public const float TickRate = .5f;
 	public static event Action GameReady
 	{
 		add
