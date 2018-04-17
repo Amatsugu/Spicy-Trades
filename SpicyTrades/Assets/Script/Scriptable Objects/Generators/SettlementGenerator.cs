@@ -69,7 +69,7 @@ public class SettlementGenerator : FeatureGenerator
 		SettlementTile[] villages = new SettlementTile[numVillages];
 		curCycles = 0;
 		Debug.Log(GeneratorName + "Slecting " + numVillages + " villages...");
-		var villageNameProdider = townNames.GetNameList();
+		var villageNameProdider = villageNames.GetNameList();
 		while (curCycles++ < maxGenerationCycles)
 		{
 			if (numVillages <= 0)

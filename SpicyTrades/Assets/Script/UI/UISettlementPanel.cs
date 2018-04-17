@@ -79,6 +79,8 @@ public class UISettlementPanel : UIPanel
 	{
 		GUILayout.Label(" ");
 		GUILayout.Label(" ");
+		GUILayout.Label("Population: " + _currentSettlement.Population);
+		GUILayout.Label("Type: " + _currentSettlement.SettlementType);
 		GUILayout.Label("Active Events");
 		GUI.skin.label.normal.textColor = Color.black;
 		foreach(var e in _currentSettlement.currentEvents)

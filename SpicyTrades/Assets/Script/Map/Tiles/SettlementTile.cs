@@ -24,6 +24,7 @@ public class SettlementTile : Tile
 	public List<SettlementEvent> eventPool; //TODO: make event list
 	public List<ActiveEvent> currentEvents;
 	private int _nextEventTick;
+	private SettlementTile _capital;
 
 	public SettlementTile(SettlementTileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius, SettlementTile center = null) : base(tileInfo, parent, hexCoords, outerRadius)
 	{
@@ -55,13 +56,15 @@ public class SettlementTile : Tile
 
 	public void AddResource(ResourceTileInfo resource, float count)
 	{
+		if (_capital == null)
+			_capital = GameMaster.GameMap.Capital;
 		count = Mathf.Floor(count);
 		if (!ResourceCache.ContainsKey(resource))
 		{
 			if(SettlementType != SettlementType.Capital && count > maxResourceStorage)
 			{
 				var extra = count - maxResourceStorage;
-				GameMaster.GameMap.Capital.AddResource(resource, extra);
+				_capital.AddResource(resource, extra);
 				count = maxResourceStorage;
 			}
 			ResourceCache.Add(resource, new float[] { count, GetResourceValue(count) });
@@ -72,7 +75,7 @@ public class SettlementTile : Tile
 			if (SettlementType != SettlementType.Capital && cache[0] + count > maxResourceStorage)
 			{
 				var extra = (cache[0] + count) - maxResourceStorage;
-				GameMaster.GameMap.Capital.AddResource(resource, extra);
+				_capital.AddResource(resource, extra);
 				count -= extra;
 			}
 			cache[0] += count;
@@ -146,7 +149,6 @@ public class SettlementTile : Tile
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
 		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
-		Debug.Log(pick);
 		var pickedEvents = groupedEvents.Aggregate((e1, e2) => Mathf.Abs(e1.Key - pick) < Mathf.Abs(e2.Key - pick) ? e1 : e2).ToArray();
 		if (Mathf.Abs(pickedEvents.First().Chance - pick) > 5)
 			return;
