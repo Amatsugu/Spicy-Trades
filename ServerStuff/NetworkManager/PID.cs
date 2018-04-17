@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace NetworkManager
@@ -12,6 +13,7 @@ namespace NetworkManager
         private int MAX_USERNAME_SIZE=128;
         private int MAX_ID_SIZE = 8;
         private int UID_BYTE_SIZE; // see constructor for how it is modified
+        private IPEndPoint connection;
         public static int PID_SIZE;
         //Max Username 128 characters
         //Id size 8 characters
@@ -30,6 +32,14 @@ namespace NetworkManager
             this.isFriend = isFriend;
             UID_BYTE_SIZE = 2 + MAX_ID_SIZE + MAX_USERNAME_SIZE;
             PID_SIZE = UID_BYTE_SIZE;
+        }
+        public void SetConnection(IPEndPoint ip)
+        {
+            connection = ip;
+        }
+        public IPEndPoint GetConnection()
+        {
+            return connection;
         }
         public PID(byte[] piddata)
         {

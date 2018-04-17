@@ -39,9 +39,10 @@ namespace NetworkManager
                     objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
                     Network.player = (PID)objects[0];
                     Network.self = (string)objects[1];
+                    Network.INITCONNECTION(); // Set up certain data on the server
                     break;
                 case Network.REGISTER:
-                    //Registering was successful! Nothing is needed!
+                    //Registering was successful! Make callback?
                     break;
                 case Network.UPDATES:
                     //NOT IMPLEMENTED IN THIS VERSION

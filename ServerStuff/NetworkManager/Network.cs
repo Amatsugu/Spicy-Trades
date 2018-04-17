@@ -4,6 +4,8 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Text.RegularExpressions;
+using System.Linq;
 
 namespace NetworkManager
 {
@@ -42,6 +44,7 @@ namespace NetworkManager
         public const byte ROOMS        = 0x16; //Gets a room count
         public const byte GROOM        = 0x17; //gets a room object from a roomid
         public const byte GPID         = 0x18; //gets a pid object from a playerid
+        public const byte SYNC         = 0x19; //Syncs data between rooms
         //Error Codes
         public const byte NO_ERROR              = 0x00;
         public const byte UNKNOWN_ERROR         = 0x01;
@@ -187,6 +190,24 @@ namespace NetworkManager
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTR, self, pos, count });
             SendData(temp);
+        }
+        public static void Sync(string data)
+        {
+            byte[] temp;
+            string randomid = Guid.NewGuid().ToString("N").Substring(0, 8); // keep track incase multiple ppl are syncing at the same time
+            if (data.Length > 1024)
+            {
+                string[] groups = (from Match m in Regex.Matches(data, @"\d{1024}") select m.Value).ToArray();
+                for(int i=0; i <groups.Length;i++)
+                {
+                    temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, groups.Length, i, groups[i] }); // Send the data, breakes it into pieces for you
+                    SendData(temp);
+                }
+            } else
+            {
+                temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, 1 , 1, data }); // 1 packet of data being sent... the server will simply mirror this data
+                SendData(temp);
+            }
         }
         public static void SendFriendRequest(string playerid)
         {
