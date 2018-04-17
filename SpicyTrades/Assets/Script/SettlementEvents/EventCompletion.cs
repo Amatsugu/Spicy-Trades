@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class EventCompletion : ScriptableObject
+[CreateAssetMenu(menuName = "Data Providers/Event Completion")]
+public class EventCompletion : ScriptableObject
 {
-	public abstract void Complete();
-
-	public abstract void Fail();
+	public SettlementEffect sucess;
+	public SettlementEffect fail;
 }

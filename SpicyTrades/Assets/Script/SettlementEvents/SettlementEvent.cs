@@ -15,6 +15,7 @@ public class SettlementEvent
 	public List<ResourceNeed> resourceDemands = new List<ResourceNeed>();
 	public int duration;
 	public int cooldown;
+	public SettlementType location;
 
 	public EventCompletion completionEffect;
 

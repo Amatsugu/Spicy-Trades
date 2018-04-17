@@ -18,7 +18,7 @@ public class SettlementTileInfo : TileInfo
 
 public enum SettlementType
 {
-	Town,
-	Village,
-	Capital
+	Village = 0, 
+	Town = 1,
+	Capital = 2
 }

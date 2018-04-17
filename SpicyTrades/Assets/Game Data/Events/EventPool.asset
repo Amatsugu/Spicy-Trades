@@ -12,64 +12,105 @@ MonoBehaviour:
   m_Name: EventPool
   m_EditorClassIdentifier: 
   events:
-  - name: Test Event
-    description: dsad
+  - name: Fool's Day
+    description: 'A day for all the jesters and fools to run wild among the populace,
+      pulling pranks and cracking jokes. '
     Chance: 50
     resourceDemands:
-    - Resource: Iron
-      Count: 3000
-      Type: 0
-      Source:
-        name: Test Event
-        description: dsad
-        Chance: 0
-        resourceDemands:
-        - Resource: Iron
-          Count: 3000
-          Type: 0
-          Source:
-            name: Test Event
-            description: dsad
-            Chance: 0
-            resourceDemands:
-            - Resource: Iron
-              Count: 3000
-              Type: 0
-              Source:
-                name: Test Event
-                description: dsad
-                Chance: 0
-                resourceDemands:
-                - Resource: Iron
-                  Count: 3000
-                  Type: 0
-                duration: 600
-                cooldown: 10
-                completionEffect: {fileID: 0}
-            duration: 600
-            cooldown: 10
-            completionEffect: {fileID: 0}
-        duration: 600
-        cooldown: 10
-        completionEffect: {fileID: 0}
+    - resource: Wheat
+      count: 2
+      type: 0
+    - resource: Flour
+      count: 1
+      type: 0
+    - resource: Alcohol
+      count: 1
+      type: 2
     duration: 600
     cooldown: 10
+    location: 0
     completionEffect: {fileID: 0}
-  - name: Event 2
-    description: dsad
+  - name: We Love The King!
+    description: 'A celebration held around the kingdom, sometimes lasting days, in
+      celebration for the monarchy. '
     Chance: 90
     resourceDemands:
-    - Resource: Coal
-      Count: 2000
-      Type: 0
-      Source:
-        name: 
-        description: 
-        Chance: 0
-        resourceDemands: []
-        duration: 0
-        cooldown: 0
-        completionEffect: {fileID: 0}
+    - resource: Meat
+      count: 3
+      type: 0
+    - resource: Beer
+      count: 1
+      type: 0
+    - resource: Wine
+      count: 1
+      type: 0
     duration: 100
     cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Metalworker's Competition
+    description: A day for metalworkers of all kinds to show off their skills in the
+      trade.
+    Chance: 90
+    resourceDemands:
+    - resource: Metal
+      count: 4
+      type: 2
+    - resource: Gem
+      count: 1
+      type: 2
+    - resource: Coal
+      count: 1
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Harvest's Night
+    description: 'A celebration marking the end of a harvest season and hopes of a
+      bountiful harvest for the next season. '
+    Chance: 90
+    resourceDemands:
+    - resource: Grain
+      count: 2
+      type: 2
+    - resource: Flour
+      count: 1
+      type: 0
+    - resource: Beer
+      count: 1
+      type: 0
+    - resource: Meat
+      count: 4
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Spirit Burial
+    description: 'A day to mourn those that have passed. Bonfires are lit throughout
+      the area in reverence. '
+    Chance: 90
+    resourceDemands:
+    - resource: Timber
+      count: 2
+      type: 0
+    - resource: Coal
+      count: 1
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Fashion Bloom
+    description: Fabricworkers develop new cuts for clothing and the populace are
+      madly in love with them.
+    Chance: 90
+    resourceDemands:
+    - resource: Textile
+      count: 3
+      type: 2
+    duration: 100
+    cooldown: 20
+    location: 0
     completionEffect: {fileID: 0}

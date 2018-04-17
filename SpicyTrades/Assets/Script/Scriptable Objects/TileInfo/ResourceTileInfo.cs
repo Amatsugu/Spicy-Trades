@@ -6,6 +6,7 @@ using UnityEngine;
 public class ResourceTileInfo : TileInfo
 {
 	public ResourceCategory category;
+	public string[] tags;
 	public int requiredWorkers;
 	public float basePrice;
 	public float yeild;

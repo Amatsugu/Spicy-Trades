@@ -5,7 +5,13 @@ using UnityEngine;
 
 public class SettlementTile : Tile
 {
-	public SettlementType townType;
+	public SettlementType SettlementType
+	{
+		get
+		{
+			return tileInfo.settlementType;
+		}
+	}
 	public string Name;
 	public int Population { get; set; }
 	public SettlementTile Center { get; set; }
@@ -39,7 +45,7 @@ public class SettlementTile : Tile
 		if (!ResourceCache.ContainsKey(resource))
 		{
 			var f = 0;
-			ResourceCache.Add(resource, new float[] { f, Mathf.Max(.5f, Mathf.Min(1.5f, (1.5f - (f / maxResourceStorage))))});
+			ResourceCache.Add(resource, new float[] { f, (float)MathUtils.Map(f, 0, maxResourceStorage, 1.5f, .5f) });
 		}
 		return this;
 	}
@@ -54,7 +60,7 @@ public class SettlementTile : Tile
 			ResourceCache[res][0] += res.yeild;
 			if (ResourceCache[res][0] > maxResourceStorage)
 				ResourceCache[res][0] = maxResourceStorage;
-			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 0.5f, 1.5f); //Recalculate Value
+			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 1.5f, .5f); //Recalculate Value
 		}
 		//Satisfy Needs
 		SatisfyNeeds();
@@ -74,12 +80,34 @@ public class SettlementTile : Tile
 		});
 	}
 
-	public void PickEvent()
+	private void PickEvent()
 	{
+		//Remove Completed Events
+		currentEvents.RemoveAll(e =>
+		{
+			if (e.EndTime > GameMaster.CurrentTick)
+				return false;
+			if(e.Event.completionEffect != null)
+			{
+				var ce = e.Event.completionEffect;
+				if (e.ResourceNeeds.Any(neeed => neeed.count > 0))
+				{
+					if (ce.fail != null)
+						ce.fail.Effect(this);
+				}
+				else
+				{
+					if (ce.sucess != null)
+						ce.sucess.Effect(this);
+				}
+			}
+			return true;
+		});
+		//Select New Events
 		if (eventPool == null)
 			eventPool = GameMaster.Registry.eventPool.events;
 		Debug.Log("Picking Event");
-		var groupedEvents = eventPool.GroupBy(e => e.Chance, e => e);
+		var groupedEvents = eventPool.Where(e => e.location <= SettlementType).GroupBy(e => e.Chance, e => e);
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
 		pick = (float)MathUtils.Map(pick, 0, 1, 0, 100);
@@ -91,10 +119,22 @@ public class SettlementTile : Tile
 		if (currentEvents.Any(e => e.Event == pickedEvent))
 			return;
 		_nextEventTick = GameMaster.CurrentTick + pickedEvent.cooldown;
-		currentEvents.Add(new ActiveEvent(pickedEvent));
-		foreach(var d in pickedEvent.resourceDemands)
-			d.source = pickedEvent;
-		ResourceNeeds.AddRange(pickedEvent.resourceDemands);
+		var activeEvent = new ActiveEvent(pickedEvent, this);
+		currentEvents.Add(activeEvent);
+		var resNeed = new ResourceNeed[pickedEvent.resourceDemands.Count];
+		activeEvent.ResourceNeeds = resNeed;
+		for (int i = 0; i < resNeed.Length; i++)
+		{
+			var resDemmands = pickedEvent.resourceDemands[i];
+			resNeed[i] = new ResourceNeed
+			{
+				resource = resDemmands.resource,
+				count = resDemmands.count * Population,
+				type = resDemmands.type,
+				source = activeEvent
+			};
+		}
+		ResourceNeeds.AddRange(resNeed);
 		Debug.Log(pickedEvent.name + " Picked");
 	}
 
@@ -106,7 +146,7 @@ public class SettlementTile : Tile
 		if (res[0] < units)
 			return false;
 		res[0] -= units;
-		res[1] = (float)MathUtils.Map(res[0], 0, maxResourceStorage, 0.5f, 1.5f);
+		res[1] = (float)MathUtils.Map(res[0], 0, maxResourceStorage, 1.5f, .5f);
 		return true;
 	}
 
@@ -115,7 +155,9 @@ public class SettlementTile : Tile
 		foreach (var need in ResourceNeeds)
 		{
 			if (need.source != null)
-				Debug.Log("Src: " + need.source.name);
+				Debug.Log("Src: " + need.source.Name);
+			if (need.count == 0)
+				continue;
 			if(need.type == NeedType.Category) //Categoric Needs
 			{
 				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
@@ -123,17 +165,32 @@ public class SettlementTile : Tile
 				{
 					if (res.category != cat)
 						continue;
-					var curCache = ResourceCache[res];
-					if (curCache[0] >= need.count)
-					{
-						curCache[0] -= need.count;
+					if (TakeResource(res, (int)need.count))
 						need.count = 0;
-					}
 					else
 					{
-						var unitsTaken = Mathf.FloorToInt(curCache[0]);
+						var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
+						TakeResource(res, unitsTaken);
 						need.count -= unitsTaken;
-						curCache[0] -= unitsTaken;
+					}
+					if (need.count == 0)
+						break;
+				}
+			}
+			else if(need.type == NeedType.Tag) //Tagged
+			{
+				var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(need.resource));
+				if (resCache.Count() == 0)
+					continue;
+				foreach(var res in resCache)
+				{
+					if (TakeResource(res, (int)need.count))
+						need.count = 0;
+					else
+					{
+						var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
+						TakeResource(res, unitsTaken);
+						need.count -= unitsTaken;
 					}
 					if (need.count == 0)
 						break;
@@ -154,20 +211,17 @@ public class SettlementTile : Tile
 			}
 			else //Resources
 			{
-				var key = ResourceCache.Keys.SingleOrDefault(res => res.name == need.resource);
-				if (key == null)
+				var res = ResourceCache.Keys.SingleOrDefault(key => key.name == need.resource);
+				if (res == null)
 					continue;
-				var curCache = ResourceCache[key];
-				if (curCache[0] >= need.count)
-				{
-					curCache[0] = 0;
+				var curCache = ResourceCache[res];
+				if (TakeResource(res, (int)need.count))
 					need.count = 0;
-				}
 				else
 				{
-					var unitsTaken = Mathf.FloorToInt(curCache[0]);
+					var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
+					TakeResource(res, unitsTaken);
 					need.count -= unitsTaken;
-					curCache[0] -= unitsTaken;
 				}
 			}
 
@@ -180,7 +234,7 @@ public class SettlementTile : Tile
 	{
 		foreach(var res in ResourceCache.Keys)
 		{
-			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 0.5f, 1.5f); //Recalculate Value
+			ResourceCache[res][1] = (float)MathUtils.Map(ResourceCache[res][0], 0, maxResourceStorage, 1.5f, .5f); //Recalculate Value
 		}
 	}
 

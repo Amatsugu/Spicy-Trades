@@ -17,7 +17,13 @@ MonoBehaviour:
   cost: 50
   tileRenderers: []
   category: 1
+  tags:
+  - Grain
+  - Food
+  - Plant
+  - Material
   requiredWorkers: 5
   basePrice: 0.2
   yeild: 20
   description: 
+  icon: {fileID: 0}

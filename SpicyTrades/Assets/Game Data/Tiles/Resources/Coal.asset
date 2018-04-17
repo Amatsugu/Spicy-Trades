@@ -17,7 +17,12 @@ MonoBehaviour:
   cost: 50
   tileRenderers: []
   category: 3
+  tags:
+  - Fuel
+  - Ore
+  - Material
   requiredWorkers: 20
   basePrice: 0.5
   yeild: 8
   description: 
+  icon: {fileID: 0}

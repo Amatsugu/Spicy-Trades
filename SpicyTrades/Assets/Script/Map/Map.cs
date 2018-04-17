@@ -155,11 +155,12 @@ public class Map : IEnumerable<Tile>
 	{
 		for (int i = 0; i < ticks; i++)
 		{
-			GameMaster.CurrentTick++;
+			UnityEngine.Random.InitState(GameMaster.GameMap.Seed + GameMaster.CurrentTick);
 			foreach (var town in Towns)
 				town.Simulate();
 			foreach (var town in Towns) //TODO: Do we do this
 				town.NegotiateTrade();
+			GameMaster.CurrentTick++;
 		}
 		if(OnMapSimulate != null)
 			OnMapSimulate.Invoke(this);

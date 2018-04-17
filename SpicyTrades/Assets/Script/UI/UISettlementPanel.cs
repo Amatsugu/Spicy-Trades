@@ -14,10 +14,12 @@ public class UISettlementPanel : UIPanel
 	public TMP_InputField buyCountInput;
 
 	private ResourceTileInfo _selected;
+	private SettlementTile _currentSettlement;
 
 	public void Show(SettlementTile settlement)
 	{
 		Show();
+		_currentSettlement = settlement;
 		if(GameMaster.CameraPan != null)
 			GameMaster.CameraPan.isPaused = true;
 		titleText.text = settlement.Name;
@@ -73,6 +75,39 @@ public class UISettlementPanel : UIPanel
 		});
 	}
 
+	public void OnGUI()
+	{
+		GUILayout.Label(" ");
+		GUILayout.Label(" ");
+		GUILayout.Label("Active Events");
+		GUI.skin.label.normal.textColor = Color.black;
+		foreach(var e in _currentSettlement.currentEvents)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(e.Name);
+			GUILayout.Label(e.EndTime.ToString());
+			GUILayout.EndHorizontal();
+			foreach(var need in e.ResourceNeeds)
+			{
+				GUILayout.BeginHorizontal();
+				GUILayout.Label("\t" + need.resource);
+				GUILayout.Label(need.count.ToString());
+				GUILayout.Label(need.type.ToString());
+				GUILayout.EndHorizontal();
+			}
+		}
+
+		GUILayout.Label("Needs");
+		foreach(var need in _currentSettlement.ResourceNeeds)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(need.resource);
+			GUILayout.Label(need.count.ToString());
+			GUILayout.Label(need.type.ToString());
+			GUILayout.EndHorizontal();
+		}
+	}
+
 	public override void Hide()
 	{
 		if(GameMaster.CameraPan != null)
@@ -80,5 +115,6 @@ public class UISettlementPanel : UIPanel
 		base.Hide();
 		buyButton.interactable = false;
 		DestroyChildren(contentBase);
+		_currentSettlement = null;
 	}
 }

@@ -10,13 +10,13 @@ public class ResourceNeed
 	public float count;
 	public NeedType type;
 	[HideInInspector]
-	public SettlementEvent source;
+	public ActiveEvent source;
 }
 
 public enum NeedType
 {
-	Resource, 
+	Resource,
 	Category,
-	Money,
-	Event
+	Tag,
+	Money
 }
