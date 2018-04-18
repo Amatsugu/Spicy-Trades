@@ -16,6 +16,7 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   cost: 0
   tileRenderers:
-  - {fileID: 11400000, guid: b51258155599c384b9f725e8394e72eb, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: f12f6a55a657ce24191c8f6da430f923, type: 2}
   settlementType: 1
   foodPerPop: 0.5
