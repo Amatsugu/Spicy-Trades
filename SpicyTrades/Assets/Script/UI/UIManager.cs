@@ -55,8 +55,8 @@ public class UIManager : MonoBehaviour
 
 	private void Update()
 	{
-		var pos = Instance.camera.WorldToScreenPoint(_priceWindowPos);
-		Instance.pricePanel.Move(pos);
+		//var pos = Instance.camera.WorldToScreenPoint(_priceWindowPos);
+		//Instance.pricePanel.Move(pos);
 	}
 
 	private void OnGUI()
