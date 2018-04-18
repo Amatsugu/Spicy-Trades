@@ -25,5 +25,6 @@ public class BuildingRenderer : TileRenderer
 		var buildingSR = building.AddComponent<SpriteRenderer>();
 		buildingSR.sprite = sprite;
 		buildingSR.sortingOrder = 3;
+		tile.SetRenderData(name, building);
 	}
 }

@@ -15,7 +15,8 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
   color: {r: 0.2352941, g: 0.2352941, b: 0.2352941, a: 1}
   cost: 50
-  tileRenderers: []
+  tileRenderers:
+  - {fileID: 11400000, guid: 55911a6a340ae884fb5350952205b4a9, type: 2}
   category: 3
   tags:
   - Fuel
