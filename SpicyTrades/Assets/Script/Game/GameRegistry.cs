@@ -5,5 +5,5 @@ using UnityEngine;
 public class GameRegistry : MonoBehaviour
 {
 	public EventPool eventPool;
-
+	public ResourceListProvider resourceList;
 }

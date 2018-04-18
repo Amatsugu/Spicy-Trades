@@ -23,12 +23,12 @@ public class Player : MonoBehaviour
 	private SettlementTile _curTile;
 	private SpriteRenderer _sprite;
 	private Coroutine _curAnimation;
-	private List<InventoryItem> _inventory;
+	public List<InventoryItem> inventory;
 
 	private void Start()
 	{
 		_sprite = GetComponent<SpriteRenderer>();
-		_inventory = new List<InventoryItem>();
+		inventory = new List<InventoryItem>();
 		Money = new Coin(10000f);
 		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
@@ -72,7 +72,7 @@ public class Player : MonoBehaviour
 
 	public void AddItem(InventoryItem item)
 	{
-		var invItem = _inventory.FirstOrDefault(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.FirstOrDefault(i => i.Package.Resource == item.Package.Resource);
 		if (invItem == null)
 		{
 			invItem = new InventoryItem
@@ -80,11 +80,10 @@ public class Player : MonoBehaviour
 				Package = item.Package,
 				Cost = item.Cost
 			};
-			_inventory.Add(invItem);
+			inventory.Add(invItem);
 		}else
 		{
-			invItem.Cost = invItem.Cost + invItem.Cost;
-			invItem.Cost /= 2f;
+			invItem.Cost = (invItem.Cost + invItem.Cost)/2f;
 			var p = invItem.Package;
 			p.ResourceUnits = p.ResourceUnits + item.Package.ResourceUnits;
 			invItem.Package = p;
@@ -93,7 +92,7 @@ public class Player : MonoBehaviour
 
 	public bool TakeItem(InventoryItem item)
 	{
-		var invItem = _inventory.First(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.First(i => i.Package.Resource == item.Package.Resource);
 		if (invItem == null)
 			return false;
 		else
@@ -104,7 +103,7 @@ public class Player : MonoBehaviour
 			{
 				if (invItem.Package.ResourceUnits == item.Package.ResourceUnits)
 				{
-					_inventory.Remove(invItem);
+					inventory.Remove(invItem);
 					return true;
 				}else
 				{
@@ -135,7 +134,7 @@ public class Player : MonoBehaviour
 #if DEBUG
 	public void LogItems()
 	{
-		foreach (var p in _inventory)
+		foreach (var p in inventory)
 			Debug.Log(p.Package.Resource + " : " + p.Package.ResourceUnits);
 	}
 #endif

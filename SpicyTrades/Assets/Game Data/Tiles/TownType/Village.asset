@@ -17,4 +17,5 @@ MonoBehaviour:
   cost: 0
   tileRenderers:
   - {fileID: 11400000, guid: b51258155599c384b9f725e8394e72eb, type: 2}
-  settlementType: 1
+  settlementType: 0
+  foodPerPop: 0.5

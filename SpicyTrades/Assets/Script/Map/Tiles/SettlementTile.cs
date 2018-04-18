@@ -66,6 +66,7 @@ public class SettlementTile : Tile
 				var extra = count - maxResourceStorage;
 				_capital.AddResource(resource, extra);
 				count = maxResourceStorage;
+				Money += resource.basePrice;
 			}
 			ResourceCache.Add(resource, new float[] { count, GetResourceValue(count) });
 		}
@@ -77,6 +78,7 @@ public class SettlementTile : Tile
 				var extra = (cache[0] + count) - maxResourceStorage;
 				_capital.AddResource(resource, extra);
 				count -= extra;
+				Money += resource.basePrice;
 			}
 			cache[0] += count;
 			cache[1] = GetResourceValue(count);
@@ -144,7 +146,7 @@ public class SettlementTile : Tile
 		//Select New Events
 		if (eventPool == null)
 			eventPool = GameMaster.Registry.eventPool.events;
-		Debug.Log("Picking Event");
+		//Debug.Log("Picking Event");
 		var groupedEvents = eventPool.Where(e => e.location <= SettlementType).GroupBy(e => e.Chance, e => e);
 		var pick = Random.Range(0, 1f);
 		pick = 1f - (pick * pick);
@@ -172,7 +174,7 @@ public class SettlementTile : Tile
 			};
 		}
 		ResourceNeeds.AddRange(resNeed);
-		Debug.Log(pickedEvent.name + " Picked");
+		//Debug.Log(pickedEvent.name + " Picked");
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
@@ -282,7 +284,7 @@ public class SettlementTile : Tile
 	{
 		if (player == null)
 			player = GameMaster.Player;
-		var cost = units * ResourceCache[resource][1];
+		var cost = resource.basePrice * units * ResourceCache[resource][1];
 		if (player.Money < cost)
 			return false;
 		if (TakeResource(resource, units))

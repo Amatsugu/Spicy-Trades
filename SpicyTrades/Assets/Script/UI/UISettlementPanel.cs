@@ -53,6 +53,12 @@ public class UISettlementPanel : UIPanel
 
 	}
 
+	public void Refresh()
+	{
+		DestroyChildren(contentBase);
+		Show(_currentSettlement);
+	}
+
 	private void DisplayInfo(ResourceTileInfo res, float[] values, SettlementTile settlement)
 	{
 		buyButton.interactable = true;
@@ -77,12 +83,13 @@ public class UISettlementPanel : UIPanel
 
 	public void OnGUI()
 	{
+		var res = GameMaster.Registry.resourceList;
+		GUI.skin.label.normal.textColor = Color.black;
 		GUILayout.Label(" ");
 		GUILayout.Label(" ");
 		GUILayout.Label("Population: " + _currentSettlement.Population);
 		GUILayout.Label("Type: " + _currentSettlement.SettlementType);
 		GUILayout.Label("Active Events");
-		GUI.skin.label.normal.textColor = Color.black;
 		foreach(var e in _currentSettlement.currentEvents)
 		{
 			GUILayout.BeginHorizontal();
@@ -92,7 +99,11 @@ public class UISettlementPanel : UIPanel
 			foreach(var need in e.ResourceNeeds)
 			{
 				GUILayout.BeginHorizontal();
-				GUILayout.Label("\t" + need.resource);
+				var resource = res.GetResourceByName(need.resource);
+				if(resource == null)
+					GUILayout.Label("\t" + need.resource);
+				else
+					GUILayout.Label("\t" + resource.PrettyName);
 				GUILayout.Label(need.count.ToString());
 				GUILayout.Label(need.type.ToString());
 				GUILayout.EndHorizontal();
@@ -103,7 +114,11 @@ public class UISettlementPanel : UIPanel
 		foreach(var need in _currentSettlement.ResourceNeeds)
 		{
 			GUILayout.BeginHorizontal();
-			GUILayout.Label(need.resource);
+			var resource = res.GetResourceByName(need.resource);
+			if (resource == null)
+				GUILayout.Label(need.resource);
+			else
+				GUILayout.Label(resource.PrettyName);
 			GUILayout.Label(need.count.ToString());
 			GUILayout.Label(need.type.ToString());
 			GUILayout.EndHorizontal();
@@ -118,5 +133,6 @@ public class UISettlementPanel : UIPanel
 		buyButton.interactable = false;
 		DestroyChildren(contentBase);
 		_currentSettlement = null;
+		_selected = null;
 	}
 }
