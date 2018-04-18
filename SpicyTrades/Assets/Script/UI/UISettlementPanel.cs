@@ -84,7 +84,6 @@ public class UISettlementPanel : UIPanel
 	public void OnGUI()
 	{
 		var res = GameMaster.Registry.resourceList;
-		GUI.skin.label.normal.textColor = Color.black;
 		GUILayout.Label(" ");
 		GUILayout.Label(" ");
 		GUILayout.Label("Population: " + _currentSettlement.Population);

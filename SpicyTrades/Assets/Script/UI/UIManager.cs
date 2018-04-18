@@ -65,7 +65,6 @@ public class UIManager : MonoBehaviour
 			return;
 
 		var res = GameMaster.Registry.resourceList;
-		GUI.skin.label.fontSize = 20;
 		GUILayout.Label(" ");
 		GUILayout.Label(" ");
 		GUILayout.Label("Money: " + GameMaster.Player.Money.ToString(" "));
