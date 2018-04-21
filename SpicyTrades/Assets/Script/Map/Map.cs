@@ -186,6 +186,9 @@ public class Map : IEnumerable<Tile>
 		T nTile;
 		switch(newTile.TileType)
 		{
+			case TileType.Factory:
+				nTile = new FactoryTile(newTile as FactoryTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
+				break;
 			case TileType.Resource:
 				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;

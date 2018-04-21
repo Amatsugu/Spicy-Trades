@@ -12,6 +12,7 @@ public class ResourceTileInfo : TileInfo
 	public float yeild;
 	public string description;
 	public Sprite icon;
+	public Recipe recipe;
 
 	public string PrettyName
 	{

@@ -12,7 +12,7 @@ public class ResourceGenerator : FeatureGenerator
 	public override void Generate(Map map)
 	{
 		var towns = map.GetTowns();
-		var resources = resourceProvider.GetResourceList();
+		var resources = resourceProvider.GetResourceList().Where(r => r.recipe == null).ToArray();
 		foreach(SettlementTile t in towns)
 		{
 			var curTown = (t.tileInfo as SettlementTileInfo);
@@ -54,6 +54,7 @@ public class ResourceGenerator : FeatureGenerator
 						candicadates.RemoveAt(c);
 					}
 				}
+				//Place Factories
 
 				
 			}else if(curTown.settlementType == SettlementType.Village)

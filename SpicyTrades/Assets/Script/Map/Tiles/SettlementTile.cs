@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,6 +17,7 @@ public class SettlementTile : Tile
 	public List<ResourceTileInfo> Resources { get; private set; }
 	public Coin Money = new Coin(500000);
 	public const int maxResourceStorage = 1000;
+
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<ResourceNeed> ResourceNeeds { get; private set; }
 	public new SettlementTileInfo tileInfo;
@@ -83,6 +83,16 @@ public class SettlementTile : Tile
 			cache[0] += count;
 			cache[1] = GetResourceValue(count);
 		}
+	}
+
+	public bool HasResource(ResourceTileInfo resource, int count)
+	{
+		if (ResourceCache.ContainsKey(resource))
+		{
+			return ResourceCache[resource][0] >= count;
+		}
+		else
+			return false;
 	}
 
 	private float GetResourceValue(float supply)
@@ -179,6 +189,8 @@ public class SettlementTile : Tile
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
 	{
+		if (units == 0)
+			return true;
 		float[] res;
 		if (!ResourceCache.TryGetValue(resource, out res))
 			return false;
