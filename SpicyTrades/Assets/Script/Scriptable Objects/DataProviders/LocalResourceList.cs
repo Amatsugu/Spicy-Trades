@@ -6,15 +6,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Data Providers/Local Resource List")]
 public class LocalResourceList : ResourceListProvider
 {
-	public ResourceTileInfo[] resources;
-
-	public override ResourceTileInfo[] GetResourceList()
-	{
-		return resources;
-	}
-
 	public override ResourceTileInfo GetResourceByName(string name)
 	{
-		return resources.SingleOrDefault(r => r.name == name);
+		return items.SingleOrDefault(r => r.name == name);
 	}
 }

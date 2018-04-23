@@ -16,20 +16,22 @@ public class FactoryTileInfo : TileInfo
 	{
 		if (recipe.inputA == null && recipe.inputB == null)
 			return;
-		if (recipe.inputACount <= 0 && recipe.inputBCount <= 0)
+		var inA = recipe.inputA;
+		var inB = recipe.inputB;
+		if (inA.count <= 0 && inB.count <= 0)
 			return;
 
-		if(recipe.inputA != null)
+		if(inA != null)
 		{
-			if (!settlement.HasResource(recipe.inputA, recipe.inputACount))
+			if (!settlement.HasResource(inA))
 				return;
 		}
-		if (recipe.inputB != null)
+		if (inB != null)
 		{
-			if (!settlement.HasResource(recipe.inputB, recipe.inputBCount))
+			if (!settlement.HasResource(inB))
 				return;
 		}
-		if (settlement.TakeResource(recipe.inputA, recipe.inputACount) && settlement.TakeResource(recipe.inputB, recipe.inputBCount))
+		if (settlement.TakeResource(inA) && settlement.TakeResource(inB))
 			settlement.AddResource(recipe.output, recipe.outputCount);
 	}
 }

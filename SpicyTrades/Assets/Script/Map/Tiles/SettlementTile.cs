@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -15,6 +16,7 @@ public class SettlementTile : Tile
 	public int Population { get; set; }
 	public SettlementTile Center { get; set; }
 	public List<ResourceTileInfo> Resources { get; private set; }
+	public List<FactoryTileInfo> Factories { get; private set; }
 	public Coin Money = new Coin(500000);
 	public const int maxResourceStorage = 1000;
 
@@ -33,6 +35,7 @@ public class SettlementTile : Tile
 		currentEvents = new List<ActiveEvent>();
 		_nextEventTick = GameMaster.CurrentTick;
 		Resources = new List<ResourceTileInfo>();
+		Factories = new List<FactoryTileInfo>();
 		ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
 		ResourceNeeds = new List<ResourceNeed>();
 	}
@@ -83,6 +86,53 @@ public class SettlementTile : Tile
 			cache[0] += count;
 			cache[1] = GetResourceValue(count);
 		}
+	}
+
+	public bool HasResource(ResourceNeed resource)
+	{
+		if (resource.type == NeedType.Category) //Categoric Needs
+		{
+			ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), resource.resource);
+			foreach (var res in ResourceCache.Keys)
+			{
+				if (res.category != cat)
+					continue;
+				if (HasResource(res, (int)resource.count))
+					return true;
+			}
+			return false;
+		}
+		else if (resource.type == NeedType.Tag) //Tagged
+		{
+			var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(resource.resource));
+			if (resCache.Count() == 0)
+				return false;
+			foreach (var res in resCache)
+			{
+				if (HasResource(res, (int)resource.count))
+					return true;
+			}
+			return false;
+		}
+		else if (resource.type == NeedType.Money) //Money
+		{
+			return (Money >= resource.count);
+		}
+		else //Resources
+		{
+			var res = ResourceCache.Keys.SingleOrDefault(key => key.name == resource.resource);
+			if (res == null)
+				return false;
+			var curCache = ResourceCache[res];
+			if (HasResource(res, (int)resource.count))
+				return true;
+			return false;
+		}
+	}
+
+	public void RegisterFactory(FactoryTileInfo factory)
+	{
+		Factories.Add(factory);
 	}
 
 	public bool HasResource(ResourceTileInfo resource, int count)
@@ -184,7 +234,55 @@ public class SettlementTile : Tile
 			};
 		}
 		ResourceNeeds.AddRange(resNeed);
-		//Debug.Log(pickedEvent.name + " Picked");
+	}
+
+	public bool TakeResource(ResourceNeed need)
+	{
+		if (need.count == 0)
+			return true;
+		if (need.type == NeedType.Category) //Categoric Needs
+		{
+			ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
+			foreach (var res in ResourceCache.Keys)
+			{
+				if (res.category != cat)
+					continue;
+				if (TakeResource(res, (int)need.count))
+					return true;
+			}
+			return false;
+		}
+		else if (need.type == NeedType.Tag) //Tagged
+		{
+			var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(need.resource));
+			if (resCache.Count() == 0)
+				return false;
+			foreach (var res in resCache)
+			{
+				if (TakeResource(res, (int)need.count))
+					return true;
+			}
+			return false;
+		}
+		else if (need.type == NeedType.Money) //Money
+		{
+			if (Money >= need.count)
+			{
+				Money -= need.count;
+				return true;
+			}
+			return false;
+		}
+		else //Resources
+		{
+			var res = ResourceCache.Keys.SingleOrDefault(key => key.name == need.resource);
+			if (res == null)
+				return false;
+			var curCache = ResourceCache[res];
+			if (TakeResource(res, (int)need.count))
+				return true;
+			return false;
+		}
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
