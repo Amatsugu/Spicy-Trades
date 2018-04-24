@@ -10,6 +10,7 @@ namespace NetworkManager
         {
             Network.DataRecieved += OnDataRecieved;
         }
+        static Dictionary<string, Dictionary<int,string>> SYNC_CACHE = new Dictionary<string, Dictionary<int, string>>();
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
             byte command = e.RawResponse[0];
@@ -176,6 +177,34 @@ namespace NetworkManager
                 case Network.GPID:
                     objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
                     Network.players[(string)objects[1]] = (PID)objects[0];
+                    break;
+                case Network.SYNC://id, numpieces, cpiece, payload
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });
+                    string syncid = (string)objects[0];
+                    int numpieces = (int)objects[1];
+                    int cpiece = (int)objects[2];
+                    string piece = (string)objects[3];
+                    if (SYNC_CACHE.ContainsKey(syncid))
+                    {
+                        SYNC_CACHE[syncid][cpiece] = piece;
+                    }
+                    else
+                    {
+                        var dict = new Dictionary<int, string>();
+                        dict.Add(cpiece, piece);
+                        SYNC_CACHE.Add(syncid, dict);
+                    }
+                    int PCount = SYNC_CACHE[syncid].Count;
+                    string whole = "";
+                    if (PCount == numpieces){
+                        for(int i = 0; i < PCount; i++)
+                        {
+                            whole += SYNC_CACHE[syncid][i];
+                        }
+                        SyncEventArgs fulldata = new SyncEventArgs();
+                        fulldata.Data = whole;
+                        Network.OnSyncData(fulldata);
+                    }
                     break;
                 default:
                     Console.WriteLine("Unknown command!");

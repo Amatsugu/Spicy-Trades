@@ -256,7 +256,6 @@ namespace NetworkManager
         }
         public static void GetResourceList()
         {
-            //This will work interesting... The data returned by the callback will be in pieces... This will have items and recipies ill figure it out :P
             byte[] temp = NetUtils.PieceCommand(new object[] { GRESORCE, self });
             SendData(temp);
         }
@@ -321,6 +320,10 @@ namespace NetworkManager
                 }
             }
         }
+        /* -----------
+         * EVENT STUFF
+         * -----------
+         */
         public static void OnDataRecieved(DataRecievedArgs e)
         {
             EventHandler<DataRecievedArgs> handler = DataRecieved;
@@ -371,6 +374,21 @@ namespace NetworkManager
             EventHandler<FriendsArgs> handler = FriendsList;
             handler(null, e);
         }
+        public static void OnSyncData(SyncEventArgs e)
+        {
+            EventHandler<SyncEventArgs> handler = SyncData;
+            handler(null, e);
+        }
+        public static void OnLogin(LoginEventArgs e)
+        {
+            EventHandler<LoginEventArgs> handler = LoggedIn;
+            handler(null, e);
+        }
+        public static void OnRegistered(RegisteredEventArgs e)
+        {
+            EventHandler<RegisteredEventArgs> handler = Registered;
+            handler(null, e);
+        }
         public static event EventHandler<DataRecievedArgs> DataRecieved;
         public static event EventHandler<ChatDataArgs> Chat;
         public static event EventHandler<FriendRequestArgs> FriendRequested;
@@ -381,5 +399,82 @@ namespace NetworkManager
         public static event EventHandler<RoomListArgs> RoomList;
         public static event EventHandler<FriendsArgs> FriendsList;
         public static event EventHandler<ErrorArgs> Error;
+        public static event EventHandler<SyncEventArgs> SyncData;
+        public static event EventHandler<LoginEventArgs> LoggedIn;
+        public static event EventHandler<RegisteredEventArgs> Registered;
+    }
+    public class SyncEventArgs : EventArgs
+    {
+        public string Data { get; set; }
+    }
+    public class RegisteredEventArgs : EventArgs
+    {
+        public string response { get; set; }
+    }
+    public class LoginEventArgs : EventArgs
+    {
+        public string response { get; set; }
+    }
+    public class DataRecievedArgs : EventArgs
+    {
+        public string Response { get; set; }
+        public byte[] RawResponse { get; set; }
+        public IPEndPoint SenderRef { get; set; }
+    }
+    public class ErrorArgs : EventArgs
+    {
+        public int ErrorCode { get; set; }
+        public string ErrorMessage { get; set; }
+    }
+    public class MessageArgs : EventArgs
+    {
+        public string Message { get; set; }
+        public PID Player { get; set; }
+    }
+    public class BasicResponseArgs : EventArgs
+    {
+        public string Response { get; set; }
+    }
+    public class RoomUpdateArgs : EventArgs
+    {
+        public PID Player { get; set; }
+        public Room Room { get; set; }
+        public bool Ready { get; set; }
+        public byte Command { get; set; }
+    }
+    public class RoomCountArgs : EventArgs
+    {
+        public int count { get; set; }
+    }
+    public class RoomListingArgs : EventArgs
+    {
+        public Room[] Rooms { get; set; }
+    }
+    public class FriendsArgs : EventArgs
+    {
+        public PID[] Friends { get; set; }
+    }
+    public class FriendRequestArgs : EventArgs
+    {
+        public PID[] Requests { get; set; }
+    }
+    public class RoomIsHostArgs : EventArgs
+    {
+        public bool host { get; set; }
+        public Room Room { get; set; }
+    }
+    public class RoomListArgs : EventArgs
+    {
+        public Room[] Rooms { get; set; }
+    }
+    public class ResourceListArgs : EventArgs
+    {
+        //Need info from Kham
+    }
+    public class ChatDataArgs : EventArgs
+    {
+        public PID Speaker { get; set; }
+        public int Flag { get; set; }
+        public Room Room { get; set; }
     }
 }
