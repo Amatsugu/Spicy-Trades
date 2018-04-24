@@ -8,7 +8,7 @@ public class Transaction
 	public object playerId;
 	public HexCoords targetSettlement;
 	public string resource;
-	public int count;
+	public float count;
 }
 
 public enum TransactionType

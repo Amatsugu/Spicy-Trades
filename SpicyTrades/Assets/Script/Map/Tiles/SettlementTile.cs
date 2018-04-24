@@ -91,44 +91,10 @@ public class SettlementTile : Tile
 
 	public bool HasResource(ResourceNeed resource)
 	{
-		if (resource.type == NeedType.Category) //Categoric Needs
-		{
-			ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), resource.resource);
-			foreach (var res in ResourceCache.Keys)
-			{
-				if (res.category != cat)
-					continue;
-				if (HasResource(res, (int)resource.count))
-					return true;
-			}
+		var res = ResourceCache.Keys.FirstOrDefault(r => resource.Match(r));
+		if (res == null)
 			return false;
-		}
-		else if (resource.type == NeedType.Tag) //Tagged
-		{
-			var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(resource.resource));
-			if (resCache.Count() == 0)
-				return false;
-			foreach (var res in resCache)
-			{
-				if (HasResource(res, (int)resource.count))
-					return true;
-			}
-			return false;
-		}
-		else if (resource.type == NeedType.Money) //Money
-		{
-			return (Money >= resource.count);
-		}
-		else //Resources
-		{
-			var res = ResourceCache.Keys.SingleOrDefault(key => key.name == resource.resource);
-			if (res == null)
-				return false;
-			var curCache = ResourceCache[res];
-			if (HasResource(res, (int)resource.count))
-				return true;
-			return false;
-		}
+		return HasResource(res, resource.count);
 	}
 
 	public void RegisterFactory(FactoryTileInfo factory)
@@ -141,8 +107,9 @@ public class SettlementTile : Tile
 		Recipes.Add(recipe);
 	}
 
-	public bool HasResource(ResourceTileInfo resource, int count)
+	public bool HasResource(ResourceTileInfo resource, float count)
 	{
+		count = Mathf.Floor(count);
 		if (ResourceCache.ContainsKey(resource))
 		{
 			return ResourceCache[resource][0] >= count;
@@ -251,54 +218,15 @@ public class SettlementTile : Tile
 	{
 		if (need.count == 0)
 			return true;
-		/*
-		if (need.type == NeedType.Category) //Categoric Needs
-		{
-			ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
-			foreach (var res in ResourceCache.Keys)
-			{
-				if (res.category != cat)
-					continue;
-				if (TakeResource(res, (int)need.count))
-					return true;
-			}
+		var res = ResourceCache.Keys.FirstOrDefault(r => need.Match(r));
+		if (res == null)
 			return false;
-		}
-		else if (need.type == NeedType.Tag) //Tagged
-		{
-			var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(need.resource));
-			if (resCache.Count() == 0)
-				return false;
-			foreach (var res in resCache)
-			{
-				if (TakeResource(res, (int)need.count))
-					return true;
-			}
-			return false;
-		}
-		else if (need.type == NeedType.Money) //Money
-		{
-			if (Money >= need.count)
-			{
-				Money -= need.count;
-				return true;
-			}
-			return false;
-		}
-		else //Resources
-		{
-			var res = ResourceCache.Keys.SingleOrDefault(key => key.name == need.resource);
-			if (res == null)
-				return false;
-			var curCache = ResourceCache[res];
-			if (TakeResource(res, (int)need.count))
-				return true;
-			return false;
-		}*/
+		return TakeResource(res, need.count);
 	}
 
-	public bool TakeResource(ResourceTileInfo resource, int units)
+	public bool TakeResource(ResourceTileInfo resource, float units)
 	{
+		units = Mathf.Floor(units);
 		if (units == 0)
 			return true;
 		float[] res;
@@ -333,74 +261,6 @@ public class SettlementTile : Tile
 				if (need.count == 0)
 					break;
 			}
-			/*
-			if(need.type == NeedType.Category) //Categoric Needs
-			{
-				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
-				foreach (var res in ResourceCache.Keys)
-				{
-					if (res.category != cat)
-						continue;
-					if (TakeResource(res, (int)need.count))
-						need.count = 0;
-					else
-					{
-						var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
-						TakeResource(res, unitsTaken);
-						need.count -= unitsTaken;
-					}
-					if (need.count == 0)
-						break;
-				}
-			}
-			else if(need.type == NeedType.Tag) //Tagged
-			{
-				var resCache = ResourceCache.Keys.Where(r => r.tags.Contains(need.resource));
-				if (resCache.Count() == 0)
-					continue;
-				foreach(var res in resCache)
-				{
-					if (TakeResource(res, (int)need.count))
-						need.count = 0;
-					else
-					{
-						var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
-						TakeResource(res, unitsTaken);
-						need.count -= unitsTaken;
-					}
-					if (need.count == 0)
-						break;
-				}
-			}
-			else if (need.type == NeedType.Money) //Money
-			{
-				if (Money >= need.count)
-				{
-					Money -= need.count;
-					need.count = 0;
-				}
-				else
-				{
-					need.count = (need.count - Money).Value;
-					Money = new Coin(0);
-				}
-			}
-			else //Resources
-			{
-				var res = ResourceCache.Keys.SingleOrDefault(key => key.name == need.resource);
-				if (res == null)
-					continue;
-				var curCache = ResourceCache[res];
-				if (TakeResource(res, (int)need.count))
-					need.count = 0;
-				else
-				{
-					var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
-					TakeResource(res, unitsTaken);
-					need.count -= unitsTaken;
-				}
-			}*/
-
 		}
 		ResourceNeeds.RemoveAll(n => n.count == 0);
 		RecalculateAssetValue();
@@ -419,8 +279,9 @@ public class SettlementTile : Tile
 	{
 	}
 
-	public bool Buy(ResourceTileInfo resource, int units, Player player = null)
+	public bool Buy(ResourceTileInfo resource, float units, Player player = null)
 	{
+		units = Mathf.Floor(units);
 		if (player == null)
 			player = GameMaster.Player;
 		var cost = resource.basePrice * units * ResourceCache[resource][1];
