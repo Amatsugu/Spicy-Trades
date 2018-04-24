@@ -117,6 +117,33 @@ public class Player
 		return true;
 	}
 
+	public bool Sell(ResourceTileInfo resource, float count, SettlementTile settlement)
+	{
+		float price;
+		if (settlement.ResourceCache.ContainsKey(resource))
+			price = settlement.ResourceCache[resource][1] * resource.basePrice;
+		else
+			price = 1.5f * resource.basePrice;
+		if (settlement.Money >= price)
+		{
+			settlement.AddResource(resource, count);
+			settlement.Money -= price;
+			AddMoney(price);
+			AddItem(new InventoryItem
+			{
+				Cost = price,
+				Package = new TradePackage
+				{
+					Resource = resource.name,
+					PackageType = TradePackageType.Resource,
+					ResourceUnits = count
+				}
+			});
+			return true;
+		}
+		return false;
+	}
+
 #if DEBUG
 	public void LogItems()
 	{
