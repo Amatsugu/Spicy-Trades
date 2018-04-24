@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data Providers/Event")]
 [Serializable]
 public class SettlementEvent
 {

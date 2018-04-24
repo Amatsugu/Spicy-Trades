@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -18,10 +19,10 @@ public class SettlementTile : Tile
 	public List<FactoryTileInfo> Factories { get; private set; }
 	public Coin Money = new Coin(500000);
 	public const int maxResourceStorage = 1000;
-
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<ResourceNeed> ResourceNeeds { get; private set; }
 	public List<Recipe> Recipes { get; private set; }
+	[JsonIgnore]
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; //TODO: make event list
 	public List<ActiveEvent> currentEvents;
@@ -302,7 +303,7 @@ public class SettlementTile : Tile
 			new Transaction
 			{
 				type = TransactionType.Buy,
-				playerId = player, //TODO: Player ID
+				playerId = player.Id, //TODO: Player ID
 				resource = resource.name,
 				count = units
 			};

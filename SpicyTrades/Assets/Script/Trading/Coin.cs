@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,11 +9,11 @@ using UnityEngine;
 [Serializable]
 public struct Coin
 {
-	[SerializeField]
+	[JsonIgnore]
 	public int Chip { get { return (int)((Value - (Royal * silverPerGold) - Silver) * chipPerSilver); } }
-	[SerializeField]
+	[JsonIgnore]
 	public int Silver { get { return (int)(Value - (Royal * silverPerGold)); } }
-	[SerializeField]
+	[JsonIgnore]
 	public int Royal { get { return (int)(Value / silverPerGold); } }
 
 	public float Value { get; private set; }

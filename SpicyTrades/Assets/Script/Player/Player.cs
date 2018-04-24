@@ -1,73 +1,59 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using NetworkManager;
+using Newtonsoft.Json;
 
-public class Player : MonoBehaviour
+public class Player
 {
-	public float moveSpeed = 1f;
-	public bool isMoving = false;
-	public TextMeshProUGUI hudText;
+	public string Id { get; private set; }
+	public string Username { get; private set; }
 	public Coin Money { get; private set; }
+	[JsonIgnore]
+	public PlayerObject playerObject;
+	[JsonIgnore]
 	public SettlementTile CurrentTile
 	{
 		get
 		{
-			return _curTile;
+			return GameMaster.GameMap[_curTile.ToIndex()] as SettlementTile;
 		}
 	}
-
-	private SettlementTile _curTile;
-	private SpriteRenderer _sprite;
-	private Coroutine _curAnimation;
+	[JsonProperty]
+	private HexCoords _curTile;
+	
 	public List<InventoryItem> inventory;
 
-	private void Start()
+	public Player(PlayerObject player)
 	{
-		_sprite = GetComponent<SpriteRenderer>();
+		playerObject = player;
+		player.SetPlayer(this);
 		inventory = new List<InventoryItem>();
 		Money = new Coin(10000f);
 		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
 
-	public void SetTile(SettlementTile tile)
-	{
-		_curTile = tile;
-		GameMaster.CachePrices(tile);
-		UIManager.ShowSettlementPanel(tile);
-		transform.position = _curTile.WolrdPos;
-	}
-
 	public void MoveTo(SettlementTile tile)
 	{
-		if (isMoving)
-			return;
-		isMoving = true;
-		if (_curAnimation != null)
-			StopCoroutine(_curAnimation);
-		_curAnimation = StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile.Center)));
+		playerObject.MoveTo(tile);
+		new Transaction
+		{
+			type = TransactionType.Move,
+			playerId = Id,
+			targetSettlement = tile.Position
+		};//TODO: Sync Transactions
 	}
 
-	IEnumerator MoveAnimation(Tile[] path)
+	public void SetTile(SettlementTile tile)
 	{
-		for (int i = 1; i < path.Length; i++)
-		{
-			float time = 0;
-			while(time < 1)
-			{
-				transform.position = Vector3.Lerp(path[i-1].WolrdPos, path[i].WolrdPos, time += Time.deltaTime * moveSpeed);
-				if (path[i - 1].WolrdPos.x > path[i].WolrdPos.x)
-					_sprite.flipX = true;
-				else
-					_sprite.flipX = false;
-				yield return new WaitForEndOfFrame();
-			}
-		}
-		SetTile(path.Last() as SettlementTile);
-		isMoving = false;
+		_curTile = tile.Position;
+		GameMaster.CachePrices(tile);
+		UIManager.ShowSettlementPanel(tile);
+		playerObject.transform.position = tile.WolrdPos;
 	}
 
 	public void AddItem(InventoryItem item)

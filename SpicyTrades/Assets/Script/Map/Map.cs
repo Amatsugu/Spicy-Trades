@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,10 +7,8 @@ using System.Linq.Expressions;
 using System.Text;
 using UnityEngine;
 
-[Serializable]
 public class Map : IEnumerable<Tile>
 {
-	[SerializeField]
 	public Tile[] Tiles { get; private set; }
 	public List<SettlementTile> Towns { get; private set; }
 	public SettlementTile Capital { get; private set; }
@@ -17,6 +16,7 @@ public class Map : IEnumerable<Tile>
 	public Player CurrentPlayer { get; private set; }
 	public int Height { get; private set; }
 	public int Width { get; private set; }
+	[JsonIgnore]
 	public int Length { get
 		{
 			return Height * Width;
@@ -25,6 +25,7 @@ public class Map : IEnumerable<Tile>
 
 	public readonly int Seed;
 
+	[JsonIgnore]
 	public int TileCount
 	{
 		get
@@ -149,7 +150,7 @@ public class Map : IEnumerable<Tile>
 		foreach(Tile t in this)
 			t.Destroy();
 		foreach (var player in Players)
-			UnityEngine.Object.Destroy(player.gameObject);
+			UnityEngine.Object.Destroy(player.playerObject.gameObject);
 	}
 
 	public byte[] Simulate(int ticks)
