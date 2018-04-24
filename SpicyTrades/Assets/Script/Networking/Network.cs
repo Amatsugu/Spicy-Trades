@@ -72,7 +72,7 @@ namespace NetworkManager
         public static Dictionary<string, Room> rooms;
         public static Room CurrentRoom;
         public static bool HANDSHAKEDONE = false;
-        public static void Connect(string ip, int port,string user,string pass)
+        public static bool Connect(string ip, int port,string user,string pass)
         {
             Login(ip, port, user, pass);
             ClientDataManager.INIT();
@@ -80,14 +80,13 @@ namespace NetworkManager
             try
             {
                 connection.Connect(ip, port);
-                Byte[] sendBytes = new byte[] { 0, 0 };
-                SendData(sendBytes);
                 Thread t = new Thread(new ThreadStart(ThreadProc));
                 t.Start();
+                return true;
             }
             catch (Exception e)
             {
-                Console.WriteLine(e.ToString());
+                return false;
             }
         }
         public static void Host(int port)
@@ -261,7 +260,7 @@ namespace NetworkManager
         }
         public static void INITCONNECTION()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { INIT });
+            byte[] temp = NetUtils.PieceCommand(new object[] { INIT,self });
             SendData(temp);
         }
         public static void SatHello()
