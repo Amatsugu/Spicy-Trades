@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +9,7 @@ using UnityEngine;
 [Serializable]
 public class Map : IEnumerable<Tile>
 {
+	[SerializeField]
 	public Tile[] Tiles { get; private set; }
 	public List<SettlementTile> Towns { get; private set; }
 	public SettlementTile Capital { get; private set; }
@@ -186,6 +187,9 @@ public class Map : IEnumerable<Tile>
 		T nTile;
 		switch(newTile.TileType)
 		{
+			case TileType.Factory:
+				nTile = new FactoryTile(newTile as FactoryTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
+				break;
 			case TileType.Resource:
 				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;

@@ -11,7 +11,9 @@ public class ResourceTileInfo : TileInfo
 	public float basePrice;
 	public float yeild;
 	public string description;
+	public string tooltip;
 	public Sprite icon;
+	public Recipe recipe;
 
 	public string PrettyName
 	{
@@ -24,6 +26,7 @@ public class ResourceTileInfo : TileInfo
 	public void OnEnable()
 	{
 		TileType = TileType.Resource;
+		tag = "Resource";
 	}
 
 }

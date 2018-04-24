@@ -3,15 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public abstract class ResourceListProvider : ScriptableObject
+public abstract class ResourceListProvider : ListProvider<ResourceTileInfo>
 {
 	public ResourceTileInfo basicFood;
 
-	public abstract ResourceTileInfo[] GetResourceList();
-
 	public virtual ResourceTileInfo GetResourceByName(string name)
 	{
-		return GetResourceList().SingleOrDefault(r => r.name == name);
+		return items.SingleOrDefault(r => r.name == name);
 	}
 
 }

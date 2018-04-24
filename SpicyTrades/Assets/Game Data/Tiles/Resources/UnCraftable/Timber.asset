@@ -9,21 +9,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
-  m_Name: Coal
+  m_Name: Timber
   m_EditorClassIdentifier: 
   tag: Resource
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.2352941, g: 0.2352941, b: 0.2352941, a: 1}
+  color: {r: 0.5, g: 0.23793103, b: 0, a: 1}
   cost: 50
   tileRenderers:
-  - {fileID: 11400000, guid: 55911a6a340ae884fb5350952205b4a9, type: 2}
-  category: 3
+  - {fileID: 11400000, guid: fa0854ae86525fc4c97b20c428eb5556, type: 2}
+  category: 0
   tags:
-  - Fuel
-  - Ore
   - Material
-  requiredWorkers: 20
-  basePrice: 0.5
-  yeild: 8
-  description: 
+  requiredWorkers: 25
+  basePrice: 0.3
+  yeild: 9
+  description: A cut piece of lumber. Burns easy. Used to create the foundations of
+    a house, wagons, boats, and wooden figurines.
+  tooltip: A long piece of cut wood. Kinda heavy. Watch for the splinters!
   icon: {fileID: 0}
+  recipe: {fileID: 0}

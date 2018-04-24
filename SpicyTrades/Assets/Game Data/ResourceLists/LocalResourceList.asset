@@ -11,10 +11,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5068571cf6cbfab458d9d7a967dd44fb, type: 3}
   m_Name: LocalResourceList
   m_EditorClassIdentifier: 
-  basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
-  resources:
+  items:
   - {fileID: 11400000, guid: abf58effb97c4b144b14968b73ed263d, type: 2}
   - {fileID: 11400000, guid: abbd03ab306d8bd4590791ae0821d7f2, type: 2}
   - {fileID: 11400000, guid: efa5d50ed9123f74982f4f4269ce6887, type: 2}
   - {fileID: 11400000, guid: d45d6b248e2117b4491a66c0687c418a, type: 2}
   - {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
+  - {fileID: 11400000, guid: 1b11617ecaf5a0441af6987d127490e0, type: 2}
+  - {fileID: 11400000, guid: 63e8acd8a09c92945b6c2fbdf8425cde, type: 2}
+  - {fileID: 11400000, guid: 39593cc1df54b3844b1951658380fd07, type: 2}
+  basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}

@@ -17,5 +17,6 @@ public enum TileType
 {
 	Tile,
 	Settlement,
-	Resource
+	Resource,
+	Factory
 }

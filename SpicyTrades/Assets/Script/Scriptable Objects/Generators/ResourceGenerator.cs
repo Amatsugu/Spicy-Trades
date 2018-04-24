@@ -9,10 +9,12 @@ public class ResourceGenerator : FeatureGenerator
 	public int maxResources = 3;
 	public GameObject resourceTile;
 	public ResourceListProvider resourceProvider;
+	public RecipeListProvider recipeList;
+	public FactoryListProvider factoryList;
 	public override void Generate(Map map)
 	{
 		var towns = map.GetTowns();
-		var resources = resourceProvider.GetResourceList();
+		var resources = resourceProvider.GetResourceList().Where(r => r.recipe == null).ToArray();
 		foreach(SettlementTile t in towns)
 		{
 			var curTown = (t.tileInfo as SettlementTileInfo);
@@ -31,6 +33,29 @@ public class ResourceGenerator : FeatureGenerator
 					t.Population += res.requiredWorkers;
 					candicadates.RemoveAt(c);
 				}
+
+				//Place Factories
+				if (recipeList == null)
+					return;
+				var recipes = recipeList.items.Where(recipe => placedResources.Any(resA => recipe.inputA.Match(resA) || recipe.inputB.Match(resA))).ToList();
+
+				//placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
+				numResources = Random.Range(1, maxResources / 2);
+				for (int i = 0; i < numResources; i++)
+				{
+					if (recipes.Count == 0)
+						break;
+					var c = Random.Range(0, candicadates.Count);
+					var r = Random.Range(0, recipes.Count);
+					var f = factoryList.GetFactoryByType(recipes[r].factoryType);
+					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], f, false, true).tileInfo;
+					t.RegisterFactory(factory);
+					t.RegisterRecipe(recipes[r]);
+					t.Population += 10; //TODO: Tune numbers
+					recipes.RemoveAll(recipie => recipie.factoryType == recipes[r].factoryType);
+					candicadates.RemoveAt(c);
+				}
+
 				//Allocate Food
 				float foodPerPop = curTown.foodPerPop;
 				float requiredFood = t.Population * foodPerPop;
@@ -44,7 +69,7 @@ public class ResourceGenerator : FeatureGenerator
 					{
 						if (candicadates.Count == 0)
 						{
-							Debug.Log(GeneratorName + "Needs more food.");
+							Debug.LogWarning(GeneratorName + "Needs more food.");
 							break;
 						}
 						int c = Random.Range(0, candicadates.Count); 
@@ -54,7 +79,6 @@ public class ResourceGenerator : FeatureGenerator
 						candicadates.RemoveAt(c);
 					}
 				}
-
 				
 			}else if(curTown.settlementType == SettlementType.Village)
 			{
@@ -73,6 +97,50 @@ public class ResourceGenerator : FeatureGenerator
 					candicadates.RemoveAt(c);
 				}
 				t.Population = Mathf.CeilToInt(t.Population * .8f);
+
+				//Place Factories
+				if (recipeList == null)
+					return;
+				var recipes = recipeList.items.Where(recipe => placedResources.Any(resA => recipe.inputA.Match(resA) || recipe.inputB.Match(resA))).ToList();
+				numResources = Random.Range(1, maxResources / 2);
+				for (int i = 0; i < numResources; i++)
+				{
+					if (recipes.Count == 0)
+						break;
+					var c = Random.Range(0, candicadates.Count);
+					var r = Random.Range(0, recipes.Count);
+					var f = factoryList.GetFactoryByType(recipes[r].factoryType);
+					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], f, false, true).tileInfo;
+					t.RegisterFactory(factory);
+					t.RegisterRecipe(recipes[r]);
+					t.Population += 10; //TODO: Tune numbers
+					recipes.RemoveAll(recipie => recipie.factoryType == recipes[r].factoryType);
+					candicadates.RemoveAt(c);
+				}
+
+				//Allocate Food
+				float foodPerPop = curTown.foodPerPop;
+				float requiredFood = t.Population * foodPerPop;
+				float foodTotal = placedResources.Sum(res => res.category == ResourceCategory.Food ? res.yeild : 0);
+				if (requiredFood > foodTotal)
+				{
+					float neededFood = requiredFood - foodTotal;
+					int numFoodTiles = Mathf.CeilToInt(neededFood / resourceProvider.basicFood.yeild);
+					Debug.Log(GeneratorName + "Need " + neededFood + " [" + numFoodTiles + "] Food Units");
+					for (int i = 0; i < numFoodTiles; i++)
+					{
+						if (candicadates.Count == 0)
+						{
+							Debug.LogWarning(GeneratorName + "Needs more food.");
+							break;
+						}
+						int c = Random.Range(0, candicadates.Count);
+						var f = map.ReplaceTile<ResourceTile>(candicadates[c], resourceProvider.basicFood, false, true).tileInfo;
+						t.Population += resourceProvider.basicFood.requiredWorkers;
+						t.RegisterResource(f);
+						candicadates.RemoveAt(c);
+					}
+				}
 			}
 		}
 	}

@@ -12,6 +12,7 @@ TagManager:
   - Ground
   - Water
   - Mountain
+  - Factory
   layers:
   - Default
   - TransparentFX
