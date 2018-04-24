@@ -10,6 +10,7 @@ public class ResourceGenerator : FeatureGenerator
 	public GameObject resourceTile;
 	public ResourceListProvider resourceProvider;
 	public RecipeListProvider recipeList;
+	public FactoryListProvider factoryList;
 	public override void Generate(Map map)
 	{
 		var towns = map.GetTowns();
@@ -36,14 +37,20 @@ public class ResourceGenerator : FeatureGenerator
 				//Place Factories
 				if (recipeList == null)
 					return;
-				var recipes = placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
+				var recipes = recipeList.items.Where(recipe => placedResources.Any(resA => recipe.inputA.Match(resA) || recipe.inputB.Match(resA))).ToList();
+
+				//placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
 				numResources = Random.Range(1, maxResources / 2);
 				for (int i = 0; i < numResources; i++)
 				{
+					if (recipes.Count == 0)
+						break;
 					var c = Random.Range(0, candicadates.Count);
 					var r = Random.Range(0, recipes.Count);
-					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], new FactoryTileInfo { factoryType = recipes[r].factoryType }, false, true).tileInfo;
+					var f = factoryList.GetFactoryByType(recipes[r].factoryType);
+					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], f, false, true).tileInfo;
 					t.RegisterFactory(factory);
+					t.RegisterRecipe(recipes[r]);
 					t.Population += 10; //TODO: Tune numbers
 					recipes.RemoveAll(recipie => recipie.factoryType == recipes[r].factoryType);
 					candicadates.RemoveAt(c);
@@ -94,14 +101,18 @@ public class ResourceGenerator : FeatureGenerator
 				//Place Factories
 				if (recipeList == null)
 					return;
-				var recipes = placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
+				var recipes = recipeList.items.Where(recipe => placedResources.Any(resA => recipe.inputA.Match(resA) || recipe.inputB.Match(resA))).ToList();
 				numResources = Random.Range(1, maxResources / 2);
 				for (int i = 0; i < numResources; i++)
 				{
+					if (recipes.Count == 0)
+						break;
 					var c = Random.Range(0, candicadates.Count);
 					var r = Random.Range(0, recipes.Count);
-					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], new FactoryTileInfo { factoryType = recipes[r].factoryType }, false, true).tileInfo;
+					var f = factoryList.GetFactoryByType(recipes[r].factoryType);
+					var factory = map.ReplaceTile<FactoryTile>(candicadates[c], f, false, true).tileInfo;
 					t.RegisterFactory(factory);
+					t.RegisterRecipe(recipes[r]);
 					t.Population += 10; //TODO: Tune numbers
 					recipes.RemoveAll(recipie => recipie.factoryType == recipes[r].factoryType);
 					candicadates.RemoveAt(c);

@@ -21,6 +21,7 @@ public class SettlementTile : Tile
 
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<ResourceNeed> ResourceNeeds { get; private set; }
+	public List<Recipe> Recipes { get; private set; }
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; //TODO: make event list
 	public List<ActiveEvent> currentEvents;
@@ -35,6 +36,7 @@ public class SettlementTile : Tile
 		_nextEventTick = GameMaster.CurrentTick;
 		Resources = new List<ResourceTileInfo>();
 		Factories = new List<FactoryTileInfo>();
+		Recipes = new List<Recipe>();
 		ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
 		ResourceNeeds = new List<ResourceNeed>();
 	}
@@ -134,6 +136,11 @@ public class SettlementTile : Tile
 		Factories.Add(factory);
 	}
 
+	public void RegisterRecipe(Recipe recipe)
+	{
+		Recipes.Add(recipe);
+	}
+
 	public bool HasResource(ResourceTileInfo resource, int count)
 	{
 		if (ResourceCache.ContainsKey(resource))
@@ -163,6 +170,11 @@ public class SettlementTile : Tile
 		}
 		//Satisfy Needs
 		SatisfyNeeds();
+		//Craft
+		foreach (var recipe in Recipes)
+		{
+			Factories.First(f => f.factoryType == recipe.factoryType).Craft(recipe, this);
+		}
 		//Select Events
 		if (_nextEventTick <= GameMaster.CurrentTick)
 			PickEvent();

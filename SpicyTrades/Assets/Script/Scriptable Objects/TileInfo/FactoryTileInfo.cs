@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
+[CreateAssetMenu(menuName = "Tile/Factory")]
 public class FactoryTileInfo : TileInfo
 {
 	public string factoryType;
@@ -10,6 +12,7 @@ public class FactoryTileInfo : TileInfo
 	public void OnEnable()
 	{
 		TileType = TileType.Factory;
+		tag = "Factory";
 	}
 
 	public void Craft(Recipe recipe, SettlementTile settlement)
@@ -21,12 +24,12 @@ public class FactoryTileInfo : TileInfo
 		if (inA.count <= 0 && inB.count <= 0)
 			return;
 
-		if(inA != null)
+		if(inA.count > 0)
 		{
 			if (!settlement.HasResource(inA))
 				return;
 		}
-		if (inB != null)
+		if (inB.count > 0)
 		{
 			if (!settlement.HasResource(inB))
 				return;

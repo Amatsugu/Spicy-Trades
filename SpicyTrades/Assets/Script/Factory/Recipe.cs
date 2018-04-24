@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[CreateAssetMenu(menuName = "Data Providers/Recipe")]
 public class Recipe : ScriptableObject
 {
 	public ResourceNeed inputA;
