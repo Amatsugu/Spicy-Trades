@@ -251,6 +251,7 @@ public class SettlementTile : Tile
 	{
 		if (need.count == 0)
 			return true;
+		/*
 		if (need.type == NeedType.Category) //Categoric Needs
 		{
 			ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
@@ -293,7 +294,7 @@ public class SettlementTile : Tile
 			if (TakeResource(res, (int)need.count))
 				return true;
 			return false;
-		}
+		}*/
 	}
 
 	public bool TakeResource(ResourceTileInfo resource, int units)
@@ -316,6 +317,23 @@ public class SettlementTile : Tile
 		{
 			if (need.count == 0)
 				continue;
+			var res = ResourceCache.Keys.Where(_res => need.Match(_res)).ToArray();
+			if (res.Length == 0)
+				continue;
+			foreach(var cRes in res)
+			{
+				if (TakeResource(cRes, (int)need.count))
+					need.count = 0;
+				else
+				{
+					var unitsTaken = Mathf.FloorToInt(ResourceCache[cRes][0]);
+					TakeResource(cRes, unitsTaken);
+					need.count -= unitsTaken;
+				}
+				if (need.count == 0)
+					break;
+			}
+			/*
 			if(need.type == NeedType.Category) //Categoric Needs
 			{
 				ResourceCategory cat = (ResourceCategory)System.Enum.Parse(typeof(ResourceCategory), need.resource);
@@ -381,7 +399,7 @@ public class SettlementTile : Tile
 					TakeResource(res, unitsTaken);
 					need.count -= unitsTaken;
 				}
-			}
+			}*/
 
 		}
 		ResourceNeeds.RemoveAll(n => n.count == 0);
@@ -420,6 +438,13 @@ public class SettlementTile : Tile
 				Cost = cost
 			});
 			player.TakeMoney(cost);
+			new Transaction
+			{
+				type = TransactionType.Buy,
+				playerId = player, //TODO: Player ID
+				resource = resource.name,
+				count = units
+			};
 			return true;
 		}
 		return false;
