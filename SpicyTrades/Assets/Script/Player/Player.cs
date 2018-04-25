@@ -37,15 +37,18 @@ public class Player
 		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
 
-	public void MoveTo(SettlementTile tile)
+	public void MoveTo(SettlementTile tile, bool makeTransaction = true)
 	{
 		playerObject.MoveTo(tile);
-		new Transaction
+		if(makeTransaction)
 		{
-			type = TransactionType.Move,
-			playerId = Id,
-			targetSettlement = tile.Position
-		};//TODO: Sync Transactions
+			GameMaster.SendTransaction(new Transaction
+			{
+				type = TransactionType.Move,
+				playerId = Id,
+				targetSettlement = tile.Position
+			});
+		}
 	}
 
 	public void SetTile(SettlementTile tile)
@@ -58,44 +61,40 @@ public class Player
 
 	public void AddItem(InventoryItem item)
 	{
-		var invItem = inventory.FirstOrDefault(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.FirstOrDefault(i => i.Resource.resource == item.Resource.resource);
 		if (invItem == null)
 		{
 			invItem = new InventoryItem
 			{
-				Package = item.Package,
+				Resource = item.Resource,
 				Cost = item.Cost
 			};
 			inventory.Add(invItem);
 		}else
 		{
 			invItem.Cost = (invItem.Cost + invItem.Cost)/2f;
-			var p = invItem.Package;
-			p.ResourceUnits = p.ResourceUnits + item.Package.ResourceUnits;
-			invItem.Package = p;
+			invItem.Resource.count += item.Resource.count;
 		}
 	}
 
 	public bool TakeItem(InventoryItem item)
 	{
-		var invItem = inventory.First(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.First(i => i.Resource.resource == item.Resource.resource);
 		if (invItem == null)
 			return false;
 		else
 		{
-			if(invItem.Package.ResourceUnits < item.Package.ResourceUnits)
+			if(invItem.Resource.count < item.Resource.count)
 				return false;
 			else
 			{
-				if (invItem.Package.ResourceUnits == item.Package.ResourceUnits)
+				if (invItem.Resource.count == item.Resource.count)
 				{
 					inventory.Remove(invItem);
 					return true;
 				}else
 				{
-					var p = invItem.Package;
-					p.ResourceUnits -= item.Package.ResourceUnits;
-					invItem.Package = p;
+					invItem.Resource.count -= item.Resource.count;
 					return true;
 				}
 			}
@@ -117,7 +116,7 @@ public class Player
 		return true;
 	}
 
-	public bool Sell(ResourceTileInfo resource, float count, SettlementTile settlement)
+	public bool Sell(ResourceTileInfo resource, float count, SettlementTile settlement, bool makeTransaction = true)
 	{
 		float price;
 		if (settlement.ResourceCache.ContainsKey(resource))
@@ -129,16 +128,28 @@ public class Player
 			settlement.AddResource(resource, count);
 			settlement.Money -= price;
 			AddMoney(price);
-			AddItem(new InventoryItem
+			TakeItem(new InventoryItem
 			{
 				Cost = price,
-				Package = new TradePackage
+				Resource = new ResourceIdentifier
 				{
-					Resource = resource.name,
-					PackageType = TradePackageType.Resource,
-					ResourceUnits = count
+					resource = resource.name,
+					count = count
 				}
 			});
+			if(makeTransaction)
+			{
+				GameMaster.SendTransaction(new Transaction
+				{
+					type = TransactionType.Sell,
+					playerId = Id,
+					resources = new ResourceIdentifier
+					{
+						resource = resource.name,
+						count = count
+					}
+				});
+			}
 			return true;
 		}
 		return false;
@@ -148,7 +159,7 @@ public class Player
 	public void LogItems()
 	{
 		foreach (var p in inventory)
-			Debug.Log(p.Package.Resource + " : " + p.Package.ResourceUnits);
+			Debug.Log(p.Resource.resource + " : " + p.Resource.count);
 	}
 #endif
 

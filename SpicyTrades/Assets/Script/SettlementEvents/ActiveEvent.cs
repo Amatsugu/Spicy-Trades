@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,7 +17,7 @@ public class ActiveEvent
 	public SettlementEvent Event { get; private set; }
 	public float EndTime { get; private set; }
 	public SettlementTile EventHost { get; set; }
-	public ResourceNeed[] ResourceNeeds { get; set; }
+	public ResourceIdentifier[] ResourceNeeds { get; set; }
 
 	public ActiveEvent(SettlementEvent @event, SettlementTile hostSettlement)
 	{

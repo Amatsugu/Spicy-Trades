@@ -20,11 +20,11 @@ public class SettlementTile : Tile
 	public Coin Money = new Coin(500000);
 	public const int maxResourceStorage = 1000;
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
-	public List<ResourceNeed> ResourceNeeds { get; private set; }
+	public List<ResourceIdentifier> ResourceNeeds { get; private set; }
 	public List<Recipe> Recipes { get; private set; }
 	[JsonIgnore]
 	public new SettlementTileInfo tileInfo;
-	public List<SettlementEvent> eventPool; //TODO: make event list
+	public List<SettlementEvent> eventPool; 
 	public List<ActiveEvent> currentEvents;
 	private int _nextEventTick;
 	private SettlementTile _capital;
@@ -39,7 +39,7 @@ public class SettlementTile : Tile
 		Factories = new List<FactoryTileInfo>();
 		Recipes = new List<Recipe>();
 		ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
-		ResourceNeeds = new List<ResourceNeed>();
+		ResourceNeeds = new List<ResourceIdentifier>();
 	}
 
 	public SettlementTile RegisterResource(ResourceTileInfo resource)
@@ -48,7 +48,7 @@ public class SettlementTile : Tile
 		{
 			Resources = new List<ResourceTileInfo>();
 			ResourceCache = new Dictionary<ResourceTileInfo, float[]>();
-			ResourceNeeds = new List<ResourceNeed>();
+			ResourceNeeds = new List<ResourceIdentifier>();
 		}
 		Resources.Add(resource);
 		if (!ResourceCache.ContainsKey(resource))
@@ -90,7 +90,7 @@ public class SettlementTile : Tile
 		}
 	}
 
-	public bool HasResource(ResourceNeed resource)
+	public bool HasResource(ResourceIdentifier resource)
 	{
 		var res = ResourceCache.Keys.FirstOrDefault(r => resource.Match(r));
 		if (res == null)
@@ -151,7 +151,7 @@ public class SettlementTile : Tile
 	private void DetermineNeeds()
 	{
 		//Make Food Needs
-		ResourceNeeds.Add(new ResourceNeed
+		ResourceNeeds.Add(new ResourceIdentifier
 		{
 			type = NeedType.Category,
 			resource = "Food",
@@ -199,12 +199,12 @@ public class SettlementTile : Tile
 		_nextEventTick = GameMaster.CurrentTick + pickedEvent.cooldown;
 		var activeEvent = new ActiveEvent(pickedEvent, this);
 		currentEvents.Add(activeEvent);
-		var resNeed = new ResourceNeed[pickedEvent.resourceDemands.Count];
+		var resNeed = new ResourceIdentifier[pickedEvent.resourceDemands.Count];
 		activeEvent.ResourceNeeds = resNeed;
 		for (int i = 0; i < resNeed.Length; i++)
 		{
 			var resDemmands = pickedEvent.resourceDemands[i];
-			resNeed[i] = new ResourceNeed
+			resNeed[i] = new ResourceIdentifier
 			{
 				resource = resDemmands.resource,
 				count = resDemmands.count * Population,
@@ -215,7 +215,7 @@ public class SettlementTile : Tile
 		ResourceNeeds.AddRange(resNeed);
 	}
 
-	public bool TakeResource(ResourceNeed need)
+	public bool TakeResource(ResourceIdentifier need)
 	{
 		if (need.count == 0)
 			return true;
@@ -280,33 +280,40 @@ public class SettlementTile : Tile
 	{
 	}
 
-	public bool Buy(ResourceTileInfo resource, float units, Player player = null)
+	public bool Buy(ResourceTileInfo resource, float count, Player player = null, bool makeTransaction = true)
 	{
-		units = Mathf.Floor(units);
+		count = Mathf.Floor(count);
 		if (player == null)
 			player = GameMaster.Player;
-		var cost = resource.basePrice * units * ResourceCache[resource][1];
+		var cost = resource.basePrice * count * ResourceCache[resource][1];
 		if (player.Money < cost)
 			return false;
-		if (TakeResource(resource, units))
+		if (TakeResource(resource, count))
 		{
 			player.AddItem(new InventoryItem
 			{
-				Package = new TradePackage
+				Resource = new ResourceIdentifier
 				{
-					Resource = resource.name,
-					ResourceUnits = units
+					resource = resource.name,
+					count = count
 				},
 				Cost = cost
 			});
 			player.TakeMoney(cost);
-			new Transaction
+			if (makeTransaction)
 			{
-				type = TransactionType.Buy,
-				playerId = player.Id, //TODO: Player ID
-				resource = resource.name,
-				count = units
-			};
+
+				GameMaster.SendTransaction(new Transaction
+				{
+					type = TransactionType.Buy,
+					playerId = player.Id,
+					resources = new ResourceIdentifier
+					{
+						resource = resource.name,
+						count = count
+					}
+				});
+			}
 			return true;
 		}
 		return false;

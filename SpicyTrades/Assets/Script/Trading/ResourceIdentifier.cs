@@ -5,7 +5,7 @@ using System.Linq;
 using UnityEngine;
 
 [Serializable]
-public class ResourceNeed
+public class ResourceIdentifier
 {
 	public string resource;
 	public float count;

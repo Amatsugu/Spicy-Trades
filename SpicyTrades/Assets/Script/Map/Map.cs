@@ -95,19 +95,9 @@ public class Map : IEnumerable<Tile>
 		return this[x, y, z];
 	}
 
-	public IEnumerable<SettlementTile> GetTowns()
+	public IEnumerable<SettlementTile> GetSettlements()
 	{
 		return from Tile t in Tiles where t.GetType() == typeof(SettlementTile) select t as SettlementTile;
-	}
-
-	public string ToJSON() //TODO: Implement Proper Serialization
-	{
-		return JsonUtility.ToJson(this);
-	}
-
-	public static Map FromJSON(string json)
-	{
-		return JsonUtility.FromJson<Map>(json);
 	}
 
 	IEnumerator<Tile> IEnumerable<Tile>.GetEnumerator()

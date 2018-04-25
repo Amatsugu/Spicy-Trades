@@ -12,12 +12,16 @@ MonoBehaviour:
   m_Name: LocalResourceList
   m_EditorClassIdentifier: 
   items:
+  - {fileID: 11400000, guid: c0e9027c1f2e18d4f978b19803858da5, type: 2}
+  - {fileID: 11400000, guid: aaff6fc5cab93564d9507596c321d34d, type: 2}
+  - {fileID: 11400000, guid: b33380b5f30b162498874b772eadc3c2, type: 2}
+  - {fileID: 11400000, guid: 1b11617ecaf5a0441af6987d127490e0, type: 2}
   - {fileID: 11400000, guid: abf58effb97c4b144b14968b73ed263d, type: 2}
   - {fileID: 11400000, guid: abbd03ab306d8bd4590791ae0821d7f2, type: 2}
+  - {fileID: 11400000, guid: 39593cc1df54b3844b1951658380fd07, type: 2}
+  - {fileID: 11400000, guid: 63e8acd8a09c92945b6c2fbdf8425cde, type: 2}
   - {fileID: 11400000, guid: efa5d50ed9123f74982f4f4269ce6887, type: 2}
   - {fileID: 11400000, guid: d45d6b248e2117b4491a66c0687c418a, type: 2}
+  - {fileID: 11400000, guid: 3cc1ca513f5d90d4eaf335cbefda4dea, type: 2}
   - {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}
-  - {fileID: 11400000, guid: 1b11617ecaf5a0441af6987d127490e0, type: 2}
-  - {fileID: 11400000, guid: 63e8acd8a09c92945b6c2fbdf8425cde, type: 2}
-  - {fileID: 11400000, guid: 39593cc1df54b3844b1951658380fd07, type: 2}
   basicFood: {fileID: 11400000, guid: ccc61625d96ec61478a01cdceed1b467, type: 2}

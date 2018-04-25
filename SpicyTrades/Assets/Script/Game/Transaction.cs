@@ -5,27 +5,30 @@ using Newtonsoft.Json;
 using System.Linq;
 
 public class Transaction
-{
+{ 
 	public TransactionType type;
 	public string playerId;
 	public string targetPlayerId;
 	public HexCoords targetSettlement;
-	public ResourceNeed resources;
+	public ResourceIdentifier resources;
 
 	public void Execute()
 	{
-		SettlementTile settlement;
+		SettlementTile settlement = GameMaster.GameMap[targetSettlement.ToIndex()] as SettlementTile;
 		ResourceTileInfo res;
+		Player player = GameMaster.Players.First(p => p.Id == playerId);
 		switch(type)
 		{
 			case TransactionType.Buy:
-				settlement = GameMaster.GameMap[targetSettlement.ToIndex()] as SettlementTile;
 				res = settlement.ResourceCache.Keys.First(r => resources.Match(r));
-				settlement.Buy(res, resources.count, GameMaster.Players.First(p => p.Id == playerId));
+				settlement.Buy(res, resources.count, player, false);
 				break;
 			case TransactionType.Sell:
-				settlement = GameMaster.GameMap[targetSettlement.ToIndex()] as SettlementTile;
 				res = settlement.ResourceCache.Keys.First(r => resources.Match(r));
+				player.Sell(res, resources.count, settlement, false);
+				break;
+			case TransactionType.Move:
+				player.MoveTo(settlement, false);
 				break;
 		}
 	}

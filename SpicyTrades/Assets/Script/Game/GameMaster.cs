@@ -117,6 +117,11 @@ public class GameMaster
 		}
 	}
 
+	public static void SendTransaction(Transaction transaction)
+	{
+		//TODO: Send Transaction
+	}
+
 	public static Tile GetTile(int x, int y, int z)
 	{
 		return GameMap[x, y, z];

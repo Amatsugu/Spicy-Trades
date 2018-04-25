@@ -72,9 +72,9 @@ public class UIManager : MonoBehaviour
 		foreach(var item in GameMaster.Player.inventory)
 		{
 			GUILayout.BeginHorizontal();
-			GUILayout.Label("\t" + res.GetResourceByName(item.Package.Resource).PrettyName);
+			GUILayout.Label("\t" + res.GetResourceByName(item.Resource.resource).PrettyName);
 			GUILayout.Label(new Coin(item.Cost).ToString(" "));
-			GUILayout.Label("[" + item.Package.ResourceUnits + "]");
+			GUILayout.Label("[" + item.Resource.count + "]");
 			GUILayout.EndHorizontal();
 		}
 	}
