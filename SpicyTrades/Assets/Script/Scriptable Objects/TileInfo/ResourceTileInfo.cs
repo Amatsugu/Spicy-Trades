@@ -7,9 +7,9 @@ public class ResourceTileInfo : TileInfo
 {
 	public ResourceCategory category;
 	public string[] tags;
-	public int requiredWorkers;
+	public int requiredWorkers = 5;
+	public float yeild = 20;
 	public float basePrice;
-	public float yeild;
 	public string description;
 	public string tooltip;
 	public Sprite icon;

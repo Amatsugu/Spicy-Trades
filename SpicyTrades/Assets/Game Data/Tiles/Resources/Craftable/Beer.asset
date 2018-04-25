@@ -17,10 +17,13 @@ MonoBehaviour:
   cost: 0
   tileRenderers: []
   category: 2
-  tags: []
+  tags:
+  - Liquid
+  - Alcohol
+  - Product
   requiredWorkers: 0
-  basePrice: 1
   yeild: 0
+  basePrice: 1
   description: An alcoholic drink produced from fermented barley, hops,  water and
     yeast. In common supply and usually part of any household's diet.
   tooltip: A barrel filled to the brim with beer. No minors allowed!

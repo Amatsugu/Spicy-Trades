@@ -20,11 +20,10 @@ MonoBehaviour:
   category: 3
   tags:
   - Fuel
-  - Ore
   - Material
   requiredWorkers: 20
-  basePrice: 0.5
   yeild: 8
+  basePrice: 0.5
   description: A blackish lump of rock that easily burns. Known for its heat production
     and loved by blacksmiths all around. Used in the production of steel.
   tooltip: "A black lump of coal\u2026 try not to stain your hands."

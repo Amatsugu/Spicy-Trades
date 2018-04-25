@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = .1f;
+	public const float TickRate = 5f;
 	public static event Action GameReady
 	{
 		add
@@ -122,6 +122,11 @@ public class GameMaster
 		//TODO: Send Transaction
 	}
 
+	public static void OnTransactionRecieve(Transaction transaction)
+	{
+		transaction.Execute();
+	}
+
 	public static Tile GetTile(int x, int y, int z)
 	{
 		return GameMap[x, y, z];
@@ -131,9 +136,7 @@ public class GameMaster
 	{
 		if (tile.GetType() == typeof(SettlementTile))
 		{
-
 			UIManager.ShowPricePanel((tile as SettlementTile).Center);
-			//Instance._map.CurrentPlayer.MoveTo(tile as SettlementTile);
 		}
 #if DEBUG
 		var n = tile.GetNeighbors();

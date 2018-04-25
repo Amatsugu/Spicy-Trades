@@ -11,6 +11,7 @@ public class ResourceGenerator : FeatureGenerator
 	public ResourceListProvider resourceProvider;
 	public RecipeListProvider recipeList;
 	public FactoryListProvider factoryList;
+
 	public override void Generate(Map map)
 	{
 		var settlements = map.GetSettlements();
@@ -97,21 +98,21 @@ public class ResourceGenerator : FeatureGenerator
 	{
 		if (recipeList == null)
 			return;
-		var recipes = recipeList.items.Where(recipe => placedResources.Any(resA => recipe.inputA.Match(resA) || recipe.inputB.Match(resA))).ToList();
-		var numResources = Random.Range(1, maxResources / 2);
-		for (int i = 0; i < numResources; i++)
+		var recipes = placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
+		var numResources = Random.Range(1, maxResources);
+		for (int i = 0; i < recipes.Count; i++)
 		{
-			if (recipes.Count == 0)
-				break;
 			var c = Random.Range(0, candicates.Count);
 			var r = Random.Range(0, recipes.Count);
-			var f = factoryList.GetFactoryByType(recipes[r].factoryType);
-			var factory = map.ReplaceTile<FactoryTile>(candicates[c], f, false, true).tileInfo;
-			settlement.RegisterFactory(factory);
+			if(!settlement.Factories.Any(f => f.factoryType == recipes[r].factoryType))
+			{
+				var f = factoryList.GetFactoryByType(recipes[r].factoryType);
+				var factory = map.ReplaceTile<FactoryTile>(candicates[c], f, false, true).tileInfo;
+				settlement.RegisterFactory(factory);
+				candicates.RemoveAt(c);
+				settlement.Population += 10; //TODO: Tune numbers
+			}
 			settlement.RegisterRecipe(recipes[r]);
-			settlement.Population += 10; //TODO: Tune numbers
-			recipes.RemoveAll(recipie => recipie.factoryType == recipes[r].factoryType);
-			candicates.RemoveAt(c);
 		}
 	}
 }

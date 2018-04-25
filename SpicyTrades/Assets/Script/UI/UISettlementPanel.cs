@@ -88,6 +88,15 @@ public class UISettlementPanel : UIPanel
 		GUILayout.Label(" ");
 		GUILayout.Label("Population: " + _currentSettlement.Population);
 		GUILayout.Label("Type: " + _currentSettlement.SettlementType);
+		GUILayout.Label("Recipies");
+		foreach (var recipe in _currentSettlement.Recipes)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(recipe.name);
+			GUILayout.Label(recipe.output.PrettyName);
+			GUILayout.EndHorizontal();
+		}
+		return;
 		GUILayout.Label("Active Events");
 		foreach(var e in _currentSettlement.currentEvents)
 		{
@@ -108,7 +117,6 @@ public class UISettlementPanel : UIPanel
 				GUILayout.EndHorizontal();
 			}
 		}
-
 		GUILayout.Label("Needs");
 		foreach(var need in _currentSettlement.ResourceNeeds)
 		{

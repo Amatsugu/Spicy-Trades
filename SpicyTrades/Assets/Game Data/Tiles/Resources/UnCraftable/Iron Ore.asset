@@ -19,10 +19,10 @@ MonoBehaviour:
   category: 0
   tags:
   - Ore
-  - Material
+  - Metal
   requiredWorkers: 15
-  basePrice: 0.8
   yeild: 6
+  basePrice: 0.8
   description: 'A metal mined from rocks. It ranges from gray to brown in color depending
     on oxidation. '
   tooltip: "Looks like there is some iron in this rock\u2026 Maybe you can extract

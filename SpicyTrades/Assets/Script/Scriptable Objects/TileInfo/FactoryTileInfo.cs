@@ -17,8 +17,6 @@ public class FactoryTileInfo : TileInfo
 
 	public void Craft(Recipe recipe, SettlementTile settlement)
 	{
-		if (recipe.inputA == null && recipe.inputB == null)
-			return;
 		var inA = recipe.inputA;
 		var inB = recipe.inputB;
 		if (inA.count <= 0 && inB.count <= 0)
@@ -34,7 +32,8 @@ public class FactoryTileInfo : TileInfo
 			if (!settlement.HasResource(inB))
 				return;
 		}
-		if (settlement.TakeResource(inA) && settlement.TakeResource(inB))
-			settlement.AddResource(recipe.output, recipe.outputCount);
+		settlement.TakeResource(inA);
+		settlement.TakeResource(inB);
+		settlement.AddResource(recipe.output, recipe.outputCount);
 	}
 }

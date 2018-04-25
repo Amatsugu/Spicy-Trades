@@ -19,10 +19,11 @@ MonoBehaviour:
   category: 0
   tags:
   - Grain
+  - Crop
   - Material
   requiredWorkers: 5
-  basePrice: 0.12
   yeild: 20
+  basePrice: 0.12
   description: 'A basic and essential crop usually grown by farmers in the spring
     season. Often used to make beer. '
   tooltip: A bundle of barley.

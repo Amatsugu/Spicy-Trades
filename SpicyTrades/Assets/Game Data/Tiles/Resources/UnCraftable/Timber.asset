@@ -19,10 +19,11 @@ MonoBehaviour:
   - {fileID: 11400000, guid: fa0854ae86525fc4c97b20c428eb5556, type: 2}
   category: 0
   tags:
-  - Material
+  - Fuel
+  - Wood
   requiredWorkers: 25
-  basePrice: 0.3
   yeild: 9
+  basePrice: 0.3
   description: A cut piece of lumber. Burns easy. Used to create the foundations of
     a house, wagons, boats, and wooden figurines.
   tooltip: A long piece of cut wood. Kinda heavy. Watch for the splinters!

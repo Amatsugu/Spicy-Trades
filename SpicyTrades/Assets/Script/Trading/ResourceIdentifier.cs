@@ -15,6 +15,8 @@ public class ResourceIdentifier
 
 	public bool Match(ResourceTileInfo resource)
 	{
+		if (count == 0)
+			return true;
 		if (type == NeedType.Category) //Categoric Needs
 		{
 			return resource.category == (ResourceCategory)Enum.Parse(typeof(ResourceCategory), this.resource);

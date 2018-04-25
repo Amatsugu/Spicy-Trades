@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
+  m_Name: Copper Ingot
+  m_EditorClassIdentifier: 
+  tag: Resource
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 1, g: 0.31034485, b: 0, a: 1}
+  cost: 0
+  tileRenderers: []
+  category: 0
+  tags:
+  - Ingot
+  - Metal
+  - Product
+  - Material
+  requiredWorkers: 5
+  yeild: 20
+  basePrice: 0.25
+  description: A bar of smelted copper. Fairly useless in the creation of tools on
+    its own. Mostly used to create bronze, brass and copper coins for currency.
+  tooltip: "A brown bar of copper. Maybe you can make something out of this\u2026"
+  icon: {fileID: 0}
+  recipe: {fileID: 11400000, guid: fb80470491503f04cb6d68f6d093fd5b, type: 2}

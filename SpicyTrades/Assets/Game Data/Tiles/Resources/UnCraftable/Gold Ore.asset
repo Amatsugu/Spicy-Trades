@@ -19,11 +19,10 @@ MonoBehaviour:
   category: 0
   tags:
   - Ore
-  - Material
-  - Precous Metal
+  - Metal
   requiredWorkers: 25
-  basePrice: 10
   yeild: 4
+  basePrice: 20
   description: A precious metal extracted from rocks by mining. The ore has a distinct
     yellow shine. Rather rare in these parts of the world.
   tooltip: "Looks like there is some gold in this rock\u2026 Maybe you can extract

@@ -20,11 +20,11 @@ MonoBehaviour:
   tags:
   - Grain
   - Food
-  - Plant
+  - Produce
   - Material
   requiredWorkers: 5
+  yeild: 21
   basePrice: 0.2
-  yeild: 20
   description: A basic and essential crop usually grown by farmers in the fall season.
     Often grinded to make flour.
   tooltip: 'A bundle of wheat. '
