@@ -17,11 +17,11 @@ public class ResourceGenerator : FeatureGenerator
 		var resources = resourceProvider.GetResourceList().Where(r => r.recipe == null).ToArray();
 		foreach(SettlementTile settlement in settlements)
 		{
-			var curTown = (settlement.tileInfo as SettlementTileInfo);
-			if (curTown.settlementType == SettlementType.Town)
+			var curSettlementInfo = (settlement.tileInfo as SettlementTileInfo);
+			var candidates = settlement.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
+			var numResources = Random.Range(1, maxResources + 1);
+			if (curSettlementInfo.settlementType == SettlementType.Town)
 			{
-				var candidates = settlement.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
-				var numResources = Random.Range(1, maxResources + 1);
 				var placedResources = new List<ResourceTileInfo>();
 				//Place Resources
 				for (int i = 0; i < numResources; i++)
@@ -38,12 +38,10 @@ public class ResourceGenerator : FeatureGenerator
 				GenerateFactories(placedResources, candidates, map, settlement);
 
 				//Allocate Food
-				
-				
-			}else if(curTown.settlementType == SettlementType.Village)
+				AllocateFood(curSettlementInfo, settlement, placedResources, candidates, map);
+			}
+			else if(curSettlementInfo.settlementType == SettlementType.Village)
 			{
-				var candidates = settlement.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
-				var numResources = Random.Range(1, maxResources + 1);
 				var placedResources = new List<ResourceTileInfo>();
 				var foods = (from ResourceTileInfo res in resources where res.category == ResourceCategory.Food select res).ToArray();
 				//Place Resources
@@ -62,35 +60,15 @@ public class ResourceGenerator : FeatureGenerator
 				GenerateFactories(placedResources, candidates, map, settlement);
 
 				//Allocate Food
-				float foodPerPop = curTown.foodPerPop;
-				float requiredFood = settlement.Population * foodPerPop;
-				float foodTotal = placedResources.Sum(res => res.category == ResourceCategory.Food ? res.yeild : 0);
-				if (requiredFood > foodTotal)
-				{
-					float neededFood = requiredFood - foodTotal;
-					int numFoodTiles = Mathf.CeilToInt(neededFood / resourceProvider.basicFood.yeild);
-					Debug.Log(GeneratorName + "Need " + neededFood + " [" + numFoodTiles + "] Food Units");
-					for (int i = 0; i < numFoodTiles; i++)
-					{
-						if (candidates.Count == 0)
-						{
-							Debug.LogWarning(GeneratorName + "Needs more food.");
-							break;
-						}
-						int c = Random.Range(0, candidates.Count);
-						var f = map.ReplaceTile<ResourceTile>(candidates[c], resourceProvider.basicFood, false, true).tileInfo;
-						settlement.Population += resourceProvider.basicFood.requiredWorkers;
-						settlement.RegisterResource(f);
-						candidates.RemoveAt(c);
-					}
-				}
+				AllocateFood(curSettlementInfo, settlement, placedResources, candidates, map);
 			}
 		}
 	}
 
-	private void AllocateFood()
+	//Allocate Food
+	private void AllocateFood(SettlementTileInfo curSettlementTileInfo, SettlementTile settlement, List<ResourceTileInfo> placedResources, List<Tile> candidates, Map map)
 	{
-		float foodPerPop = curTown.foodPerPop;
+		float foodPerPop = curSettlementTileInfo.foodPerPop;
 		float requiredFood = settlement.Population * foodPerPop;
 		float foodTotal = placedResources.Sum(res => res.category == ResourceCategory.Food ? res.yeild : 0);
 		if (requiredFood > foodTotal)
