@@ -28,13 +28,14 @@ namespace NetworkManager
                 dat.ErrorCode = error;
                 dat.ErrorMessage = (string) objects[0];
                 Network.OnError(dat);
+                return;
             }
             ChatDataArgs globalchat;
             switch (command)
             {
                 case Network.HELLO:
                     Console.WriteLine("Got a hello from the server!");
-                    Network.SendData(new byte[] { 0 });
+                    Network.SendData(new byte[] { 0, 0 });
                     break;
                 case Network.LOGIN:
                     objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
@@ -146,6 +147,9 @@ namespace NetworkManager
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
+                    LoginEventArgs logargs = new LoginEventArgs();
+                    logargs.response = "Logged in!";
+                    Network.OnLogin(logargs);
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
@@ -175,8 +179,9 @@ namespace NetworkManager
                     Network.rooms[(string)objects[1]] = (Room)objects[0];
                     break;
                 case Network.GPID:
-                    objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
-                    Network.players[(string)objects[1]] = (PID)objects[0];
+                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    PID temppid = (PID)objects[0];
+                    Network.players[temppid.GetID()] = temppid;
                     break;
                 case Network.SYNC://id, numpieces, cpiece, payload
                     objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });

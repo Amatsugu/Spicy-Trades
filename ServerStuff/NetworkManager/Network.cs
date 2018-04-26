@@ -68,26 +68,27 @@ namespace NetworkManager
         public static UdpClient connection;
         public static string self;
         public static PID player;
-        public static Dictionary<string, PID> players;
-        public static Dictionary<string, Room> rooms;
+        public static Dictionary<string, PID> players = new Dictionary<string, PID>();
+        public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
         public static Room CurrentRoom;
         public static bool HANDSHAKEDONE = false;
-        public static void Connect(string ip, int port,string user,string pass)
+        public static bool Connect(string ip, int port,string _user,string _pass)
         {
-            Login(ip, port, user, pass);
+            //Login(ip, port, user, pass);
             ClientDataManager.INIT();
             connection = new UdpClient(port);
             try
             {
                 connection.Connect(ip, port);
-                Byte[] sendBytes = new byte[] { 0, 0 };
-                SendData(sendBytes);
                 Thread t = new Thread(new ThreadStart(ThreadProc));
                 t.Start();
+                SendData(NetUtils.PieceCommand(new object[] {Network.LOGIN, _user, _pass}));
+                return true;
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
+                return false;
             }
         }
         public static void Host(int port)
@@ -109,6 +110,7 @@ namespace NetworkManager
                 DataRecievedArgs data = new DataRecievedArgs();
                 data.Response = returnData;
                 data.RawResponse = receiveBytes;
+                data.SenderRef = sender;
                 OnDataRecieved(data);
             }
         }
@@ -122,7 +124,7 @@ namespace NetworkManager
                 DownloadPID(pid);
                 while (!players.ContainsKey(pid))
                 {
-                    //Lets wait it out...
+                    DoMainClientStuff();
                 }
                 return players[pid];
             }
@@ -138,7 +140,7 @@ namespace NetworkManager
                 DownloadRoom(rid);
                 while (!rooms.ContainsKey(rid))
                 {
-                    //Lets wait it out...
+                    DoMainClientStuff();
                 }
                 return rooms[rid];
             }
@@ -261,10 +263,10 @@ namespace NetworkManager
         }
         public static void INITCONNECTION()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { INIT });
+            byte[] temp = NetUtils.PieceCommand(new object[] { INIT, self });
             SendData(temp);
         }
-        public static void SatHello()
+        public static void SayHello()
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { HELLO });
             SendData(temp);
@@ -304,20 +306,24 @@ namespace NetworkManager
             Consume(data[0]);
             connection.Send(data, data.Length, sender);
         }
+        public static IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
         public static void ThreadProc()
         {
-            IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
             while (true)
             {
-                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
-                if (receiveBytes.Length > 0)
-                {
-                    string returnData = Encoding.ASCII.GetString(receiveBytes);
-                    DataRecievedArgs data = new DataRecievedArgs();
-                    data.Response = returnData;
-                    data.RawResponse = receiveBytes;
-                    OnDataRecieved(data);
-                }
+                DoMainClientStuff();
+            }
+        }
+        public static void DoMainClientStuff()
+        {
+            Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+            if (receiveBytes.Length > 0)
+            {
+                string returnData = Encoding.ASCII.GetString(receiveBytes);
+                DataRecievedArgs data = new DataRecievedArgs();
+                data.Response = returnData;
+                data.RawResponse = receiveBytes;
+                OnDataRecieved(data);
             }
         }
         /* -----------
