@@ -143,7 +143,6 @@ public class SettlementGenerator : FeatureGenerator
 		Debug.Log(GeneratorName + "Finished");
 	}
 
-
 	List<Tile> GetConnectionOrder(Tile start)
 	{
 		var output = new List<Tile>();

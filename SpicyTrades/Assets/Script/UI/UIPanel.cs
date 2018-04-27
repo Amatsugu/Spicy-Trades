@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public abstract class UIPanel : MonoBehaviour
 {
 
 	public RectTransform PanelBase { get; private set; }
 	public Button closeButton;
+	public TextMeshProUGUI titleText;
 	public bool hideOnStart = true;
 	public bool hideOnBlur = true;
 

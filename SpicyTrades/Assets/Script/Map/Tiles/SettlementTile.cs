@@ -22,6 +22,7 @@ public class SettlementTile : Tile
 	public Dictionary<ResourceTileInfo, float[]> ResourceCache { get; private set; }
 	public List<ResourceIdentifier> ResourceNeeds { get; private set; }
 	public List<Recipe> Recipes { get; private set; }
+	public string Description { get; set; }
 	[JsonIgnore]
 	public new SettlementTileInfo tileInfo;
 	public List<SettlementEvent> eventPool; 

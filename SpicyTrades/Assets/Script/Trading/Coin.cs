@@ -131,17 +131,17 @@ public struct Coin
 
 	public static bool operator <=(Coin a, Coin b)
 	{
-		return (a > b) || (a == b);
+		return (a < b) || (a == b);
 	}
 
 	public static bool operator <=(float a, Coin b)
 	{
-		return (a > b) || (a == b);
+		return (a < b) || (a == b);
 	}
 
 	public static bool operator <=(Coin a, float b)
 	{
-		return (a > b) || (a == b);
+		return (a < b) || (a == b);
 	}
 
 	public static bool operator ==(Coin a, Coin b)

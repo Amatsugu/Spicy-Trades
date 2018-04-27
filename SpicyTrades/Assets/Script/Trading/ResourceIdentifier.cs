@@ -15,7 +15,7 @@ public class ResourceIdentifier
 
 	public bool Match(ResourceTileInfo resource)
 	{
-		if (count == 0)
+		if (string.IsNullOrEmpty(this.resource) && count == 0)
 			return true;
 		if (type == NeedType.Category) //Categoric Needs
 		{

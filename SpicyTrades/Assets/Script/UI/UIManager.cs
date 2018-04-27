@@ -24,10 +24,9 @@ public class UIManager : MonoBehaviour
 		Instance = this;
 		GameMaster.GameReady += () => GameMaster.GameMap.OnMapSimulate += m =>
 		{
-			if (settlementPanel.IsOpen)
+			if (settlementPanel.IsOpen && settlementPanel.marketPanel.IsOpen)
 			{
-				settlementPanel.Refresh();
-				//ShowSettlementPanel(GameMaster.Player.CurrentTile);
+				settlementPanel.marketPanel.Refresh();
 			}
 		};
 		_windowList = pricePanel.contentBase.GetComponent<UIList>();
