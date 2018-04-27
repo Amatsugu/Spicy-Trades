@@ -60,6 +60,7 @@ namespace NetworkManager
         public const byte NO_UPDATES            = 0x0B;
         public const byte CANT_JOIN_ROOM        = 0x0C;
         public const byte MESSAGE_TO_LARGE      = 0x0D;
+        public const byte ROOM_ERROR            = 0x0E;
         //Chat codes
         public const byte CHAT_DM = 0x00;
         public const byte CHAT_RM = 0x01;
@@ -164,9 +165,9 @@ namespace NetworkManager
         {
             //
         }
-        public static void CreateRoom(string password) //This will trigger the player joined room event with you as the argument
+        public static void CreateRoom(string password="NONE") //This will trigger the player joined room event with you as the argument
         {//Might need to send map data as well
-            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self });
+            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self,password });
             SendData(temp);
         }
         public static void JoinRoom(string roomid)
@@ -188,7 +189,7 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { ROOMS, self });
             SendData(temp);
         }
-        public static void ListRooms(int pos, int count)
+        public static void ListRooms(int pos=0, int count=100)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTR, self, pos, count });
             SendData(temp);
@@ -236,14 +237,14 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { IHOST, self , roomid });
             SendData(temp);
         }
-        public static void KickPlayer(string roomid,string playerid)
+        public static void KickPlayer(string playerid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { KICK, self , roomid, playerid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { KICK, self, playerid });
             SendData(temp);
         }
-        public static void InviteFriend(string playerid, string roomid)
+        public static void InviteFriend(string playerid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self, playerid, roomid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self, playerid});
             SendData(temp);
         }
         public static void SetReady(bool ready,string roomid)
@@ -251,9 +252,9 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready, roomid });
             SendData(temp);
         }
-        public static void LeaveRoom(string roomid)
+        public static void LeaveRoom()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self, roomid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self});
             SendData(temp);
         }
         public static void GetResourceList()
@@ -268,7 +269,7 @@ namespace NetworkManager
         }
         public static void SayHello()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { HELLO });
+            byte[] temp = NetUtils.PieceCommand(new object[] { HELLO, self });
             SendData(temp);
         }
         public static void SendDM(Message msg,string playerid)
@@ -276,9 +277,9 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { CHATDM, self, msg, playerid });
             SendData(temp);
         }
-        public static void SendRoomChat(Message msg, string roomid)
+        public static void SendRoomChat(Message msg)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg, roomid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg});
             SendData(temp);
         }
         public static void SendChat(Message msg)
@@ -395,6 +396,16 @@ namespace NetworkManager
             EventHandler<RegisteredEventArgs> handler = Registered;
             handler(null, e);
         }
+        public static void OnRoomDataRecieved(GotRoomEventArgs e)
+        {
+            EventHandler<GotRoomEventArgs> handler = GotRoomData;
+            handler(null, e);
+        }
+        public static void OnPIDDataRecieved(GotPIDEventArgs e)
+        {
+            EventHandler<GotPIDEventArgs> handler = GotPIDData;
+            handler(null, e);
+        }
         public static event EventHandler<DataRecievedArgs> DataRecieved;
         public static event EventHandler<ChatDataArgs> Chat;
         public static event EventHandler<FriendRequestArgs> FriendRequested;
@@ -408,10 +419,20 @@ namespace NetworkManager
         public static event EventHandler<SyncEventArgs> SyncData;
         public static event EventHandler<LoginEventArgs> LoggedIn;
         public static event EventHandler<RegisteredEventArgs> Registered;
+        public static event EventHandler<GotRoomEventArgs> GotRoomData;
+        public static event EventHandler<GotPIDEventArgs> GotPIDData;
     }
     public class SyncEventArgs : EventArgs
     {
         public string Data { get; set; }
+    }
+    public class GotRoomEventArgs : EventArgs
+    {
+        public Room Room { get; set; }
+    }
+    public class GotPIDEventArgs : EventArgs
+    {
+        public PID Pid { get; set; }
     }
     public class RegisteredEventArgs : EventArgs
     {
@@ -479,7 +500,7 @@ namespace NetworkManager
     }
     public class ChatDataArgs : EventArgs
     {
-        public PID Speaker { get; set; }
+        public Message Message {get;set;}
         public int Flag { get; set; }
         public Room Room { get; set; }
     }
