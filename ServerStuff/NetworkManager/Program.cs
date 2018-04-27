@@ -17,16 +17,10 @@ namespace NetworkManager
             }
             Network.Error += OnError;
             Network.LoggedIn += OnLoggedIn;
-            //byte [] data = NetUtils.PieceCommand(new object[] { "epicknex", "password" });
-            //for (int i = 0; i < data.Length; i++)
-            //{
-            //    Console.Write(data[i] + ".");
-            //}
-            //Console.WriteLine("");
-            //object[] temp = NetUtils.FormCommand(data,new string[] {"s","s" });
-            //Console.WriteLine((string)temp[0]);
-            //Console.WriteLine((string)temp[1]);
-            //Console.ReadLine();
+            Network.GotRoomData += OnRoomDataRecieved;
+            Network.GotPIDData += OnPIDDataRecieved;
+            Network.Chat += OnChat;
+            Network.RoomList += OnRoomList;
         }
         public static void OnError(object sender, ErrorArgs e)
         {
@@ -36,8 +30,26 @@ namespace NetworkManager
         {
             Console.WriteLine("We are logged it!");
             PID test = Network.GetPID("12345678");
-            Console.WriteLine("Got PID");
-            Console.WriteLine(test.GetName());
+            Network.CreateRoom();
+            Network.LeaveRoom();
+            Network.ListRooms();
+        }
+        public static void OnPIDDataRecieved(object sender, GotPIDEventArgs e)
+        {
+            Console.WriteLine("PID: "+e.Pid.GetName());
+        }
+        public static void OnRoomDataRecieved(object sender, GotRoomEventArgs e)
+        {
+            Console.WriteLine("Room: " + e.Room.GetRoomID());
+            //Network.SendRoomChat(new Message("Hello this is a test of Room chat!", Network.player));
+        }
+        public static void OnChat(object sender, ChatDataArgs e)
+        {
+            Console.WriteLine(e.Message.GetPID().GetName()+": " + e.Message.GetMessage());
+        }
+        public static void OnRoomList(object sender, RoomListArgs e)
+        {
+            Console.WriteLine(e.Rooms.Length);
         }
     }
 }

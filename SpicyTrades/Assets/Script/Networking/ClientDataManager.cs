@@ -28,13 +28,14 @@ namespace NetworkManager
                 dat.ErrorCode = error;
                 dat.ErrorMessage = (string) objects[0];
                 Network.OnError(dat);
+                return;
             }
             ChatDataArgs globalchat;
             switch (command)
             {
                 case Network.HELLO:
                     Console.WriteLine("Got a hello from the server!");
-                    Network.SendData(new byte[] { 0 });
+                    Network.SendData(new byte[] { 0, 0 });
                     break;
                 case Network.LOGIN:
                     objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
@@ -78,8 +79,8 @@ namespace NetworkManager
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
                     Message msgglobal = (Message)objects[0];
                     globalchat = new ChatDataArgs();
-                    globalchat.Speaker = msgglobal.GetPID();
                     globalchat.Flag = Network.CHAT_GLOBAL;
+                    globalchat.Message = msgglobal;
                     Network.OnChat(globalchat);
                     break;
                 case Network.REQUEST:
@@ -146,22 +147,25 @@ namespace NetworkManager
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
+                    LoginEventArgs logargs = new LoginEventArgs();
+                    logargs.response = "Logged in!";
+                    Network.OnLogin(logargs);
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
                     Message msgdm = (Message)objects[0];
                     globalchat = new ChatDataArgs();
-                    globalchat.Speaker = msgdm.GetPID();
                     globalchat.Flag = Network.CHATDM;
+                    globalchat.Message = msgdm;
                     Network.OnChat(globalchat);
                     break;
                 case Network.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s" });
                     Message msgrm = (Message)objects[0];
                     globalchat = new ChatDataArgs();
-                    globalchat.Speaker = msgrm.GetPID();
                     globalchat.Room = Network.GetRoom((string)objects[1]);
                     globalchat.Flag = Network.CHATDM;
+                    globalchat.Message = msgrm;
                     Network.OnChat(globalchat);
                     break;
                 case Network.ROOMS:
@@ -171,12 +175,20 @@ namespace NetworkManager
                     Network.OnRoomCount(count);
                     break;
                 case Network.GROOM:
-                    objects = NetUtils.FormCommand(data, new string[] { "r", "s" });
-                    Network.rooms[(string)objects[1]] = (Room)objects[0];
+                    objects = NetUtils.FormCommand(data, new string[] { "r" });
+                    Room temp = (Room)objects[0];
+                    Network.rooms[temp.GetRoomID()] = temp;
+                    GotRoomEventArgs room = new GotRoomEventArgs();
+                    room.Room = temp;
+                    Network.OnRoomDataRecieved(room);
                     break;
                 case Network.GPID:
-                    objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
-                    Network.players[(string)objects[1]] = (PID)objects[0];
+                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    PID temppid = (PID)objects[0];
+                    Network.players[temppid.GetID()] = temppid;
+                    GotPIDEventArgs pid = new GotPIDEventArgs();
+                    pid.Pid = (PID)objects[0];
+                    Network.OnPIDDataRecieved(pid);
                     break;
                 case Network.SYNC://id, numpieces, cpiece, payload
                     objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });

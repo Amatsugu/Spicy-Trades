@@ -177,10 +177,10 @@ namespace NetworkManager
                     self = (string)objects[0];
                     playerid = (string)objects[1];
                     Network.SendData(NetUtils.PieceCommand(new object[] {
-                    Network.REQUEST,
-                    Network.NO_ERROR,
-                    GetPlayerPID (self).GetID ()
-                }));
+                        Network.REQUEST,
+                        Network.NO_ERROR,
+                        GetPlayerPID (self).GetID ()
+                    }));
                     //TODO FINISH THIS! This needs the database, but will alert the user if online
                     break;
                 case Network.LISTF:

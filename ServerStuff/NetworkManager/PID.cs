@@ -12,9 +12,9 @@ namespace NetworkManager
         private bool isFriend;
         private int MAX_USERNAME_SIZE=128;
         private int MAX_ID_SIZE = 8;
-        private int UID_BYTE_SIZE; // see constructor for how it is modified
+        private int UID_BYTE_SIZE = 2 + 8 + 128; // see constructor for how it is modified
         private IPEndPoint connection;
-        public static int PID_SIZE;
+        public static int PID_SIZE = 2 + 8 + 128;
         //Max Username 128 characters
         //Id size 8 characters
         //ToBytes() will be used 
@@ -30,8 +30,6 @@ namespace NetworkManager
             this.id = id;
             this.name = name;
             this.isFriend = isFriend;
-            UID_BYTE_SIZE = 2 + MAX_ID_SIZE + MAX_USERNAME_SIZE;
-            PID_SIZE = UID_BYTE_SIZE;
         }
         public void SetConnection(IPEndPoint ip)
         {

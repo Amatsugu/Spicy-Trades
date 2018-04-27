@@ -15,7 +15,7 @@ namespace NetworkManager
         {
             this.message = message;
             this.pid = pid;
-            this.time = DateTime.Now;
+            time = DateTime.Now;
         }
         /*
          * So the Message object has this byte format:

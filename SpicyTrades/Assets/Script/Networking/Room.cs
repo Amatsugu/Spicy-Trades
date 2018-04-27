@@ -15,7 +15,7 @@ namespace NetworkManager
         private byte theyHost;//set to the index in the array whos host
         private bool host;//ture if your that lucky guy, tbh if you create a room then this is true anyway
         private bool isReady;//client side
-        private bool roomJoined=false;
+        private bool roomJoined = false;
         private int numOfPlayers;
 
         public Room(string roomID, string roomPass, bool host)
@@ -52,9 +52,9 @@ namespace NetworkManager
                 {
                     roomPass = NetUtils.ConvertByteToString(roomdata.SubArray(13, 128));
                 }
-                for(int i = 0; i < numOfPlayers; i++)
+                for (int i = 0; i < numOfPlayers; i++)
                 {
-                    members[i] = new PID(roomdata.SubArray(13+_pass, PID.PID_SIZE));
+                    members[i] = new PID(roomdata.SubArray(13 + _pass, PID.PID_SIZE));
                 }
             }
             else
@@ -64,19 +64,19 @@ namespace NetworkManager
         }
         public byte[] ToBytes()
         {
-            byte Type = Network.ROOM;
             int ppl = numOfPlayers;
             int _pass;
             byte[] pass;
             if (roomPass != "")
             {
                 _pass = 128;
-                pass = new byte[128];
-            } else
+                pass = new byte[128]; // Pass is used you dumb machine
+            }
+            else
             {
                 _pass = 0;
             }
-            int sendSize = (ppl * members[0].GetSize())+1+1+ MAX_ID_SIZE +1+ 1+1+ _pass; // The data stuff
+            int sendSize = (ppl * members[0].GetSize()) + 1 + 1 + MAX_ID_SIZE + 1 + 1 + 1 + _pass; // The data stuff
             byte[] send = new byte[sendSize];
             send[0] = Network.ROOM;
             send[1] = (byte)ppl;
@@ -124,10 +124,10 @@ namespace NetworkManager
                     }
                 }
             }
-            for(int p = 0; p < ppl; p++)
+            for (int p = 0; p < ppl; p++)
             {
                 byte[] temp = members[p].ToBytes();
-                for (int i = 0; i < temp.Length;i++)
+                for (int i = 0; i < temp.Length; i++)
                 {
                     send[_pass + 13 + i + (p * members[0].GetSize())] = temp[i];
                 }
@@ -141,7 +141,7 @@ namespace NetworkManager
         public int GetNumPlayers()
         {
             int sum = 0;
-            for (int i = 0; i < 4;i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (members[i] != null)
                 {
@@ -165,9 +165,9 @@ namespace NetworkManager
         public void AddMember(PID member)
         {
             members[numOfPlayers++] = member;
-            Network.InviteFriend(roomID, member.GetID()); // Its started
+            Network.InviteFriend(member.GetID()); // Its started
         }
-        public void AddMember(PID member,bool noprob)
+        public void AddMember(PID member, bool noprob)
         {
             members[numOfPlayers++] = member;
         }
@@ -175,9 +175,9 @@ namespace NetworkManager
         {
             PID[] temp = new PID[MAX_MEMBERS];
             int count = 0;
-            for (int i = 0; i < MAX_MEMBERS; i++)
+            for (int i = 0; i < numOfPlayers; i++)
             {
-                if (members[i].GetID()!=member.GetID())
+                if (members[i].GetID() != member.GetID())
                 {
                     temp[count++] = members[i];
                 }
@@ -188,7 +188,7 @@ namespace NetworkManager
         {
             if (host)
             {
-                Network.KickPlayer(roomID, member.GetID()); // Its started
+                Network.KickPlayer(member.GetID()); // Its started
                 return true;
             }
             return false;
@@ -199,16 +199,16 @@ namespace NetworkManager
         }
         public void LeaveRoom()
         {
-            Network.LeaveRoom(roomID); //Tells the server you are leaving
+            Network.LeaveRoom(); //Tells the server you are leaving
         }
         public void SetReady(bool b)
         {
             isReady = b;
-            Network.SetReady(b,roomID); //DW Server will not mirror commands sent to you...
+            Network.SetReady(b, roomID); //DW Server will not mirror commands sent to you...
         }
-        public void SetReady(bool b,PID player)
+        public void SetReady(bool b, PID player)
         {
-            for(int i = 0; i < MAX_MEMBERS; i++)
+            for (int i = 0; i < MAX_MEMBERS; i++)
             {
                 if (player.GetID() == members[i].GetID())
                 {
@@ -223,7 +223,7 @@ namespace NetworkManager
         }
         public void SendChat(string message)
         {
-            Network.SendRoomChat(new Message(message,Network.player),roomID);
+            Network.SendRoomChat(new Message(message, Network.player));
         }
     }
 }
