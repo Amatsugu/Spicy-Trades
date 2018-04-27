@@ -1,4 +1,5 @@
-﻿using System.Collections;
+using Newtonsoft.Json;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,7 @@ public struct HexCoords
 {
 	public int X { get; private set; }
 	public int Y { get; private set; }
+	[JsonIgnore]
 	public int Z
 	{
 		get
@@ -26,6 +28,7 @@ public struct HexCoords
 		return new HexCoords(x - y / 2, y);
 	}
 
+	[JsonIgnore]
 	public int OffsetX
 	{
 		get
@@ -34,6 +37,7 @@ public struct HexCoords
 		}
 	}
 
+	[JsonIgnore]
 	public int OffsetY
 	{
 		get

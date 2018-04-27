@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,8 +8,9 @@ public class PlayerSpawner : FeatureGenerator
 	public GameObject playerPrefab;
 	public override void Generate(Map map)
 	{
-		var playerCharacter = Instantiate(playerPrefab, map.Capital.WolrdPos, Quaternion.Euler(-60, 0, 0)).GetComponent<Player>();
-		playerCharacter.SetTile(map.Capital);
-		map.AddPlayer(playerCharacter, true);
+		var playerCharacter = Instantiate(playerPrefab, map.Capital.WolrdPos, Quaternion.Euler(-60, 0, 0)).GetComponent<PlayerObject>();
+		var player = new Player(playerCharacter);
+		player.SetTile(map.Capital);
+		map.AddPlayer(player, true);
 	}
 }

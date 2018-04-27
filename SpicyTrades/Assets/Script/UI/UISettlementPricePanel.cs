@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UISettlementPricePanel : UIPanel
 {
-	public TextMeshProUGUI titleText;
 	public RectTransform contentBase;
 	public GameObject resourceListItem;
 	public TextMeshProUGUI noPriceText;
@@ -15,6 +14,8 @@ public class UISettlementPricePanel : UIPanel
 	public void Show(SettlementTile tile)
 	{
 		Show();
+		if (GameMaster.CameraPan != null)
+			GameMaster.CameraPan.isPaused = true;
 		DestroyChildren(contentBase);
 		titleText.text = tile.Name;
 		var clickEvent = new Button.ButtonClickedEvent();
@@ -45,6 +46,8 @@ public class UISettlementPricePanel : UIPanel
 
 	public override void Hide()
 	{
+		if (GameMaster.CameraPan != null)
+			GameMaster.CameraPan.isPaused = false;
 		noPriceText.gameObject.SetActive(false);
 		base.Hide();
 		DestroyChildren(contentBase);

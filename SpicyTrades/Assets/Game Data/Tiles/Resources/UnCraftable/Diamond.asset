@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
+  m_Name: Diamond
+  m_EditorClassIdentifier: 
+  tag: Resource
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 0.5441177, g: 0.84908736, b: 1, a: 1}
+  cost: 0
+  tileRenderers: []
+  category: 2
+  tags:
+  - Gem
+  requiredWorkers: 5
+  yeild: 20
+  basePrice: 5
+  description: An extremely rare and valuable stone and one of the hardest substances
+    in the world. Revered as healing stones and used by royalty as jewelry. A well-cut
+    diamond is worth royals more than an uncut one, but the process makes them slightly
+    undesirable.
+  tooltip: "Wow\u2026 a diamond! Looks pretty rough around the edges though. I wonder
+    if it could be improved somehow\u2026 (uncut) Wow! A cut diamond! This must be
+    worth a fortune. (cut)"
+  icon: {fileID: 0}
+  recipe: {fileID: 0}

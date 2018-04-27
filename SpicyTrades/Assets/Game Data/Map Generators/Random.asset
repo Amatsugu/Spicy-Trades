@@ -17,6 +17,7 @@ MonoBehaviour:
   featureGenerators:
   - {fileID: 11400000, guid: 20c1a71c5036ca64ab9f24cd62486203, type: 2}
   - {fileID: 11400000, guid: de7c548e92e27ce479a7bbd86dedc918, type: 2}
+  - {fileID: 11400000, guid: 3822c9e86cae8ab41bcea249cc43493a, type: 2}
   - {fileID: 11400000, guid: f02fc7ac3bf25ce40b6e330bc3c6b264, type: 2}
   Regen: 0
   resolution: 493

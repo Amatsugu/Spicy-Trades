@@ -1,9 +1,9 @@
 CREATE TABLE public.recipes(
-	id_recipe character varying(45) NOT NULL,
-	ingredient1 character varying,
-	ingredients2 character varying,
-	method_ID character varying,
-	id_Resources Serial,
+	id_recipe VARCHAR(45) NOT NULL,
+	ingredient1 TEXT, /*FK resource*/
+	ingredients2 TEXT, /*FK resource*/
+	method_ID TEXT, /*Change to enum, will till you the values*/
+	id_Resources Serial, /*What is this for?*/
 	CONSTRAINT recipes_pkey PRIMARY KEY (id_recipe)
 
 );
@@ -15,20 +15,19 @@ ALTER TABLE public.recipes OWNER TO postgres;
 CREATE TABLE public.Resources(
 	id_Resources uuid,
 	price float,
-	resource_name character varying NOT NULL,
-	recipe character varying,
+	resource_name TEXT NOT NULL,
+	recipe TEXT, /*FK resource*/
 	player_ID bigint,
-	description character varying,
-	tool_tip character varying,
+	description TEXT,
+	tool_tip TEXT,
 	Is_Gatherable boolean,
+	tags TEXT[],
 	CONSTRAINT Resources_pkey PRIMARY KEY (id_Resources)
-
-
 );
 
 CREATE TABLE public.session(
 	session_ID serial,
-	lastLogin character varying,
+	lastLogin TEXT,
 	last_active_ID bigint,
 	last_active_Date bit varying,
 	CONSTRAINT session_pkey PRIMARY KEY (session_ID)
@@ -39,8 +38,8 @@ ALTER TABLE public.session OWNER TO postgres;
 
 CREATE TABLE public.players(
 	player_ID bigint NOT NULL,
-	username character varying NOT NULL,
-	password character varying,
+	username TEXT NOT NULL,
+	password TEXT,
 	session_ID bigint,
 	CONSTRAINT players_pkey PRIMARY KEY (player_ID)
 

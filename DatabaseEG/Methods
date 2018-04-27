@@ -1,0 +1,122 @@
+﻿
+
+using System.Security.Cryptography;
+using Npgsql;
+using System;
+
+class Database
+{
+
+
+    public const string CONN_STRING = "Host=myserver;Username=mylogin;Password=mypass;Database=mydatabase";
+
+
+    public static PID Login(string email1, string password1)
+    {
+        using (var conn = new NpgsqlConnection(CONN_STRING))
+        {
+            conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = $"SELECT password WHERE email = {Uri.EscapeDataString(email1)}";
+                string passwordHash = (string)cmd.ExecuteScalar();
+                if (!VerifyPassword(password1, passwordHash))
+                    return null;
+
+                cmd.CommandText = $"SELECT username, email  WHERE password = {passwordHash}";
+                using (var reader = cmd.ExecuteReader())
+                {
+                    return new PID(Uri.UnescapeDataString(reader.GetString(0)), reader.GetString(1));
+
+                }
+
+            }
+
+        }
+    }
+
+
+    internal static bool CheckEmailExists(string email)
+    {
+        using (var con = GetConnection())
+        {
+            using (var cmd = con.CreateCommand())
+            {
+                cmd.CommandText = $"SELECT email FROM {mydatabase.users} WHERE email = '{Uri.EscapeDataString(email)}'";
+                return cmd.ExecuteReader().HasRows;
+            }
+        }
+    }
+
+
+
+    internal static bool CheckFriendExists(string username)
+    {
+        using (var con = GetConnection())
+        {
+            using (var cmd = con.CreateCommand())
+            {
+                cmd.CommandText = $"SELECT email FROM {mydatabase.users} WHERE username = '{Uri.EscapeDataString(username)}'";
+                return cmd.ExecuteReader().HasRows;
+            }
+        }
+    }
+
+
+
+    private static bool Register(string username1, string password1, string email1)
+    {
+        try
+        {  
+            
+            
+
+            using (var conn = new NpgsqlConnection(CONN_STRING))
+            {
+
+                    if (CheckEmailExists(email1))
+                        
+                conn.Open();
+                using (var cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = $"INSERT INTO players(player_ID,username,email,password) VALUES ( default, '{Uri.EscapeDataString(username1) }' , ' {(password1)}' , ' {Uri.EscapeDataString(email1)} ')";
+                    cmd.ExecuteNonQuery();
+                    return true;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+
+    }
+
+}
+
+
+
+private static bool AddFriend (string selfusername, string username1)
+{
+    try
+    {
+        using (var conn = new NpgsqlConnection(CONN_STRING))
+        {
+
+            if (CheckFriendExists(username1))
+
+                conn.Open();
+            using (var cmd = conn.CreateCommand())
+            {
+                cmd.CommandText = $"INSERT INTO FriendsList(flist) SELECT player_ID FROM players where  ('{Uri.EscapeDataString(username1) }') WHERE player_ID  = ({ Uri.EscapeDataString(selfusername )}";
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+        }
+    }
+    catch (Exception e)
+    {
+        return false;
+    }
+
+}

@@ -15,3 +15,5 @@ MonoBehaviour:
   resourceTile: {fileID: 1295639896062918, guid: 8befeb34aae345649913de7ccd51f1cc,
     type: 2}
   resourceProvider: {fileID: 11400000, guid: 2cc54f8399e287341bb9e691c67a9175, type: 2}
+  recipeList: {fileID: 11400000, guid: 1a21af8c5f1ead34c981193f184135ee, type: 2}
+  factoryList: {fileID: 11400000, guid: 33d1e47ea1e2aa1438cac1c50d00778d, type: 2}

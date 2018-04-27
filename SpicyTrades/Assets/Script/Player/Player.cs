@@ -1,116 +1,100 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using NetworkManager;
+using Newtonsoft.Json;
 
-public class Player : MonoBehaviour
+public class Player
 {
-	public float moveSpeed = 1f;
-	public bool isMoving = false;
-	public TextMeshProUGUI hudText;
+	public string Id { get; private set; }
+	public string Username { get; private set; }
 	public Coin Money { get; private set; }
+	[JsonIgnore]
+	public PlayerObject playerObject;
+	[JsonIgnore]
 	public SettlementTile CurrentTile
 	{
 		get
 		{
-			return _curTile;
+			return GameMaster.GameMap[_curTile.ToIndex()] as SettlementTile;
 		}
 	}
+	[JsonProperty]
+	private HexCoords _curTile;
+	
+	public List<InventoryItem> inventory;
 
-	private SettlementTile _curTile;
-	private SpriteRenderer _sprite;
-	private Coroutine _curAnimation;
-	private List<InventoryItem> _inventory;
-
-	private void Start()
+	public Player(PlayerObject player)
 	{
-		_sprite = GetComponent<SpriteRenderer>();
-		_inventory = new List<InventoryItem>();
+		playerObject = player;
+		player.SetPlayer(this);
+		inventory = new List<InventoryItem>();
 		Money = new Coin(10000f);
 		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
 
+	public void MoveTo(SettlementTile tile, bool makeTransaction = true)
+	{
+		playerObject.MoveTo(tile);
+		if(makeTransaction)
+		{
+			GameMaster.SendTransaction(new Transaction
+			{
+				type = TransactionType.Move,
+				playerId = Id,
+				targetSettlement = tile.Position
+			});
+		}
+	}
+
 	public void SetTile(SettlementTile tile)
 	{
-		_curTile = tile;
+		_curTile = tile.Position;
 		GameMaster.CachePrices(tile);
 		UIManager.ShowSettlementPanel(tile);
-		transform.position = _curTile.WolrdPos;
-	}
-
-	public void MoveTo(SettlementTile tile)
-	{
-		if (isMoving)
-			return;
-		isMoving = true;
-		if (_curAnimation != null)
-			StopCoroutine(_curAnimation);
-		_curAnimation = StartCoroutine(MoveAnimation(Pathfinder.FindPath(GameMaster.GameMap[HexCoords.FromPosition(transform.position)], tile.Center)));
-	}
-
-	IEnumerator MoveAnimation(Tile[] path)
-	{
-		for (int i = 1; i < path.Length; i++)
-		{
-			float time = 0;
-			while(time < 1)
-			{
-				transform.position = Vector3.Lerp(path[i-1].WolrdPos, path[i].WolrdPos, time += Time.deltaTime * moveSpeed);
-				if (path[i - 1].WolrdPos.x > path[i].WolrdPos.x)
-					_sprite.flipX = true;
-				else
-					_sprite.flipX = false;
-				yield return new WaitForEndOfFrame();
-			}
-		}
-		SetTile(path.Last() as SettlementTile);
-		isMoving = false;
+		playerObject.transform.position = tile.WolrdPos;
 	}
 
 	public void AddItem(InventoryItem item)
 	{
-		var invItem = _inventory.FirstOrDefault(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.FirstOrDefault(i => i.Resource.resource == item.Resource.resource);
 		if (invItem == null)
 		{
 			invItem = new InventoryItem
 			{
-				Package = item.Package,
+				Resource = item.Resource,
 				Cost = item.Cost
 			};
-			_inventory.Add(invItem);
+			inventory.Add(invItem);
 		}else
 		{
-			invItem.Cost = invItem.Cost + invItem.Cost;
-			invItem.Cost /= 2f;
-			var p = invItem.Package;
-			p.ResourceUnits = p.ResourceUnits + item.Package.ResourceUnits;
-			invItem.Package = p;
+			invItem.Cost = (invItem.Cost + invItem.Cost)/2f;
+			invItem.Resource.count += item.Resource.count;
 		}
 	}
 
 	public bool TakeItem(InventoryItem item)
 	{
-		var invItem = _inventory.First(i => i.Package.Resource == item.Package.Resource);
+		var invItem = inventory.First(i => i.Resource.resource == item.Resource.resource);
 		if (invItem == null)
 			return false;
 		else
 		{
-			if(invItem.Package.ResourceUnits < item.Package.ResourceUnits)
+			if(invItem.Resource.count < item.Resource.count)
 				return false;
 			else
 			{
-				if (invItem.Package.ResourceUnits == item.Package.ResourceUnits)
+				if (invItem.Resource.count == item.Resource.count)
 				{
-					_inventory.Remove(invItem);
+					inventory.Remove(invItem);
 					return true;
 				}else
 				{
-					var p = invItem.Package;
-					p.ResourceUnits -= item.Package.ResourceUnits;
-					invItem.Package = p;
+					invItem.Resource.count -= item.Resource.count;
 					return true;
 				}
 			}
@@ -132,11 +116,50 @@ public class Player : MonoBehaviour
 		return true;
 	}
 
+	public bool Sell(ResourceTileInfo resource, float count, SettlementTile settlement, bool makeTransaction = true)
+	{
+		float price;
+		if (settlement.ResourceCache.ContainsKey(resource))
+			price = settlement.ResourceCache[resource][1] * resource.basePrice;
+		else
+			price = 1.5f * resource.basePrice;
+		if (settlement.Money >= price)
+		{
+			settlement.AddResource(resource, count);
+			settlement.Money -= price;
+			AddMoney(price);
+			TakeItem(new InventoryItem
+			{
+				Cost = price,
+				Resource = new ResourceIdentifier
+				{
+					resource = resource.name,
+					count = count
+				}
+			});
+			if(makeTransaction)
+			{
+				GameMaster.SendTransaction(new Transaction
+				{
+					type = TransactionType.Sell,
+					playerId = Id,
+					resources = new ResourceIdentifier
+					{
+						resource = resource.name,
+						count = count
+					}
+				});
+			}
+			return true;
+		}
+		return false;
+	}
+
 #if DEBUG
 	public void LogItems()
 	{
-		foreach (var p in _inventory)
-			Debug.Log(p.Package.Resource + " : " + p.Package.ResourceUnits);
+		foreach (var p in inventory)
+			Debug.Log(p.Resource.resource + " : " + p.Resource.count);
 	}
 #endif
 

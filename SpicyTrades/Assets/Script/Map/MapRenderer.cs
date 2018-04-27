@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +12,6 @@ public class MapRenderer : MonoBehaviour
 	public GameRegistry registry;
 	public Map map;
 	public float nextTick;
-	private float f = 0;
 
     // Use this for initialization
     void Awake()
@@ -36,7 +36,7 @@ public class MapRenderer : MonoBehaviour
     {
 		if(nextTick <= Time.time)
 		{
-			Debug.Log("Simulate");
+			//Debug.Log("Simulate");
 			var time = DateTime.Now;
 			map.Simulate(1);
 			nextTick = Time.time + GameMaster.TickRate;
@@ -50,6 +50,9 @@ public class MapRenderer : MonoBehaviour
 
 	private void OnGUI()
 	{
+		GUI.skin.label.fontSize = 20;
+		GUI.skin.label.normal.textColor = Color.black;
+		GUI.skin.label.fontStyle = FontStyle.Bold;
 		GUILayout.Label("Time to next Tick " + (nextTick - Time.time));
 		GUILayout.Label(GameMaster.CurrentTick.ToString());
 	}

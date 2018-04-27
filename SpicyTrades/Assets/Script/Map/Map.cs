@@ -1,4 +1,5 @@
-﻿using System;
+using Newtonsoft.Json;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,16 +7,16 @@ using System.Linq.Expressions;
 using System.Text;
 using UnityEngine;
 
-[Serializable]
 public class Map : IEnumerable<Tile>
 {
 	public Tile[] Tiles { get; private set; }
-	public List<SettlementTile> Towns { get; private set; }
+	public List<SettlementTile> Settlements { get; private set; }
 	public SettlementTile Capital { get; private set; }
 	public List<Player> Players { get; private set; }
 	public Player CurrentPlayer { get; private set; }
 	public int Height { get; private set; }
 	public int Width { get; private set; }
+	[JsonIgnore]
 	public int Length { get
 		{
 			return Height * Width;
@@ -24,6 +25,7 @@ public class Map : IEnumerable<Tile>
 
 	public readonly int Seed;
 
+	[JsonIgnore]
 	public int TileCount
 	{
 		get
@@ -41,7 +43,7 @@ public class Map : IEnumerable<Tile>
 		Height = height;
 		Width = width;
 		Tiles = new Tile[height * width];
-		Towns = new List<SettlementTile>();
+		Settlements = new List<SettlementTile>();
 		Players = new List<Player>();
 	}
 
@@ -93,19 +95,9 @@ public class Map : IEnumerable<Tile>
 		return this[x, y, z];
 	}
 
-	public IEnumerable<SettlementTile> GetTowns()
+	public IEnumerable<SettlementTile> GetSettlements()
 	{
 		return from Tile t in Tiles where t.GetType() == typeof(SettlementTile) select t as SettlementTile;
-	}
-
-	public string ToJSON() //TODO: Implement Proper Serialization
-	{
-		return JsonUtility.ToJson(this);
-	}
-
-	public static Map FromJSON(string json)
-	{
-		return JsonUtility.FromJson<Map>(json);
 	}
 
 	IEnumerator<Tile> IEnumerable<Tile>.GetEnumerator()
@@ -122,7 +114,7 @@ public class Map : IEnumerable<Tile>
 	{
 		var t = new SettlementTile(town, tile.parent, tile.Position, tile.outerRadius);
 		this[tile.Position.ToIndex()] = t;
-		Towns.Add(t);
+		Settlements.Add(t);
 		return t;
 	}
 
@@ -148,7 +140,7 @@ public class Map : IEnumerable<Tile>
 		foreach(Tile t in this)
 			t.Destroy();
 		foreach (var player in Players)
-			UnityEngine.Object.Destroy(player.gameObject);
+			UnityEngine.Object.Destroy(player.playerObject.gameObject);
 	}
 
 	public byte[] Simulate(int ticks)
@@ -156,9 +148,10 @@ public class Map : IEnumerable<Tile>
 		for (int i = 0; i < ticks; i++)
 		{
 			UnityEngine.Random.InitState(GameMaster.GameMap.Seed + GameMaster.CurrentTick);
-			foreach (var town in Towns)
+			foreach (var town in Settlements)
 				town.Simulate();
-			foreach (var town in Towns) //TODO: Do we do this
+			Capital.Simulate();
+			foreach (var town in Settlements) //TODO: Do we do this
 				town.NegotiateTrade();
 			GameMaster.CurrentTick++;
 		}
@@ -186,6 +179,9 @@ public class Map : IEnumerable<Tile>
 		T nTile;
 		switch(newTile.TileType)
 		{
+			case TileType.Factory:
+				nTile = new FactoryTile(newTile as FactoryTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
+				break;
 			case TileType.Resource:
 				nTile = new ResourceTile(newTile as ResourceTileInfo, oldTile.parent, pos, oldTile.outerRadius) as T;
 				break;

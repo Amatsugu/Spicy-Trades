@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
+  m_Name: Cotton
+  m_EditorClassIdentifier: 
+  tag: Resource
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 0.8235294, g: 0.8235294, b: 0.8235294, a: 1}
+  cost: 0
+  tileRenderers: []
+  category: 0
+  tags:
+  - Crop
+  - Fiber
+  - Material
+  requiredWorkers: 5
+  yeild: 20
+  basePrice: 0.6
+  description: 'A soft fiber that grows from cotton plants. The fiber is used to create
+    yarn or threads and woven into textiles and clothing. '
+  tooltip: "A bundle of cotton. Not as soft as you thought it would be\u2026 Needs
+    to be processed somehow."
+  icon: {fileID: 0}
+  recipe: {fileID: 0}

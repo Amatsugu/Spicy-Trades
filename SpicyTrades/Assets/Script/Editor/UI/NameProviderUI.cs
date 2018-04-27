@@ -9,7 +9,6 @@ using UnityEngine;
 class NameProviderUI : Editor
 {
 	private NameProvider nameProvider;
-	private bool rawInput = true;
 	private string rawData;
 	private void OnEnable()
 	{

@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -8,6 +9,7 @@ public class Tile
 	public HexCoords Position { get; private set; }
 	public float Cost { get; private set; }
 	public Vector3 WolrdPos { get; private set; }
+	[JsonIgnore]
 	public GameObject ThisGameObject { get; private set; }
 
 	internal void Hover()
@@ -28,13 +30,15 @@ public class Tile
 			return tileInfo.tag;
 		}
 	}
+	[JsonIgnore]
 	public TileInfo tileInfo;
 
-	internal Transform parent;
-	internal float outerRadius;
+	[JsonIgnore]
+	public Transform parent;
+	public float outerRadius;
 
 
-
+	[JsonIgnore]
 	private Dictionary<string, object> _renderData;
 	protected SpriteRenderer _sprite;
 	private Color _sCol;

@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
+  m_Name: Corn
+  m_EditorClassIdentifier: 
+  tag: Resource
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 1, g: 0.8482759, b: 0, a: 1}
+  cost: 0
+  tileRenderers: []
+  category: 1
+  tags:
+  - Grain
+  - Food
+  - Crop
+  - Produce
+  requiredWorkers: 5
+  yeild: 20
+  basePrice: 0.2
+  description: A tall growing grain that produces kernels, often yellow colored but
+    may vary from blue, red, purple and white-ish, on long ears. The kernels may be
+    replanted as seeds and have a variety of uses amongst food and animal feed.
+  tooltip: "A bushel of corn. Looks pretty tasty\u2026"
+  icon: {fileID: 0}
+  recipe: {fileID: 0}

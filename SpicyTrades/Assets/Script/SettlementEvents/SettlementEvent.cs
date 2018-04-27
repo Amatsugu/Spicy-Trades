@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Data Providers/Event")]
 [Serializable]
 public class SettlementEvent
 {
@@ -12,7 +11,7 @@ public class SettlementEvent
 	[Range(0, 100)]
 	public int Chance;
 
-	public List<ResourceNeed> resourceDemands = new List<ResourceNeed>();
+	public List<ResourceIdentifier> resourceDemands = new List<ResourceIdentifier>();
 	public int duration;
 	public int cooldown;
 	public SettlementType location;

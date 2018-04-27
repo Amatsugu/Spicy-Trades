@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7fc73d62a7561a47844fbd3354966fb, type: 3}
+  m_Name: Grape
+  m_EditorClassIdentifier: 
+  tag: Resource
+  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  color: {r: 0.65775865, g: 0, b: 0.8014706, a: 1}
+  cost: 0
+  tileRenderers: []
+  category: 1
+  tags:
+  - Food
+  - Material
+  requiredWorkers: 5
+  basePrice: 0.2
+  yeild: 20
+  description: A round fruit grown on vines known for its sweetness. Mostly used to
+    make wines. Could be used to make jams and candied grapes.
+  tooltip: "A sack of grapes. \u2026 Taste pretty sweet."
+  icon: {fileID: 0}
+  recipe: {fileID: 0}
