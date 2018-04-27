@@ -26,5 +26,5 @@ MonoBehaviour:
   description: "Laid by a hen. A constant reoccurring sight at the dinner table no
     matter one\u2019s standing. "
   tooltip: 'A dozen eggs. From a hen. Try not to drop them. '
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7992d0f71c471034ab29f1db58039042, type: 3}
   recipe: {fileID: 0}

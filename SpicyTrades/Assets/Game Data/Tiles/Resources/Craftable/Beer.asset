@@ -27,5 +27,5 @@ MonoBehaviour:
   description: An alcoholic drink produced from fermented barley, hops,  water and
     yeast. In common supply and usually part of any household's diet.
   tooltip: A barrel filled to the brim with beer. No minors allowed!
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 98ec4f45cdf503042b7306d05dfb89a5, type: 3}
   recipe: {fileID: 11400000, guid: ecc86819ce3d8cf4db9d41d3d9aad137, type: 2}

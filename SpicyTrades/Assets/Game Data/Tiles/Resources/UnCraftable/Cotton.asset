@@ -28,5 +28,5 @@ MonoBehaviour:
     yarn or threads and woven into textiles and clothing. '
   tooltip: "A bundle of cotton. Not as soft as you thought it would be\u2026 Needs
     to be processed somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 5654e49fda2f60b4dbb56afce825b685, type: 3}
   recipe: {fileID: 0}
