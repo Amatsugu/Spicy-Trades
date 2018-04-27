@@ -6,7 +6,6 @@ using UnityEngine.UI;
 
 public class UISettlementPricePanel : UIPanel
 {
-	public TextMeshProUGUI titleText;
 	public RectTransform contentBase;
 	public GameObject resourceListItem;
 	public TextMeshProUGUI noPriceText;

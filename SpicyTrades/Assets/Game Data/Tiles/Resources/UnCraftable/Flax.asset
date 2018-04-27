@@ -18,8 +18,9 @@ MonoBehaviour:
   tileRenderers: []
   category: 0
   tags:
-  - Plant
+  - Crop
   - Ingredient
+  - Textile
   requiredWorkers: 5
   yeild: 20
   basePrice: 1

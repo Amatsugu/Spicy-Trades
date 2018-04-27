@@ -18,7 +18,7 @@ MonoBehaviour:
   tileRenderers: []
   category: 0
   tags:
-  - Food
+  - Crop
   - Material
   requiredWorkers: 5
   yeild: 10

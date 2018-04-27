@@ -10,7 +10,7 @@ using UnityEngine;
 public class Map : IEnumerable<Tile>
 {
 	public Tile[] Tiles { get; private set; }
-	public List<SettlementTile> Towns { get; private set; }
+	public List<SettlementTile> Settlements { get; private set; }
 	public SettlementTile Capital { get; private set; }
 	public List<Player> Players { get; private set; }
 	public Player CurrentPlayer { get; private set; }
@@ -43,7 +43,7 @@ public class Map : IEnumerable<Tile>
 		Height = height;
 		Width = width;
 		Tiles = new Tile[height * width];
-		Towns = new List<SettlementTile>();
+		Settlements = new List<SettlementTile>();
 		Players = new List<Player>();
 	}
 
@@ -114,7 +114,7 @@ public class Map : IEnumerable<Tile>
 	{
 		var t = new SettlementTile(town, tile.parent, tile.Position, tile.outerRadius);
 		this[tile.Position.ToIndex()] = t;
-		Towns.Add(t);
+		Settlements.Add(t);
 		return t;
 	}
 
@@ -148,9 +148,10 @@ public class Map : IEnumerable<Tile>
 		for (int i = 0; i < ticks; i++)
 		{
 			UnityEngine.Random.InitState(GameMaster.GameMap.Seed + GameMaster.CurrentTick);
-			foreach (var town in Towns)
+			foreach (var town in Settlements)
 				town.Simulate();
-			foreach (var town in Towns) //TODO: Do we do this
+			Capital.Simulate();
+			foreach (var town in Settlements) //TODO: Do we do this
 				town.NegotiateTrade();
 			GameMaster.CurrentTick++;
 		}

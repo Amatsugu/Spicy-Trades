@@ -21,6 +21,7 @@ MonoBehaviour:
   - Grain
   - Food
   - Produce
+  - Crop
   - Material
   requiredWorkers: 5
   yeild: 21

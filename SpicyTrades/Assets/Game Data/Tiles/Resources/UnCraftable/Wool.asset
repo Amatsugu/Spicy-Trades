@@ -19,6 +19,7 @@ MonoBehaviour:
   category: 0
   tags:
   - Fabric
+  - Textile
   - Product
   requiredWorkers: 5
   yeild: 20
