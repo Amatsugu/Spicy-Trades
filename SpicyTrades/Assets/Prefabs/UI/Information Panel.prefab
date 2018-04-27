@@ -657,7 +657,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 224489529395451748}
   m_Direction: 2
   m_Value: 0
-  m_Size: 0
+  m_Size: 0.99999285
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -787,10 +787,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 486ece638c56496469c65ac1ef2a1f5a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  closeButton: {fileID: 0}
-  hideOnStart: 1
-  hideOnBlur: 0
+  closeButton: {fileID: 114301737064569180}
   titleText: {fileID: 114561952943346148}
+  hideOnStart: 0
+  hideOnBlur: 0
   contentBase: {fileID: 224549082842063890}
   resourceListItem: {fileID: 1431236765285522, guid: cdf6e1610bc1aac458f37422f9bf9e89,
     type: 2}
@@ -1450,7 +1450,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 1, y: 0.99999285}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -1491,7 +1491,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000009016956}
+  m_AnchoredPosition: {x: 0, y: 0.00008955948}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!224 &224569163221755286

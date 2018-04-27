@@ -14,6 +14,7 @@ public class UISettlementPricePanel : UIPanel
 	public void Show(SettlementTile tile)
 	{
 		Show();
+		Debug.Log("show");
 		if (GameMaster.CameraPan != null)
 			GameMaster.CameraPan.isPaused = true;
 		DestroyChildren(contentBase);
@@ -21,8 +22,8 @@ public class UISettlementPricePanel : UIPanel
 		var clickEvent = new Button.ButtonClickedEvent();
 		clickEvent.AddListener(() =>
 		{
-			GameMaster.Player.MoveTo(tile);
 			Hide();
+			GameMaster.Player.MoveTo(tile);
 		});
 		travelButton.onClick = clickEvent;
 		if (!GameMaster.PriceKnowledge.ContainsKey(tile))
@@ -51,12 +52,5 @@ public class UISettlementPricePanel : UIPanel
 		noPriceText.gameObject.SetActive(false);
 		base.Hide();
 		DestroyChildren(contentBase);
-	}
-
-	public void Move(Vector2 position, bool centered = true)
-	{
-		if(centered)
-			position.x -= PanelBase.rect.width / 2;
-		PanelBase.position = ContrainToScreen(position, PanelBase.rect);
 	}
 }

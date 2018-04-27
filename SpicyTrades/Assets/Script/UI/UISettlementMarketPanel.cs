@@ -39,6 +39,8 @@ public class UISettlementMarketPanel : UIPanel
 	public void Show(SettlementTile settlement)
 	{
 		Show();
+		//if (GameMaster.CameraPan != null)
+		//	GameMaster.CameraPan.isPaused = true;
 		titleText.text = settlement.Name + ": Market";
 		_currentSettlement = settlement;
 		var res = settlement.ResourceCache.Keys.ToArray();
@@ -236,5 +238,7 @@ public class UISettlementMarketPanel : UIPanel
 		base.Hide();
 		_currentSettlement = null;
 		_selectedResource = null;
+		//if (GameMaster.CameraPan != null)
+		//	GameMaster.CameraPan.isPaused = false;
 	}
 }

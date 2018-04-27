@@ -56,6 +56,7 @@ public abstract class UIPanel : MonoBehaviour
 
 	public virtual void Hide()
 	{
+		Debug.Log("hide");
 		gameObject.SetActive(false);
 	}
 
