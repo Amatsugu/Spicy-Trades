@@ -79,7 +79,7 @@ class Database
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = $"INSERT INTO players(player_ID,username,email,password) VALUES ( default, '{Uri.EscapeDataString(username1) }' , ' {(HashPassword.password1)}' , ' {Uri.EscapeDataString(email1)} ')";
+                    cmd.CommandText = $"INSERT INTO players(player_ID,username,email,password) VALUES ( default, '{Uri.EscapeDataString(username1) }' , ' {(HashPassword(password1)}' , ' {Uri.EscapeDataString(email1)} ')";
                     cmd.ExecuteNonQuery();
                     return true;
                 }
