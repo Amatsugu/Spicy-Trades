@@ -45,6 +45,7 @@ namespace NetworkManager
         public const byte GROOM        = 0x17; //gets a room object from a roomid
         public const byte GPID         = 0x18; //gets a pid object from a playerid
         public const byte SYNC         = 0x19; //Syncs data between rooms
+        public const byte LOGOUT       = 0x1A; //Tell the server you want to log out
         //Error Codes
         public const byte NO_ERROR              = 0x00;
         public const byte UNKNOWN_ERROR         = 0x01;
@@ -73,6 +74,7 @@ namespace NetworkManager
         public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
         public static Room CurrentRoom;
         public static bool HANDSHAKEDONE = false;
+        public static object[] holder;
         public static bool Connect(string ip, int port,string _user,string _pass)
         {
             //Login(ip, port, user, pass);
@@ -184,6 +186,11 @@ namespace NetworkManager
         {
             //Does the updates if any... This will probably not be implemented for the current project
         }
+        public static void Logout()
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { LOGOUT, self });
+            SendData(temp);
+        }
         public static void GetNumberOfRooms()
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { ROOMS, self });
@@ -255,11 +262,6 @@ namespace NetworkManager
         public static void LeaveRoom()
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self});
-            SendData(temp);
-        }
-        public static void GetResourceList()
-        {
-            byte[] temp = NetUtils.PieceCommand(new object[] { GRESORCE, self });
             SendData(temp);
         }
         public static void INITCONNECTION()

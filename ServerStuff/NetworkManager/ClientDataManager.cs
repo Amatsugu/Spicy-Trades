@@ -218,6 +218,9 @@ namespace NetworkManager
                         Network.OnSyncData(fulldata);
                     }
                     break;
+                case Network.LOGOUT:
+                    Console.WriteLine("Logged out!");
+                    break;
                 default:
                     Console.WriteLine("Unknown command!");
                     break;
