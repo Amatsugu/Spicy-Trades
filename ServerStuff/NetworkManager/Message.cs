@@ -17,6 +17,12 @@ namespace NetworkManager
             this.pid = pid;
             time = DateTime.Now;
         }
+        public Message(string message) //When data comes from the client
+        {
+            this.message = message;
+            pid = Network.player;
+            time = DateTime.Now;
+        }
         /*
          * So the Message object has this byte format:
          * 2-bytes Message Size

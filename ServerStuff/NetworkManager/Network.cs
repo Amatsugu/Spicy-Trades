@@ -46,6 +46,7 @@ namespace NetworkManager
         public const byte GPID         = 0x18; //gets a pid object from a playerid
         public const byte SYNC         = 0x19; //Syncs data between rooms
         public const byte LOGOUT       = 0x1A; //Tell the server you want to log out
+        public const byte SENDFR       = 0x1B; //Tell the server you want to log out
         //Error Codes
         public const byte NO_ERROR              = 0x00;
         public const byte UNKNOWN_ERROR         = 0x01;
@@ -74,18 +75,19 @@ namespace NetworkManager
         public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
         public static Room CurrentRoom;
         public static bool HANDSHAKEDONE = false;
-        public static object[] holder;
-        public static bool Connect(string ip, int port,string _user,string _pass)
+        public static object[] objects;
+        public static bool Wait = false;
+        public static bool Connect(string ip, int port)
         {
             //Login(ip, port, user, pass);
             ClientDataManager.INIT();
             connection = new UdpClient(port);
+            connection.Client.ReceiveTimeout = 1;
             try
             {
                 connection.Connect(ip, port);
                 Thread t = new Thread(new ThreadStart(ThreadProc));
                 t.Start();
-                SendData(NetUtils.PieceCommand(new object[] {Network.LOGIN, _user, _pass}));
                 return true;
             }
             catch (Exception e)
@@ -154,10 +156,31 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { REGISTER, user, pass });
             //DO IT
         }
-        public static string Login(string ip, int port, string user, string pass)
+        public static bool Login(string user, string pass)
         {
-            //Log the user in and return its session token
-            return "";
+            Wait = true;
+            SendData(NetUtils.PieceCommand(new object[] { LOGIN, user, pass }));
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec!= null && tmprec[0] != LOGIN)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
+            player = (PID)objects[0];
+            self = (string)objects[1];
+            INITCONNECTION(); // Set up certain data on the server
+            return true;
         }
         public static void Consume(byte cmd) //Consumes commands
         {
@@ -167,15 +190,56 @@ namespace NetworkManager
         {
             //
         }
-        public static void CreateRoom(string password="NONE") //This will trigger the player joined room event with you as the argument
+        public static bool CreateRoom(string password="NONE") //DONE
         {//Might need to send map data as well
             byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self,password });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != FORMR)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "r" });
+            Room tempR = (Room)objects[0];
+            rooms[tempR.GetRoomID()] = tempR;
+            CurrentRoom = tempR;
+            return true;
         }
-        public static void JoinRoom(string roomid)
+        public static Room JoinRoom(string roomid) //DONE
         {//This will trigger the player joined room event with you as the argument
             byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != JROOM)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "r" });
+            Room tempR = (Room)objects[0];
+            rooms[tempR.GetRoomID()] = tempR;
+            return tempR;
         }
         public static void HasUpdates()
         {
@@ -191,17 +255,60 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { LOGOUT, self });
             SendData(temp);
         }
-        public static void GetNumberOfRooms()
+        public static int? GetNumberOfRooms() //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { ROOMS, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec != null && tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec[0] != ROOMS)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "i" });
+            return (int)objects[0];
         }
-        public static void ListRooms(int pos=0, int count=100)
+        public static Room[] ListRooms(int pos=0, int count=100) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTR, self, pos, count });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec != null && tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec[0] != LISTR)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "s[]" });
+            string[] rids = (string[])objects[0];
+            RoomListArgs args = new RoomListArgs();
+            Room[] rooms = new Room[rids.Length];
+            for (int i = 0; i < rids.Length; i++)
+            {
+                rooms[i] = GetRoom(rids[i]);
+            }
+            return rooms;
         }
-        public static void Sync(string data)
+        public static void Sync(string data) //DONE
         {
             byte[] temp;
             string randomid = Guid.NewGuid().ToString("N").Substring(0, 8); // keep track incase multiple ppl are syncing at the same time
@@ -219,50 +326,218 @@ namespace NetworkManager
                 SendData(temp);
             }
         }
-        public static void SendFriendRequest(string playerid)
+        public static bool SendFriendRequest(string playerid) //DONE
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { REQUEST, self, playerid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { SENDFR, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec != null && tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec[0] != SENDFR)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
-        public static void ListFriends()
+        public static PID[] ListFriends() //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTF, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != LISTF)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "s[]" });
+            string[] pids = (string[])objects[0];
+            PID[] req = new PID[pids.Length];
+            for (int i = 0; i < pids.Length; i++)
+            {
+                req[i] = GetPID(pids[i]);
+            }
+            return req;
         }
-        public static void ListRequestedFriends()
+        public static PID[] ListRequestedFriends() //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTRF, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec != null && tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec[0] != LISTRF)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "s[]" });
+            string[] pids = (string[])objects[0];
+            PID[] req = new PID[pids.Length];
+            for (int i = 0; i < pids.Length; i++)
+            {
+                req[i] = GetPID(pids[i]);
+            }
+            return req;
         }
-        public static void AddFriend(string playerid)
+        public static bool AddFriend(string playerid) //DONE
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { ADDF, self, playerid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { ADDF, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != ADDF)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
-        public static void IsHostOf(string roomid)
+        public static bool? IsHostOf() //DONE
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { IHOST, self , roomid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { IHOST, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != IHOST)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            return (bool)NetUtils.FormCommand(data, new string[] { "bo" })[0];
         }
-        public static void KickPlayer(string playerid)
+        public static bool KickPlayer(string playerid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { KICK, self, playerid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { KICK, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != KICK)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
-        public static void InviteFriend(string playerid)
+        public static bool InviteFriend(string playerid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self, playerid});
+            byte[] temp = NetUtils.PieceCommand(new object[] { INVITEF, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != INVITEF)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
-        public static void SetReady(bool ready,string roomid)
+        public static bool SetReady(bool ready,string roomid)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready, roomid });
+            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != READY)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
-        public static void LeaveRoom()
+        public static bool LeaveRoom()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self});
+            byte[] temp = NetUtils.PieceCommand(new object[] { LEAVER, self });
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            Wait = true;
+            while (tmprec == null)
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != LEAVER)
+                    tmprec = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            //TODO HANDLE THIS
+            return true;
         }
         public static void INITCONNECTION()
         {
@@ -314,20 +589,44 @@ namespace NetworkManager
         {
             while (true)
             {
-                DoMainClientStuff();
+                if(!Wait)
+                    DoMainClientStuff();
             }
         }
         public static void DoMainClientStuff()
         {
-            Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
-            if (receiveBytes.Length > 0)
+            try
             {
-                string returnData = Encoding.ASCII.GetString(receiveBytes);
-                DataRecievedArgs data = new DataRecievedArgs();
-                data.Response = returnData;
-                data.RawResponse = receiveBytes;
-                OnDataRecieved(data);
+                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+                if (receiveBytes.Length > 0)
+                {
+                    DataRecievedArgs data = new DataRecievedArgs();
+                    data.RawResponse = receiveBytes;
+                    OnDataRecieved(data);
+                }
+            } catch
+            {
+                //
             }
+        }
+        public static byte[] ClientHoldManager()
+        {
+            try
+            {
+                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+                if (receiveBytes.Length > 0)
+                {
+                    DataRecievedArgs data = new DataRecievedArgs();
+                    data.RawResponse = receiveBytes;
+                    OnDataRecieved(data);
+                    return receiveBytes;
+                }
+            }
+            catch
+            {
+                
+            }
+            return null;
         }
         /* -----------
          * EVENT STUFF

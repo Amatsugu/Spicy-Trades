@@ -169,6 +169,8 @@ namespace NetworkManager
         }
         public void AddMember(PID member, bool noprob)
         {
+            if (numOfPlayers == 0)
+                theyHost = 0;
             members[numOfPlayers++] = member;
         }
         public void RemoveMember(PID member)

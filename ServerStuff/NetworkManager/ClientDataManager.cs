@@ -21,15 +21,6 @@ namespace NetworkManager
             //If there is an error you'll get the command byte[0] error byte[1] and a string of what the error is
             object[] objects;
             string[] pids;
-            if (error != Network.NO_ERROR)
-            {
-                objects = NetUtils.FormCommand(data, new string[] { "s" });
-                ErrorArgs dat = new ErrorArgs();
-                dat.ErrorCode = error;
-                dat.ErrorMessage = (string) objects[0];
-                Network.OnError(dat);
-                return;
-            }
             ChatDataArgs globalchat;
             switch (command)
             {
@@ -38,10 +29,7 @@ namespace NetworkManager
                     Network.SendData(new byte[] { 0, 0 });
                     break;
                 case Network.LOGIN:
-                    objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
-                    Network.player = (PID)objects[0];
-                    Network.self = (string)objects[1];
-                    Network.INITCONNECTION(); // Set up certain data on the server
+                    //FIXED
                     break;
                 case Network.REGISTER:
                     //Registering was successful! Make callback?
@@ -53,27 +41,10 @@ namespace NetworkManager
                     //NOT IMPLEMENTED IN THIS VERSION
                     break;
                 case Network.LISTR: //Gets the roomids
-                    objects = NetUtils.FormCommand(data, new string[] { "s[]" });
-                    string[] rids = (string[])objects[0];
-                    RoomListArgs args = new RoomListArgs();
-                    Room[] rooms = new Room[rids.Length];
-                    for (int i = 0; i < rids.Length; i++)
-                    {
-                        rooms[i] = Network.GetRoom(rids[i]);
-                    }
-                    args.Rooms = rooms;
-                    Network.OnRoomList(args);
+                    // CHANGED
                     break;
                 case Network.JROOM:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    if(roomargs.Player.GetID() == Network.player.GetID())
-                    {
-                        Network.CurrentRoom = roomargs.Room;
-                    }
-                    Network.CurrentRoom.AddMember(roomargs.Player);
+                    //FIXED
                     break;
                 case Network.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
@@ -99,32 +70,19 @@ namespace NetworkManager
                     Network.OnFriendsList(friendArr);
                     break;
                 case Network.LISTRF:
-                    objects = NetUtils.FormCommand(data, new string[] { "s[]" });
-                    pids = (string[])objects[0];
-                    FriendRequestArgs requestArr = new FriendRequestArgs();
-                    PID[] req = new PID[pids.Length];
-                    for (int i = 0; i < pids.Length; i++)
-                    {
-                        req[i] = Network.GetPID(pids[i]);
-                    }
-                    requestArr.Requests = req;
-                    Network.OnFriendRequest(requestArr);
+                    //Fixed
                     break;
                 case Network.ADDF:
                     //Not needed
                     break;
                 case Network.FORMR:
-                    //Server will not send you this command
+                    // FIXED
                     break;
                 case Network.IHOST:
                     //Command not needed, server handles and sends this data over
                     break;
                 case Network.KICK:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    Network.OnPlayerLeft(roomargs);
+                    //FIXED
                     break;
                 case Network.INVITEF:
                     objects = NetUtils.FormCommand(data, new string[] {  "s" });
@@ -137,19 +95,14 @@ namespace NetworkManager
                     break;
                 case Network.LEAVER: // only sent if you are in the room
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    Network.CurrentRoom.RemoveMember(roomargs.Player);
+                    Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
                     break;
                 case Network.GRESORCE:
-                    // Need more data from kham
+                    //NOT NEEDED
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
-                    LoginEventArgs logargs = new LoginEventArgs();
-                    logargs.response = "Logged in!";
-                    Network.OnLogin(logargs);
+                    //Fixed
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
@@ -169,10 +122,7 @@ namespace NetworkManager
                     Network.OnChat(globalchat);
                     break;
                 case Network.ROOMS:
-                    objects = NetUtils.FormCommand(data, new string[] { "i" });
-                    RoomCountArgs count = new RoomCountArgs();
-                    count.count =(int)objects[0];
-                    Network.OnRoomCount(count);
+                    //FIXED
                     break;
                 case Network.GROOM:
                     objects = NetUtils.FormCommand(data, new string[] { "r" });
