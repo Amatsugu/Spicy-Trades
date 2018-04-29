@@ -64,7 +64,6 @@ namespace NetworkManager
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
             byte command = e.RawResponse[0];
-            Network.Retrieve(command);
             byte[] data = e.RawResponse.SubArray(1, e.RawResponse.Length - 1);
             IPEndPoint send = e.SenderRef;
             object[] objects;

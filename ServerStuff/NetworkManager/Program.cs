@@ -20,6 +20,13 @@ namespace NetworkManager
             {
                 Console.WriteLine("Login Success! "+Network.player.GetName()+" "+Network.player.GetID());
                 Network.SendChat(new Message("Hello this is a test"));
+                Network.CreateRoom();
+                Network.SendRoomChat(new Message("Hello this is a Room test"));
+                Network.LeaveRoom();
+                Network.Logout();
+                Console.WriteLine("Logged out!");
+                Console.ReadLine();
+                Environment.Exit(0);
             } else
             {
                 Console.WriteLine("Cannot Login!");
