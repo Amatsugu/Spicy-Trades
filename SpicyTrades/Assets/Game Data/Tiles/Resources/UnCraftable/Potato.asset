@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tag: Resource
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.8308824, g: 0.76355225, b: 0.5437392, a: 1}
+  color: {r: 0.9843138, g: 0.9450981, b: 0.63529414, a: 1}
   cost: 0
   tileRenderers: []
   category: 1
@@ -28,5 +28,5 @@ MonoBehaviour:
     filled crop contains tons of nutrients and is welcomed by families regardless
     of social standing.
   tooltip: 'A sack of potatoes. '
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b1bc46ce02fadd049b5d85672a567fc0, type: 3}
   recipe: {fileID: 0}

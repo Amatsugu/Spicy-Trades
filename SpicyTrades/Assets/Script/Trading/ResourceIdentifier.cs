@@ -19,11 +19,11 @@ public class ResourceIdentifier
 			return true;
 		if (type == NeedType.Category) //Categoric Needs
 		{
-			return resource.category == (ResourceCategory)Enum.Parse(typeof(ResourceCategory), this.resource);
+			return resource.category.ToString() == this.resource;
 		}
 		else if (type == NeedType.Tag) //Tagged
 		{
-			return resource.tags.Any(tag => tag == this.resource);
+			return resource.tags.Contains(this.resource);
 		}
 		else //Resources
 		{

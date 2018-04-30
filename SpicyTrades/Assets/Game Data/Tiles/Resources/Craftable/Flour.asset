@@ -20,11 +20,11 @@ MonoBehaviour:
   tags:
   - Material
   requiredWorkers: 0
-  basePrice: 0.3
   yeild: 0
+  basePrice: 0.3
   description: 'Bread and butter so-to-speak. Commonplace in any household but often
     hard to store. Derived from grains and used to make breads of all types, served
     to all kinds of people. '
   tooltip: 'A sack of flour. Maybe you can make some bread out of this. '
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: a21f5d0f51d2b7742a0bfa5570f5e434, type: 3}
   recipe: {fileID: 11400000, guid: c908412fdc2e72244a42685be5f8233d, type: 2}

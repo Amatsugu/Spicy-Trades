@@ -51,11 +51,12 @@ public class Player
 		}
 	}
 
-	public void SetTile(SettlementTile tile)
+	public void SetTile(SettlementTile tile, bool showUI = true)
 	{
 		_curTile = tile.Position;
 		GameMaster.CachePrices(tile);
-		UIManager.ShowSettlementPanel(tile);
+		if(showUI)
+			UIManager.ShowSettlementPanel(tile);
 		playerObject.transform.position = tile.WolrdPos;
 	}
 

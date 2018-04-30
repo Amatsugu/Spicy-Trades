@@ -207,6 +207,24 @@ public class UISettlementMarketPanel : UIPanel
 		Refresh();
 	}
 
+	private void OnGUI()
+	{
+		GUILayout.Label(" ");
+		GUILayout.Label(" ");
+		GUILayout.Label(" ");
+		GUILayout.Label(" ");
+		GUILayout.Label(_currentSettlement.ResourceNeeds.Count.ToString());
+		GUILayout.Label(_currentSettlement.currentEvents.Count.ToString());
+		foreach(var need in _currentSettlement.ResourceNeeds)
+		{
+			GUILayout.BeginHorizontal();
+			GUILayout.Label(need.resource);
+			GUILayout.Label(need.type.ToString());
+			GUILayout.Label(need.count.ToString());
+			GUILayout.EndHorizontal();
+		}
+	}
+
 	public void SwitchToSell()
 	{
 		if (_curMode == MarketMode.Sell)

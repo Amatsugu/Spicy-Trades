@@ -10,7 +10,7 @@ public class PlayerSpawner : FeatureGenerator
 	{
 		var playerCharacter = Instantiate(playerPrefab, map.Capital.WolrdPos, Quaternion.Euler(-60, 0, 0)).GetComponent<PlayerObject>();
 		var player = new Player(playerCharacter);
-		player.SetTile(map.Capital);
+		player.SetTile(map.Capital, false);
 		map.AddPlayer(player, true);
 	}
 }

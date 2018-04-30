@@ -13,16 +13,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tag: Resource
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.3408215, g: 0, b: 0.3455882, a: 1}
+  color: {r: 0.82745105, g: 0.039215688, b: 0.28627452, a: 1}
   cost: 0
   tileRenderers: []
   category: 2
   tags: []
   requiredWorkers: 0
-  basePrice: 1.5
   yeild: 0
+  basePrice: 1.5
   description: An alcoholic drink derived from grapes. Quite common at the dinner
     table and an important addition at religious ceremonies
   tooltip: A barrel full of wine. No minors allowed!
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 29efa6adfaf61a44fa7325cd821e2b31, type: 3}
   recipe: {fileID: 11400000, guid: 110accf130e7b434b944d418a8728573, type: 2}

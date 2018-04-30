@@ -10,6 +10,7 @@ public class SettlementTileInfo : TileInfo
 {
 	public SettlementType settlementType;
 	public float foodPerPop = 0.5f;
+	public int maxEvents = 3;
 
 	private void OnEnable()
 	{

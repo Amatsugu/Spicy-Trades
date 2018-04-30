@@ -149,12 +149,13 @@ public class SettlementTile : Tile
 			PickEvent();
 	}
 
+
 	private void DetermineNeeds()
 	{
 		//Make Food Needs
 		ResourceNeeds.Add(new ResourceIdentifier
 		{
-			type = NeedType.Category,
+			type = NeedType.Tag,
 			resource = "Food",
 			count = Mathf.CeilToInt(Population * (tileInfo as SettlementTileInfo).foodPerPop)
 		});
@@ -181,8 +182,14 @@ public class SettlementTile : Tile
 						ce.sucess.Effect(this);
 				}
 			}
+			foreach (var need in e.ResourceNeeds)
+			{
+				ResourceNeeds.Remove(need);
+			}
 			return true;
 		});
+		if (currentEvents.Count > tileInfo.maxEvents)
+			return;
 		//Select New Events
 		if (eventPool == null)
 			eventPool = GameMaster.Registry.eventPool.events;
@@ -243,21 +250,22 @@ public class SettlementTile : Tile
 
 	private void SatisfyNeeds()
 	{
-		foreach (var need in ResourceNeeds)
+		foreach(var res in ResourceCache.Keys)
 		{
-			if (need.count == 0)
+			if (ResourceCache[res][0] == 0)
 				continue;
-			var res = ResourceCache.Keys.Where(_res => need.Match(_res)).ToArray();
-			if (res.Length == 0)
-				continue;
-			foreach(var cRes in res)
+			foreach (var need in ResourceNeeds)
 			{
-				if (TakeResource(cRes, (int)need.count))
+				if (need.count == 0)
+					continue;
+				if (!need.Match(res))
+					continue;
+				if (TakeResource(res, (int)need.count))
 					need.count = 0;
 				else
 				{
-					var unitsTaken = Mathf.FloorToInt(ResourceCache[cRes][0]);
-					TakeResource(cRes, unitsTaken);
+					var unitsTaken = Mathf.FloorToInt(ResourceCache[res][0]);
+					TakeResource(res, unitsTaken);
 					need.count -= unitsTaken;
 				}
 				if (need.count == 0)
