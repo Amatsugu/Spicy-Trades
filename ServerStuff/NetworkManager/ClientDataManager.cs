@@ -14,74 +14,18 @@ namespace NetworkManager
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
             byte command = e.RawResponse[0];
-            Network.Retrieve(command);
             byte error = e.RawResponse[1];
             byte[] data = e.RawResponse.SubArray(2, e.RawResponse.Length-2);
             RoomUpdateArgs roomargs;
             //If there is an error you'll get the command byte[0] error byte[1] and a string of what the error is
             object[] objects;
             string[] pids;
-            if (error != Network.NO_ERROR)
-            {
-                objects = NetUtils.FormCommand(data, new string[] { "s" });
-                ErrorArgs dat = new ErrorArgs();
-                dat.ErrorCode = error;
-                dat.ErrorMessage = (string) objects[0];
-                Network.OnError(dat);
-                return;
-            }
             ChatDataArgs globalchat;
             switch (command)
             {
                 case Network.HELLO:
                     Console.WriteLine("Got a hello from the server!");
                     Network.SendData(new byte[] { 0, 0 });
-                    break;
-                case Network.LOGIN:
-                    objects = NetUtils.FormCommand(data, new string[] { "p", "s" });
-                    Network.player = (PID)objects[0];
-                    Network.self = (string)objects[1];
-                    Network.INITCONNECTION(); // Set up certain data on the server
-                    break;
-                case Network.REGISTER:
-                    //Registering was successful! Make callback?
-                    break;
-                case Network.UPDATES:
-                    //NOT IMPLEMENTED IN THIS VERSION
-                    break;
-                case Network.DOUPDATES:
-                    //NOT IMPLEMENTED IN THIS VERSION
-                    break;
-                case Network.LISTR: //Gets the roomids
-                    objects = NetUtils.FormCommand(data, new string[] { "s[]" });
-                    string[] rids = (string[])objects[0];
-                    RoomListArgs args = new RoomListArgs();
-                    Room[] rooms = new Room[rids.Length];
-                    for (int i = 0; i < rids.Length; i++)
-                    {
-                        rooms[i] = Network.GetRoom(rids[i]);
-                    }
-                    args.Rooms = rooms;
-                    Network.OnRoomList(args);
-                    break;
-                case Network.JROOM:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    if(roomargs.Player.GetID() == Network.player.GetID())
-                    {
-                        Network.CurrentRoom = roomargs.Room;
-                    }
-                    Network.CurrentRoom.AddMember(roomargs.Player);
-                    break;
-                case Network.CHAT:
-                    objects = NetUtils.FormCommand(data, new string[] { "m" });
-                    Message msgglobal = (Message)objects[0];
-                    globalchat = new ChatDataArgs();
-                    globalchat.Flag = Network.CHAT_GLOBAL;
-                    globalchat.Message = msgglobal;
-                    Network.OnChat(globalchat);
                     break;
                 case Network.REQUEST:
                     // Nothing is needed here
@@ -98,34 +42,6 @@ namespace NetworkManager
                     friendArr.Friends = friends;
                     Network.OnFriendsList(friendArr);
                     break;
-                case Network.LISTRF:
-                    objects = NetUtils.FormCommand(data, new string[] { "s[]" });
-                    pids = (string[])objects[0];
-                    FriendRequestArgs requestArr = new FriendRequestArgs();
-                    PID[] req = new PID[pids.Length];
-                    for (int i = 0; i < pids.Length; i++)
-                    {
-                        req[i] = Network.GetPID(pids[i]);
-                    }
-                    requestArr.Requests = req;
-                    Network.OnFriendRequest(requestArr);
-                    break;
-                case Network.ADDF:
-                    //Not needed
-                    break;
-                case Network.FORMR:
-                    //Server will not send you this command
-                    break;
-                case Network.IHOST:
-                    //Command not needed, server handles and sends this data over
-                    break;
-                case Network.KICK:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    Network.OnPlayerLeft(roomargs);
-                    break;
                 case Network.INVITEF:
                     objects = NetUtils.FormCommand(data, new string[] {  "s" });
                     string playerid = (string)objects[0];
@@ -137,23 +53,37 @@ namespace NetworkManager
                     break;
                 case Network.LEAVER: // only sent if you are in the room
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    roomargs = new RoomUpdateArgs();
-                    roomargs.Room = Network.GetRoom((string)objects[0]);
-                    roomargs.Player = Network.GetPID((string)objects[1]);
-                    Network.CurrentRoom.RemoveMember(roomargs.Player);
-                    break;
-                case Network.GRESORCE:
-                    // Need more data from kham
+                    Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
-                    LoginEventArgs logargs = new LoginEventArgs();
-                    logargs.response = "Logged in!";
-                    Network.OnLogin(logargs);
+                    break;
+                case Network.CHAT:
+                    objects = NetUtils.FormCommand(data, new string[] { "m" });
+                    Message msgglobal = (Message)objects[0];
+                    if (Network.msgCache.ContainsKey(msgglobal.GetMessage()))
+                    {
+                        break;
+                    } else
+                    {
+                        Network.msgCache.Add(msgglobal.GetMessage(), msgglobal);
+                    }
+                    globalchat = new ChatDataArgs();
+                    globalchat.Flag = Network.CHAT_GLOBAL;
+                    globalchat.Message = msgglobal;
+                    Network.OnChat(globalchat);
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m" });
                     Message msgdm = (Message)objects[0];
+                    if (Network.msgCache.ContainsKey(msgdm.GetMessage()))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Network.msgCache.Add(msgdm.GetMessage(), msgdm);
+                    }
                     globalchat = new ChatDataArgs();
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgdm;
@@ -162,33 +92,19 @@ namespace NetworkManager
                 case Network.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s" });
                     Message msgrm = (Message)objects[0];
+                    if (Network.msgCache.ContainsKey(msgrm.GetMessage()))
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        Network.msgCache.Add(msgrm.GetMessage(), msgrm);
+                    }
                     globalchat = new ChatDataArgs();
                     globalchat.Room = Network.GetRoom((string)objects[1]);
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgrm;
                     Network.OnChat(globalchat);
-                    break;
-                case Network.ROOMS:
-                    objects = NetUtils.FormCommand(data, new string[] { "i" });
-                    RoomCountArgs count = new RoomCountArgs();
-                    count.count =(int)objects[0];
-                    Network.OnRoomCount(count);
-                    break;
-                case Network.GROOM:
-                    objects = NetUtils.FormCommand(data, new string[] { "r" });
-                    Room temp = (Room)objects[0];
-                    Network.rooms[temp.GetRoomID()] = temp;
-                    GotRoomEventArgs room = new GotRoomEventArgs();
-                    room.Room = temp;
-                    Network.OnRoomDataRecieved(room);
-                    break;
-                case Network.GPID:
-                    objects = NetUtils.FormCommand(data, new string[] { "p" });
-                    PID temppid = (PID)objects[0];
-                    Network.players[temppid.GetID()] = temppid;
-                    GotPIDEventArgs pid = new GotPIDEventArgs();
-                    pid.Pid = (PID)objects[0];
-                    Network.OnPIDDataRecieved(pid);
                     break;
                 case Network.SYNC://id, numpieces, cpiece, payload
                     objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });
@@ -219,7 +135,6 @@ namespace NetworkManager
                     }
                     break;
                 default:
-                    Console.WriteLine("Unknown command!");
                     break;
             }
         }

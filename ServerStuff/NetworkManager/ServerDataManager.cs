@@ -46,7 +46,6 @@ namespace NetworkManager
         private static Dictionary<string, PID> PIDs = new Dictionary<string, PID>();
         public static Dictionary<string, CID> Connections = new Dictionary<string, CID>();
         // the string here is the users session key
-        public static Dictionary<PID, CID> pidToClient = new Dictionary<PID, CID>();
         private static uint ROOMID = 0;
         // when converted to hex we get our 8byte id
         private static uint PLAYERID = 0;
@@ -65,7 +64,6 @@ namespace NetworkManager
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
         {
             byte command = e.RawResponse[0];
-            Network.Retrieve(command);
             byte[] data = e.RawResponse.SubArray(1, e.RawResponse.Length - 1);
             IPEndPoint send = e.SenderRef;
             object[] objects;
@@ -336,6 +334,13 @@ namespace NetworkManager
                     payload
                 });
                     SendToRoom(dat, Connections[self].GetCurrentRoom().GetRoomID());// remove the self tag and send the data to the clients
+                    break;
+                case Network.LOGOUT:
+                    self = (string)(NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                    pid = GetPlayerPID(self).GetID();
+                    Connections[self] = null;
+                    PIDs[pid] = null;
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.LOGOUT, Network.NO_ERROR }), send);
                     break;
                 default:
                     Console.WriteLine("Unknown command!");
