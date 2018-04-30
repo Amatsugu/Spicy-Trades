@@ -47,11 +47,11 @@ namespace NetworkManager
                     string playerid = (string)objects[0];
                     //HOOK EVENT
                     break;
-                case Network.READY:
+                case Network.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
                     break;
-                case Network.LEAVER: // only sent if you are in the room
+                case Network.LEAVERO: // only sent if you are in the room
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
                     break;

@@ -47,6 +47,8 @@ namespace NetworkManager
         public const byte SYNC         = 0x19; //Syncs data between rooms
         public const byte LOGOUT       = 0x1A; //Tell the server you want to log out
         public const byte SENDFR       = 0x1B; //Tell the server you want to log out
+        public const byte LEAVERO      = 0x1B; //Tell the server you want to log out
+        public const byte READYO       = 0x1C; //Tell the server you are ready
         //Error Codes
         public const byte NO_ERROR              = 0x00;
         public const byte UNKNOWN_ERROR         = 0x01;
@@ -77,11 +79,10 @@ namespace NetworkManager
         public static bool HANDSHAKEDONE = false;
         public static object[] objects;
         public static bool Wait = false;
-        public static byte[] lastMessage;
+        public static byte[] lastMessage=null;
         public static Dictionary<string, Message> msgCache = new Dictionary<string, Message>();
         public static bool Connect(string ip, int port)
         {
-            //Login(ip, port, user, pass);
             ClientDataManager.INIT();
             connection = new UdpClient(port);
             connection.Client.ReceiveTimeout = 1;
@@ -221,7 +222,7 @@ namespace NetworkManager
         public static void Consume(byte[] cmd) //Consumes commands
         {
             lastMessage = cmd;
-            connection.Client.ReceiveTimeout = 1000;
+            connection.Client.ReceiveTimeout = 500;
         }
         public static void ResendData()
         {
@@ -264,7 +265,6 @@ namespace NetworkManager
         }
         public static Room JoinRoom(string roomid) //DONE
         {//This will trigger the player joined room event with you as the argument
-            LeaveRoom(); // Make sure to leave a room if you are already in one
             byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
             Wait = true;
             SendData(temp);
@@ -697,13 +697,14 @@ namespace NetworkManager
                 Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
                 if (receiveBytes.Length > 0)
                 {
+
                     DataRecievedArgs data = new DataRecievedArgs();
                     data.RawResponse = receiveBytes;
                     OnDataRecieved(data);
                 }
             } catch
             {
-                //
+                //ResendData();
             }
         }
         public static byte[] ClientHoldManager()
