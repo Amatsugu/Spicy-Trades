@@ -125,7 +125,7 @@ private static bool AddFriend (string selfusername, string username1)
                 conn.Open();
             using (var cmd = conn.CreateCommand())
             {
-                cmd.CommandText = $"INSERT INTO FriendsList(flist) SELECT player_ID FROM players where  ('{Uri.EscapeDataString(username1) }') WHERE player_ID  = ({ Uri.EscapeDataString(selfusername )}";
+                cmd.CommandText = $"INSERT INTO FriendsList VALUES (default, '{Uri.EscapeDataString(username1) }'), ({ Uri.EscapeDataString(selfusername )}";
                 cmd.ExecuteNonQuery();
                 return true;
             }
