@@ -57,7 +57,7 @@ namespace NetworkManager
                 switch (cho)
                 {
                     case 1:
-                        if (Network.CreateRoom())
+                        if (Network.CreateRoom()!=null)
                         {
                             Console.WriteLine("Created a room!");
                         }

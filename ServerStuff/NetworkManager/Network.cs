@@ -231,7 +231,7 @@ namespace NetworkManager
                 SendData(lastMessage);
             }
         }
-        public static bool CreateRoom(string password="NONE") //DONE
+        public static Room CreateRoom(string password="NONE") //DONE
         {
             //Might need to send map data as well
             byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self, password });
@@ -253,14 +253,14 @@ namespace NetworkManager
             if (error != 0)
             {
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
-                return false;
+                return null;
             }
             objects = NetUtils.FormCommand(data, new string[] { "s" });
             string tempS = (string)objects[0];
             Room tempR = GetRoom(tempS);
             rooms[tempR.GetRoomID()] = tempR;
             CurrentRoom = tempR;
-            return true;
+            return tempR;
         }
         public static Room JoinRoom(string roomid) //DONE
         {//This will trigger the player joined room event with you as the argument
@@ -283,10 +283,11 @@ namespace NetworkManager
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                 return null;
             }
-            objects = NetUtils.FormCommand(data, new string[] { "r" });
-            Room tempR = (Room)objects[0];
-            CurrentRoom = tempR;
+            objects = NetUtils.FormCommand(data, new string[] { "s" });
+            string tempS = (string)objects[0];
+            Room tempR = GetRoom(tempS);
             rooms[tempR.GetRoomID()] = tempR;
+            CurrentRoom = tempR;
             return tempR;
         }
         public static void HasUpdates()
@@ -555,7 +556,7 @@ namespace NetworkManager
         }
         public static bool SetReady(bool ready)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self });
+            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready });
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
