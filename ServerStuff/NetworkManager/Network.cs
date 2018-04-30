@@ -123,17 +123,36 @@ namespace NetworkManager
         }
         public static PID GetPID(string pid)
         {
-            if (players.ContainsKey(pid))
             {
-                return players[pid];
-            } else
-            {
-                DownloadPID(pid);
-                while (!players.ContainsKey(pid))
+                if (players.ContainsKey(pid))
                 {
-                    DoMainClientStuff();
+                    return players[pid];
                 }
-                return players[pid];
+                else
+                {
+                    Wait = true;
+                    byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, pid });
+                    SendData(temp);
+                    byte[] tmprec = ClientHoldManager();
+                    while (tmprec == null)
+                    {
+                        tmprec = ClientHoldManager();
+                        if (tmprec != null && tmprec[0] != GPID)
+                            tmprec = null;
+                    }
+                    Wait = false;
+                    byte error = tmprec[1];
+                    byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+                    if (error != 0)
+                    {
+                        Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                        return null;
+                    }
+                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    PID temppid = (PID)objects[0];
+                    players[temppid.GetID()] = temppid;
+                    return players[pid];
+                }
             }
         }
         public static Room GetRoom(string rid)
@@ -144,11 +163,27 @@ namespace NetworkManager
             }
             else
             {
-                DownloadRoom(rid);
-                while (!rooms.ContainsKey(rid))
+                Wait = true;
+                byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, rid });
+                SendData(temp);
+                byte[] tmprec = ClientHoldManager();
+                while (tmprec == null)
                 {
-                    DoMainClientStuff();
+                    tmprec = ClientHoldManager();
+                    if (tmprec != null && tmprec[0] != GROOM)
+                        tmprec = null;
                 }
+                Wait = false;
+                byte error = tmprec[1];
+                byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+                if (error != 0)
+                {
+                    Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                    return null;
+                }
+                objects = NetUtils.FormCommand(data, new string[] { "r" });
+                Room rtemp = (Room)objects[0];
+                rooms[rtemp.GetRoomID()] = rtemp;
                 return rooms[rid];
             }
         }
@@ -207,7 +242,10 @@ namespace NetworkManager
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != FORMR)
+                {
                     tmprec = null;
+                    Console.WriteLine("Waiting for room data!");
+                }
             }
             Wait = false;
             byte error = tmprec[1];
@@ -225,6 +263,7 @@ namespace NetworkManager
         }
         public static Room JoinRoom(string roomid) //DONE
         {//This will trigger the player joined room event with you as the argument
+            LeaveRoom(); // Make sure to leave a room if you are already in one
             byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
             Wait = true;
             SendData(temp);
@@ -245,6 +284,7 @@ namespace NetworkManager
             }
             objects = NetUtils.FormCommand(data, new string[] { "r" });
             Room tempR = (Room)objects[0];
+            CurrentRoom = tempR;
             rooms[tempR.GetRoomID()] = tempR;
             return tempR;
         }
@@ -512,7 +552,7 @@ namespace NetworkManager
             }
             return true;
         }
-        public static bool SetReady(bool ready,string roomid)
+        public static bool SetReady(bool ready)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { READY, self });
             Wait = true;
@@ -628,16 +668,6 @@ namespace NetworkManager
             //    return false;
             //}
             //return true;
-        }
-        public static void DownloadRoom(string roomid)
-        {
-            byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, roomid });
-            SendData(temp);
-        }
-        public static void DownloadPID(string playerid)
-        {
-            byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, playerid });
-            SendData(temp);
         }
         public static void SendData(byte[] data)
         {

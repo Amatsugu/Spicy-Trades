@@ -106,22 +106,6 @@ namespace NetworkManager
                     globalchat.Message = msgrm;
                     Network.OnChat(globalchat);
                     break;
-                case Network.GROOM:
-                    objects = NetUtils.FormCommand(data, new string[] { "r" });
-                    Room temp = (Room)objects[0];
-                    Network.rooms[temp.GetRoomID()] = temp;
-                    GotRoomEventArgs room = new GotRoomEventArgs();
-                    room.Room = temp;
-                    Network.OnRoomDataRecieved(room);
-                    break;
-                case Network.GPID:
-                    objects = NetUtils.FormCommand(data, new string[] { "p" });
-                    PID temppid = (PID)objects[0];
-                    Network.players[temppid.GetID()] = temppid;
-                    GotPIDEventArgs pid = new GotPIDEventArgs();
-                    pid.Pid = (PID)objects[0];
-                    Network.OnPIDDataRecieved(pid);
-                    break;
                 case Network.SYNC://id, numpieces, cpiece, payload
                     objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });
                     string syncid = (string)objects[0];
