@@ -234,7 +234,7 @@ namespace NetworkManager
         public static bool CreateRoom(string password="NONE") //DONE
         {
             //Might need to send map data as well
-            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self,password });
+            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self, password });
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
@@ -255,8 +255,9 @@ namespace NetworkManager
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                 return false;
             }
-            objects = NetUtils.FormCommand(data, new string[] { "r" });
-            Room tempR = (Room)objects[0];
+            objects = NetUtils.FormCommand(data, new string[] { "s" });
+            string tempS = (string)objects[0];
+            Room tempR = GetRoom(tempS);
             rooms[tempR.GetRoomID()] = tempR;
             CurrentRoom = tempR;
             return true;
