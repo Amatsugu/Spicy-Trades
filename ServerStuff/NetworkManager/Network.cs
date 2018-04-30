@@ -320,10 +320,10 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null)
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != ROOMS)
+                if (tmprec != null && tmprec[0] != ROOMS)
                     tmprec = null;
             }
             Wait = false;
@@ -343,10 +343,10 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null)
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != LISTR)
+                if (tmprec != null && tmprec[0] != LISTR)
                     tmprec = null;
             }
             Wait = false;
@@ -391,10 +391,10 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null)
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != SENDFR)
+                if (tmprec != null && tmprec[0] != SENDFR)
                     tmprec = null;
             }
             Wait = false;
@@ -442,10 +442,10 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null)
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != LISTRF)
+                if (tmprec != null && tmprec[0] != LISTRF)
                     tmprec = null;
             }
             Wait = false;
