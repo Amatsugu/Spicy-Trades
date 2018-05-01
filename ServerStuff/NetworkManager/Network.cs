@@ -82,6 +82,7 @@ namespace NetworkManager
         public static object[] objects;
         public static bool Wait = false;
         public static byte[] lastMessage=null;
+        public static byte[] capturedMsg = null;
         public static Dictionary<string, Message> msgCache = new Dictionary<string, Message>();
         public static bool Connect(string ip, int port)
         {
@@ -137,11 +138,16 @@ namespace NetworkManager
                     byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, pid });
                     SendData(temp);
                     byte[] tmprec = ClientHoldManager();
-                    while (tmprec == null)
+                    while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
                     {
                         tmprec = ClientHoldManager();
                         if (tmprec != null && tmprec[0] != GPID)
                             tmprec = null;
+                    }
+                    if(capturedMsg!=null && lastMessage == null)
+                    {
+                        tmprec = capturedMsg;
+                        capturedMsg = null;
                     }
                     Wait = false;
                     byte error = tmprec[1];
@@ -170,11 +176,16 @@ namespace NetworkManager
                 byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, rid });
                 SendData(temp);
                 byte[] tmprec = ClientHoldManager();
-                while (tmprec == null)
+                while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
                 {
                     tmprec = ClientHoldManager();
                     if (tmprec != null && tmprec[0] != GROOM)
                         tmprec = null;
+                }
+                if (capturedMsg != null && lastMessage == null)
+                {
+                    tmprec = capturedMsg;
+                    capturedMsg = null;
                 }
                 Wait = false;
                 byte error = tmprec[1];
@@ -201,11 +212,16 @@ namespace NetworkManager
             Wait = true;
             SendData(NetUtils.PieceCommand(new object[] { LOGIN, user, pass }));
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec!= null && tmprec[0] != LOGIN)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -241,14 +257,19 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != FORMR)
                 {
                     tmprec = null;
-                    Console.WriteLine("Waiting for room data!");
                 }
+                Console.WriteLine("Waiting for room data! "+ (lastMessage == null && capturedMsg != null));
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -271,11 +292,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != JROOM)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -308,11 +334,16 @@ namespace NetworkManager
             SendData(temp);
             SendData(NetUtils.PieceCommand(new object[] { LOGOUT }));
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             return self;
@@ -323,11 +354,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != ROOMS)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -346,11 +382,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTR)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -386,11 +427,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != SENDFR)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -408,11 +454,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -437,11 +488,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTRF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -466,11 +522,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != ADDF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -488,11 +549,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != IHOST)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -510,11 +576,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != KICK)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -532,11 +603,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != INVITEF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -554,11 +630,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != READY)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -576,11 +657,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LEAVER)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -605,9 +691,9 @@ namespace NetworkManager
         public static void SendDM(Message msg,string playerid)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { CHATDM, self, msg, playerid });
-            SendData(temp);
+            SendData(temp, false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHATDM)
@@ -626,9 +712,9 @@ namespace NetworkManager
         public static void SendRoomChat(Message msg)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg});
-            SendData(temp);
+            SendData(temp, false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHATRM)
@@ -647,9 +733,9 @@ namespace NetworkManager
         public static void SendChat(Message msg)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { CHAT, self, msg});
-            SendData(temp);
+            SendData(temp,false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHAT)
@@ -665,14 +751,14 @@ namespace NetworkManager
             //}
             //return true;
         }
-        public static void SendData(byte[] data)
+        public static void SendData(byte[] data,bool doit=true)
         {
-            Consume(data);
+            if(doit)
+                Consume(data);
             connection.Send(data,data.Length);
         }
         public static void SendData(byte[] data, IPEndPoint sender)
         {
-            Consume(data);
             connection.Send(data, data.Length, sender);
         }
         public static IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -681,26 +767,33 @@ namespace NetworkManager
             while (true)
             {
                 if(!Wait)
-                    ClientHoldManager();
+                    DoMainClientStuff();
             }
         }
-        //public static void DoMainClientStuff()
-        //{
-        //    try
-        //    {
-        //        Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
-        //        if (receiveBytes.Length > 0)
-        //        {
+        public static void DoMainClientStuff()
+        {
+            try
+            {
+                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+                if (receiveBytes.Length > 0)
+                {
 
-        //            DataRecievedArgs data = new DataRecievedArgs();
-        //            data.RawResponse = receiveBytes;
-        //            OnDataRecieved(data);
-        //        }
-        //    } catch
-        //    {
-        //        //ResendData();
-        //    }
-        //}
+                    DataRecievedArgs data = new DataRecievedArgs();
+                    data.RawResponse = receiveBytes;
+                    OnDataRecieved(data);
+                    if (lastMessage[0] == receiveBytes[0])
+                    {
+                        Console.WriteLine(lastMessage[0] +" | "+ receiveBytes[0]);
+                        capturedMsg = receiveBytes;
+                        lastMessage = null;
+                    }
+                }
+            }
+            catch
+            {
+                ResendData();
+            }
+        }
         public static byte[] ClientHoldManager()
         {
             try
