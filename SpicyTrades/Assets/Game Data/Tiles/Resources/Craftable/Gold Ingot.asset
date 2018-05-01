@@ -17,7 +17,12 @@ MonoBehaviour:
   cost: 0
   tileRenderers: []
   category: 0
-  tags: []
+  tags:
+  - Precious Metal
+  - Metal
+  - Ingot
+  - Product
+  - Material
   requiredWorkers: 5
   yeild: 20
   basePrice: 40

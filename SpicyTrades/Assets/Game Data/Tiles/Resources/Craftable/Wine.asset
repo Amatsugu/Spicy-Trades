@@ -17,7 +17,8 @@ MonoBehaviour:
   cost: 0
   tileRenderers: []
   category: 2
-  tags: []
+  tags:
+  - Alcohol
   requiredWorkers: 0
   yeild: 0
   basePrice: 1.5

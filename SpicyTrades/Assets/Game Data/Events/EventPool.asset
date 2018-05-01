@@ -114,3 +114,188 @@ MonoBehaviour:
     cooldown: 20
     location: 0
     completionEffect: {fileID: 0}
+  - name: Death of Royalty
+    description: A royalty member has passed away, either relative or part of the
+      royal family. A funeral is held and gifts are offered as consolation.
+    Chance: 90
+    resourceDemands:
+    - resource: Precious Metal
+      count: 2
+      type: 2
+    - resource: Timber
+      count: 1
+      type: 0
+    - resource: Gem
+      count: 1
+      type: 2
+    duration: 100
+    cooldown: 20
+    location: 1
+    completionEffect: {fileID: 0}
+  - name: Confectionary's Delight
+    description: Sweets! Pastries! And more Sweets!
+    Chance: 90
+    resourceDemands:
+    - resource: Sugar
+      count: 4
+      type: 0
+    - resource: Salt
+      count: 1
+      type: 0
+    - resource: Flour
+      count: 3
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Fire! Fire!
+    description: "A fire has occurred! Some rebuilding seems to be in order\u2026"
+    Chance: 33
+    resourceDemands:
+    - resource: Timber
+      count: 6
+      type: 0
+    - resource: Iron Ingot
+      count: 2
+      type: 0
+    duration: 5
+    cooldown: 50
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Fishing Competition
+    description: Skilled fisherman put their pride on the line (haha) to see who gets
+      the largest catch.
+    Chance: 90
+    resourceDemands:
+    - resource: Timber
+      count: 1
+      type: 0
+    - resource: Iron Ingot
+      count: 2
+      type: 0
+    - resource: Fish
+      count: 6
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 1
+    completionEffect: {fileID: 0}
+  - name: Evil Begone!
+    description: A superstitious event held by some to ward off evil spirits and bad
+      luck.
+    Chance: 90
+    resourceDemands:
+    - resource: Salt
+      count: 2
+      type: 0
+    - resource: Timber
+      count: 1
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: The Great Hunt
+    description: A competition amongst avid hunters to bring back the biggest game.
+      A celebration feast is held afterwards for the winner.
+    Chance: 90
+    resourceDemands:
+    - resource: Meat
+      count: 3
+      type: 0
+    - resource: Flour
+      count: 1
+      type: 0
+    - resource: Beer
+      count: 1
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Day of the Sun
+    description: Marks the end of Spring.
+    Chance: 90
+    resourceDemands:
+    - resource: Timber
+      count: 1
+      type: 0
+    - resource: Eggs
+      count: 4
+      type: 0
+    - resource: Gold Ingot
+      count: 1
+      type: 0
+    - resource: Topaz
+      count: 1
+      type: 0
+    duration: 100
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Flood!
+    description: "A flood has occurred! It seems some crops were lost\u2026"
+    Chance: 31
+    resourceDemands:
+    - resource: Food
+      count: 2
+      type: 2
+    duration: 20
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Robbery!
+    description: "Some crops were stolen in the middle of the night\u2026"
+    Chance: 15
+    resourceDemands:
+    - resource: Crop
+      count: 1
+      type: 2
+    - resource: Sugar
+      count: 1
+      type: 0
+    - resource: Alcohol
+      count: 1
+      type: 2
+    - resource: Meat
+      count: 1
+      type: 0
+    duration: 5
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}
+  - name: Robbery!
+    description: "Some supplies were stolen in the middle of the night\u2026"
+    Chance: 31
+    resourceDemands:
+    - resource: Ore
+      count: 1
+      type: 2
+    - resource: Fabric
+      count: 1
+      type: 2
+    - resource: Metal
+      count: 1
+      type: 2
+    duration: 5
+    cooldown: 20
+    location: 1
+    completionEffect: {fileID: 0}
+  - name: Robbery!
+    description: "Some supplies were stolen in the middle of the night\u2026"
+    Chance: 26
+    resourceDemands:
+    - resource: Gem
+      count: 1
+      type: 2
+    - resource: Fabric
+      count: 1
+      type: 2
+    - resource: Precious Metal
+      count: 1
+      type: 2
+    duration: 5
+    cooldown: 20
+    location: 0
+    completionEffect: {fileID: 0}

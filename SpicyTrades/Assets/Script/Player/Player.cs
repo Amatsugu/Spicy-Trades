@@ -13,6 +13,8 @@ public class Player
 	public string Id { get; private set; }
 	public string Username { get; private set; }
 	public Coin Money { get; private set; }
+	public int Influence { get; private set; }
+
 	[JsonIgnore]
 	public PlayerObject playerObject;
 	[JsonIgnore]
