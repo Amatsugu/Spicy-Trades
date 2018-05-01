@@ -19,7 +19,6 @@ namespace NetworkManager
             }
             if(true)
             {
-                Console.WriteLine("Login Success! "+Network.player.GetName()+" "+Network.player.GetID());
                 while (!done)
                 {
                     DoStuff();
@@ -58,6 +57,7 @@ namespace NetworkManager
                 {
                     case 0:
                         Network.Login("epicknex", "password");
+                        Console.WriteLine("Login Success! " + Network.player.GetName() + " " + Network.player.GetID());
                         break;
                     case 1:
                         if (Network.CreateRoom()!=null)

@@ -50,8 +50,10 @@ namespace NetworkManager
                 case Network.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
+                    Console.WriteLine("Player Set Ready!");
                     break;
                 case Network.LEAVERO: // only sent if you are in the room
+                    Console.WriteLine("Removing member!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
                     break;
