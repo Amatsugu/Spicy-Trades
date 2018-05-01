@@ -98,20 +98,13 @@ namespace NetworkManager
                 case Network.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s", "s" });
                     Message msgrm = (Message)objects[0];
-                    if (Network.msgCache.ContainsKey(msgrm.GetMessage()))
-                    {
-                        break;
-                    }
-                    else
-                    {
-                        Network.msgCache.Add(msgrm.GetMessage(), msgrm);
-                    }
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
+                    Console.WriteLine("Got Room Chat! " + (string)objects[2]);
                     globalchat = new ChatDataArgs();
                     globalchat.Room = Network.GetRoom((string)objects[1]);
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgrm;
                     Network.OnChat(globalchat);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
                     break;
                 case Network.SYNCB://payload,key
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
