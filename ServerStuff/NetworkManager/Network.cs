@@ -681,26 +681,26 @@ namespace NetworkManager
             while (true)
             {
                 if(!Wait)
-                    DoMainClientStuff();
+                    ClientHoldManager();
             }
         }
-        public static void DoMainClientStuff()
-        {
-            try
-            {
-                Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
-                if (receiveBytes.Length > 0)
-                {
+        //public static void DoMainClientStuff()
+        //{
+        //    try
+        //    {
+        //        Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
+        //        if (receiveBytes.Length > 0)
+        //        {
 
-                    DataRecievedArgs data = new DataRecievedArgs();
-                    data.RawResponse = receiveBytes;
-                    OnDataRecieved(data);
-                }
-            } catch
-            {
-                //ResendData();
-            }
-        }
+        //            DataRecievedArgs data = new DataRecievedArgs();
+        //            data.RawResponse = receiveBytes;
+        //            OnDataRecieved(data);
+        //        }
+        //    } catch
+        //    {
+        //        //ResendData();
+        //    }
+        //}
         public static byte[] ClientHoldManager()
         {
             try
@@ -718,7 +718,10 @@ namespace NetworkManager
             }
             catch
             {
-                ResendData();
+                if (Wait)
+                {
+                    ResendData();
+                }
             }
             return null;
         }
