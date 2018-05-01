@@ -169,6 +169,8 @@ namespace NetworkManager
         }
         public void AddMember(PID member, bool noprob)
         {
+            if (numOfPlayers == 0)
+                theyHost = 0;
             members[numOfPlayers++] = member;
         }
         public void RemoveMember(PID member)
@@ -204,7 +206,7 @@ namespace NetworkManager
         public void SetReady(bool b)
         {
             isReady = b;
-            Network.SetReady(b, roomID); //DW Server will not mirror commands sent to you...
+            Network.SetReady(b); //DW Server will not mirror commands sent to you...
         }
         public void SetReady(bool b, PID player)
         {
