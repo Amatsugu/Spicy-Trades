@@ -242,6 +242,7 @@ GameObject:
   - component: {fileID: 224165243356408688}
   - component: {fileID: 222525767660983492}
   - component: {fileID: 114898165520939230}
+  - component: {fileID: 114040299362404506}
   m_Layer: 5
   m_Name: Settlement Events Panel
   m_TagString: Untagged
@@ -459,6 +460,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &114040299362404506
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1641954815064516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 09323a5330ebebd4197a4b90c7e202a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  closeButton: {fileID: 114502425352160348}
+  titleText: {fileID: 114626356455722274}
+  hideOnStart: 0
+  hideOnBlur: 0
 --- !u!114 &114070874944591846
 MonoBehaviour:
   m_ObjectHideFlags: 1
