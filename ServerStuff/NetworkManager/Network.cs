@@ -37,7 +37,7 @@ namespace NetworkManager
         public const byte INVITEF      = 0x0F; //invites a friend to a room
         public const byte READY        = 0x10; //Tell the server you are ready
         public const byte LEAVER       = 0x11; //Leave a room
-        public const byte GRESORCE     = 0x12; //Get resource
+        public const byte SYNCB        = 0x12; //Get resource
         public const byte INIT         = 0x13; //INIT
         public const byte CHATDM       = 0x14; //sends a chat to a player
         public const byte CHATRM       = 0x15; //sends a chat to a room
@@ -47,8 +47,10 @@ namespace NetworkManager
         public const byte SYNC         = 0x19; //Syncs data between rooms
         public const byte LOGOUT       = 0x1A; //Tell the server you want to log out
         public const byte SENDFR       = 0x1B; //Tell the server you want to log out
-        public const byte LEAVERO      = 0x1B; //Tell the server you want to log out
-        public const byte READYO       = 0x1C; //Tell the server you are ready
+        public const byte LEAVERO      = 0x1C; //Tell the server you want to log out
+        public const byte READYO       = 0x1D; //Tell the server you are ready
+        public const byte SYNCO        = 0x1E;
+        public const byte RELAY        = 0x1F;
         //Error Codes
         public const byte NO_ERROR              = 0x00;
         public const byte UNKNOWN_ERROR         = 0x01;
@@ -370,21 +372,13 @@ namespace NetworkManager
         }
         public static void Sync(string data) //DONE
         {
-            byte[] temp;
-            string randomid = Guid.NewGuid().ToString("N").Substring(0, 8); // keep track incase multiple ppl are syncing at the same time
-            if (data.Length > 1024)
-            {
-                string[] groups = (from Match m in Regex.Matches(data, @"\d{1024}") select m.Value).ToArray();
-                for(int i=0; i <groups.Length;i++)
-                {
-                    temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, groups.Length, i, groups[i] }); // Send the data, breakes it into pieces for you
-                    SendData(temp);
-                }
-            } else
-            {
-                temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, 1 , 1, data }); // 1 packet of data being sent... the server will simply mirror this data
-                SendData(temp);
-            }
+            byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, false, self, data}); // 1 packet of data being sent... the server will simply mirror this data
+            SendData(temp);
+        }
+        public static void Sync(byte[] data) //DONE
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, true, self, data}); // 1 packet of data being sent... the server will simply mirror this data
+            SendData(temp);
         }
         public static bool SendFriendRequest(string playerid) //DONE
         {

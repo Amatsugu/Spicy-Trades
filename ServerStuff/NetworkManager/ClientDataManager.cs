@@ -48,20 +48,22 @@ namespace NetworkManager
                     //HOOK EVENT
                     break;
                 case Network.READYO:
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "bool" });
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, (string)objects[2] }));
                     Console.WriteLine("Player Set Ready!");
                     break;
                 case Network.LEAVERO: // only sent if you are in the room
                     Console.WriteLine("Removing member!");
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY,(string)objects[2] }));
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
                     break;
                 case Network.CHAT:
-                    objects = NetUtils.FormCommand(data, new string[] { "m" });
+                    objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgglobal = (Message)objects[0];
                     if (Network.msgCache.ContainsKey(msgglobal.GetMessage()))
                     {
@@ -74,9 +76,10 @@ namespace NetworkManager
                     globalchat.Flag = Network.CHAT_GLOBAL;
                     globalchat.Message = msgglobal;
                     Network.OnChat(globalchat);
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
                     break;
                 case Network.CHATDM:
-                    objects = NetUtils.FormCommand(data, new string[] { "m" });
+                    objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgdm = (Message)objects[0];
                     if (Network.msgCache.ContainsKey(msgdm.GetMessage()))
                     {
@@ -90,9 +93,10 @@ namespace NetworkManager
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgdm;
                     Network.OnChat(globalchat);
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
                     break;
                 case Network.CHATRM:
-                    objects = NetUtils.FormCommand(data, new string[] { "m", "s" });
+                    objects = NetUtils.FormCommand(data, new string[] { "m", "s", "s" });
                     Message msgrm = (Message)objects[0];
                     if (Network.msgCache.ContainsKey(msgrm.GetMessage()))
                     {
@@ -107,34 +111,19 @@ namespace NetworkManager
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgrm;
                     Network.OnChat(globalchat);
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
                     break;
-                case Network.SYNC://id, numpieces, cpiece, payload
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "n", "n", "s" });
-                    string syncid = (string)objects[0];
-                    int numpieces = (int)objects[1];
-                    int cpiece = (int)objects[2];
-                    string piece = (string)objects[3];
-                    if (SYNC_CACHE.ContainsKey(syncid))
-                    {
-                        SYNC_CACHE[syncid][cpiece] = piece;
-                    }
-                    else
-                    {
-                        var dict = new Dictionary<int, string>();
-                        dict.Add(cpiece, piece);
-                        SYNC_CACHE.Add(syncid, dict);
-                    }
-                    int PCount = SYNC_CACHE[syncid].Count;
-                    string whole = "";
-                    if (PCount == numpieces){
-                        for(int i = 0; i < PCount; i++)
-                        {
-                            whole += SYNC_CACHE[syncid][i];
-                        }
-                        SyncEventArgs fulldata = new SyncEventArgs();
-                        fulldata.Data = whole;
-                        Network.OnSyncData(fulldata);
-                    }
+                case Network.SYNCB://payload,key
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    string recievedData = (string)objects[0];
+                    //EVENT
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY,Network.self,(string)objects[1] }));
+                    break;
+                case Network.SYNCO:
+                    objects = NetUtils.FormCommand(data, new string[] { "b[]", "s" });
+                    byte[] recievedBData = (byte[])objects[0];
+                    //EVENT
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
                     break;
                 default:
                     break;

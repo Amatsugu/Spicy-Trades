@@ -265,9 +265,6 @@ namespace NetworkManager
                 });
                     SendToRoom(dat, roomid);
                     break;
-                case Network.GRESORCE:
-                    // Need more data from kham
-                    break;
                 case Network.INIT:
                     self = (string)NetUtils.FormCommand(data, new string[] { "s" })[0];
                     GetPlayerPID(self).SetConnection(send); // Allows for faster player lookup
