@@ -48,7 +48,9 @@ namespace NetworkManager
             }
             else
             {
-                throw new ArgumentException("Attempt to form an object (Message) from non Message data! TYPECODE: " + (int)Type);
+                this.message = "Invalid Message Data sent!";
+                pid = new PID("00000000", "SYSTEM", false);
+                time = DateTime.Now;
             }
         }
         public String GetMessage()
