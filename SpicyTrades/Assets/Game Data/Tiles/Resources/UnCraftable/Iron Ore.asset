@@ -27,5 +27,5 @@ MonoBehaviour:
     on oxidation. '
   tooltip: "Looks like there is some iron in this rock\u2026 Maybe you can extract
     it somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: d0fc26622273ce04b87d9a1fb71148b4, type: 3}
   recipe: {fileID: 0}

@@ -27,5 +27,5 @@ MonoBehaviour:
     gray. '
   tooltip: Looks like there is some zinc in this rock... Maybe you can extract it
     somehow.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 02d3aa70c4bacfa41ab87bed469a41d0, type: 3}
   recipe: {fileID: 0}

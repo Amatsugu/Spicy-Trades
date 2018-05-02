@@ -26,5 +26,5 @@ MonoBehaviour:
     gold. Naturally, as such, the stone is associated with great wealth. '
   tooltip: Wow! A topaz! Fortune looks to be smiling upon you! Maybe you should keep
     this around for good luck.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: c7c6723b4636d5c43a844dedc8f01550, type: 3}
   recipe: {fileID: 0}

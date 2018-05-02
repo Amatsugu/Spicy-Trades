@@ -27,5 +27,5 @@ MonoBehaviour:
     indicates great wealth and social standing.
   tooltip: Wow, a sapphire! What a beautiful blue! You can probably fetch an extremely
     high price for this.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 803725fe0d604bc41bd602cf7240b40a, type: 3}
   recipe: {fileID: 0}

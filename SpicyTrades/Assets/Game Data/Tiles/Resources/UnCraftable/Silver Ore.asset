@@ -27,5 +27,5 @@ MonoBehaviour:
     a distinct shiny gray color. '
   tooltip: "Looks like there is some silver in this rock\u2026 Maybe you can extract
     it somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 026a05b185a97ba439bba103e9ec0168, type: 3}
   recipe: {fileID: 0}

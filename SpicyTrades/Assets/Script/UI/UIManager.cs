@@ -28,6 +28,10 @@ public class UIManager : MonoBehaviour
 			{
 				settlementPanel.marketPanel.Refresh();
 			}
+			if (settlementPanel.IsOpen && settlementPanel.eventPanel.IsOpen)
+			{
+				settlementPanel.eventPanel.RefreshList();
+			}
 		};
 		_windowList = pricePanel.contentBase.GetComponent<UIList>();
 	}

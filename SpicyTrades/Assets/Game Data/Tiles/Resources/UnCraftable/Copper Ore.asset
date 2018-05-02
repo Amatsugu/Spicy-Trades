@@ -27,5 +27,5 @@ MonoBehaviour:
     is red-orange in color.
   tooltip: "Looks like there is some copper in this rock\u2026 Maybe you can extract
     it somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b110c2d57e360fa499e8487f09f7a998, type: 3}
   recipe: {fileID: 0}

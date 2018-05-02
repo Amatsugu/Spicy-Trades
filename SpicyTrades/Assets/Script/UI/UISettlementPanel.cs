@@ -10,6 +10,8 @@ public class UISettlementPanel : UIPanel
 
 	public Button marketButton;
 	public UISettlementMarketPanel marketPanel;
+	public Button eventButton;
+	public UISettlementEventPanel eventPanel;
 
 	public void Show(SettlementTile settlement)
 	{
@@ -20,6 +22,8 @@ public class UISettlementPanel : UIPanel
 		descriptionText.text = settlement.Description;
 		marketButton.onClick.RemoveAllListeners();
 		marketButton.onClick.AddListener(() => marketPanel.Show(settlement));
+		eventButton.onClick.RemoveAllListeners();
+		eventButton.onClick.AddListener(() => eventPanel.Show(settlement));
 	}
 
 	public override void Hide()

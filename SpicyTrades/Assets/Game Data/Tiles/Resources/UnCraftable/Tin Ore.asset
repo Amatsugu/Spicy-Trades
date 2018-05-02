@@ -27,5 +27,5 @@ MonoBehaviour:
     gray and sometimes mistaken for silver. '
   tooltip: "Looks like there is some tin in this rock\u2026 Maybe you can extract
     it somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: eb38dee6059a21b44936ee18823112af, type: 3}
   recipe: {fileID: 0}

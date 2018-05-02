@@ -94,7 +94,6 @@ public class UISettlementMarketPanel : UIPanel
 				resUI.anchoredPosition = new Vector2(0, -i * (resUI.rect.height + 5));
 				_list.Add(resUI.GetComponent<UIResourceListItem>());
 			}
-			contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _list.Count * (_list.First().GetComponent<RectTransform>().rect.height + 5));
 		}
 		var r = 0;
 		if (_curMode == MarketMode.Buy)
@@ -135,6 +134,8 @@ public class UISettlementMarketPanel : UIPanel
 				});
 			}
 		}
+		contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, r * (_list.First().GetComponent<RectTransform>().rect.height + 5));
+
 		for (int i = r; i < _list.Count; i++)
 		{
 			_list[i].gameObject.SetActive(false);
