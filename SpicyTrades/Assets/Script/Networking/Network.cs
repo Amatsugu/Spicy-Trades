@@ -73,7 +73,7 @@ namespace NetworkManager
         public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
         public static UdpClient connection;
-        public static string self;
+        public static string self="";
         public static PID player;
         public static Dictionary<string, PID> players = new Dictionary<string, PID>();
         public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
@@ -104,7 +104,7 @@ namespace NetworkManager
         }
         public static void Host(int port)
         {
-            //ServerDataManager.INIT(); You can't leave compile errors in the unity project
+            ServerDataManager.INIT();
             byte[] receiveBytes;
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
             connection = new UdpClient(ipep);
