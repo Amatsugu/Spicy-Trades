@@ -71,6 +71,7 @@ public class ResourceGenerator : FeatureGenerator
 	{
 		float foodPerPop = curSettlementTileInfo.foodPerPop;
 		float requiredFood = settlement.Population * foodPerPop;
+		requiredFood += foodPerPop * 2;
 		float foodTotal = placedResources.Sum(res => res.category == ResourceCategory.Food ? res.yeild : 0);
 		if (requiredFood > foodTotal)
 		{

@@ -12,57 +12,61 @@ namespace NetworkManager
     public static class Network
     {
         //Data Types
-        public const byte PID       = 0x00; //Player ID This is sent once, then player id's are used
-        public const byte ROOM      = 0x01; //Room data This is sent once then room id's are used
-        public const byte MESSAGE   = 0x02; //This is the message object that is sent when needed
+        public const byte PID = 0x00; //Player ID This is sent once, then player id's are used
+        public const byte ROOM = 0x01; //Room data This is sent once then room id's are used
+        public const byte MESSAGE = 0x02; //This is the message object that is sent when needed
         //BOOLS
-        public const byte TRUE      = 0x00;
-        public const byte FALSE     = 0xFF;
+        public const byte TRUE = 0x00;
+        public const byte FALSE = 0xFF;
         //Commands
-        public const byte HELLO        = 0x00; //The server needs to know if you're still there
-        public const byte LOGIN        = 0x01; //Logins in the user
-        public const byte REGISTER     = 0x02; //Register an account
-        public const byte UPDATES      = 0x03; //CheckFor updates
-        public const byte DOUPDATES    = 0x04; //Gets the update files from the server
-        public const byte LISTR        = 0x05; //Gets a list of rooms returns Room[] in callback
-        public const byte JROOM        = 0x06; //Joins a room
-        public const byte CHAT         = 0x07; //Sends chat to global chat
-        public const byte REQUEST      = 0x08; //Sends a friend request
-        public const byte LISTF        = 0x09; //Gets list of friends
-        public const byte LISTRF       = 0x0A; //Gets list of friend requests
-        public const byte ADDF         = 0x0B; //Adds a friend who has sent you a request
-        public const byte FORMR        = 0x0C; //Creates a room
-        public const byte IHOST        = 0x0D; //Are you the host of a room
-        public const byte KICK         = 0x0E; //kick a player from a room
-        public const byte INVITEF      = 0x0F; //invites a friend to a room
-        public const byte READY        = 0x10; //Tell the server you are ready
-        public const byte LEAVER       = 0x11; //Leave a room
-        public const byte GRESORCE     = 0x12; //Get resource
-        public const byte INIT         = 0x13; //INIT
-        public const byte CHATDM       = 0x14; //sends a chat to a player
-        public const byte CHATRM       = 0x15; //sends a chat to a room
-        public const byte ROOMS        = 0x16; //Gets a room count
-        public const byte GROOM        = 0x17; //gets a room object from a roomid
-        public const byte GPID         = 0x18; //gets a pid object from a playerid
-        public const byte SYNC         = 0x19; //Syncs data between rooms
-        public const byte LOGOUT       = 0x1A; //Tell the server you want to log out
-        public const byte SENDFR       = 0x1B; //Tell the server you want to log out
+        public const byte HELLO = 0x00; //The server needs to know if you're still there
+        public const byte LOGIN = 0x01; //Logins in the user
+        public const byte REGISTER = 0x02; //Register an account
+        public const byte UPDATES = 0x03; //CheckFor updates
+        public const byte DOUPDATES = 0x04; //Gets the update files from the server
+        public const byte LISTR = 0x05; //Gets a list of rooms returns Room[] in callback
+        public const byte JROOM = 0x06; //Joins a room
+        public const byte CHAT = 0x07; //Sends chat to global chat
+        public const byte REQUEST = 0x08; //Sends a friend request
+        public const byte LISTF = 0x09; //Gets list of friends
+        public const byte LISTRF = 0x0A; //Gets list of friend requests
+        public const byte ADDF = 0x0B; //Adds a friend who has sent you a request
+        public const byte FORMR = 0x0C; //Creates a room
+        public const byte IHOST = 0x0D; //Are you the host of a room
+        public const byte KICK = 0x0E; //kick a player from a room
+        public const byte INVITEF = 0x0F; //invites a friend to a room
+        public const byte READY = 0x10; //Tell the server you are ready
+        public const byte LEAVER = 0x11; //Leave a room
+        public const byte SYNCB = 0x12; //Get resource
+        public const byte INIT = 0x13; //INIT
+        public const byte CHATDM = 0x14; //sends a chat to a player
+        public const byte CHATRM = 0x15; //sends a chat to a room
+        public const byte ROOMS = 0x16; //Gets a room count
+        public const byte GROOM = 0x17; //gets a room object from a roomid
+        public const byte GPID = 0x18; //gets a pid object from a playerid
+        public const byte SYNC = 0x19; //Syncs data between rooms
+        public const byte LOGOUT = 0x1A; //Tell the server you want to log out
+        public const byte SENDFR = 0x1B; //Tell the server you want to log out
+        public const byte LEAVERO = 0x1C; //Tell the server you want to log out
+        public const byte READYO = 0x1D; //Tell the server you are ready
+        public const byte SYNCO = 0x1E;
+        public const byte RELAY = 0x1F;
         //Error Codes
-        public const byte NO_ERROR              = 0x00;
-        public const byte UNKNOWN_ERROR         = 0x01;
-        public const byte INVALID_USERPASS      = 0x02;
-        public const byte INVALID_UID           = 0x03;
-        public const byte INVALID_FID           = 0x04;
-        public const byte INVALID_RID           = 0x05;
-        public const byte INVALID_EMAIL         = 0x06;
-        public const byte INVALID_CID           = 0x07;
-        public const byte CANT_FORM_ROOM        = 0x08;
-        public const byte CANT_SEND_CHAT        = 0x09;
-        public const byte CANNOT_KICK_PLAYER    = 0x0A;
-        public const byte NO_UPDATES            = 0x0B;
-        public const byte CANT_JOIN_ROOM        = 0x0C;
-        public const byte MESSAGE_TO_LARGE      = 0x0D;
-        public const byte ROOM_ERROR            = 0x0E;
+        public const byte NO_ERROR = 0x00;
+        public const byte UNKNOWN_ERROR = 0x01;
+        public const byte INVALID_USERPASS = 0x02;
+        public const byte INVALID_UID = 0x03;
+        public const byte INVALID_FID = 0x04;
+        public const byte INVALID_RID = 0x05;
+        public const byte INVALID_EMAIL = 0x06;
+        public const byte INVALID_CID = 0x07;
+        public const byte CANT_FORM_ROOM = 0x08;
+        public const byte CANT_SEND_CHAT = 0x09;
+        public const byte CANNOT_KICK_PLAYER = 0x0A;
+        public const byte NO_UPDATES = 0x0B;
+        public const byte CANT_JOIN_ROOM = 0x0C;
+        public const byte MESSAGE_TO_LARGE = 0x0D;
+        public const byte ROOM_ERROR = 0x0E;
         //Chat codes
         public const byte CHAT_DM = 0x00;
         public const byte CHAT_RM = 0x01;
@@ -77,11 +81,11 @@ namespace NetworkManager
         public static bool HANDSHAKEDONE = false;
         public static object[] objects;
         public static bool Wait = false;
-        public static byte[] lastMessage;
+        public static byte[] lastMessage = null;
+        public static byte[] capturedMsg = null;
         public static Dictionary<string, Message> msgCache = new Dictionary<string, Message>();
         public static bool Connect(string ip, int port)
         {
-            //Login(ip, port, user, pass);
             ClientDataManager.INIT();
             connection = new UdpClient(port);
             connection.Client.ReceiveTimeout = 1;
@@ -105,7 +109,7 @@ namespace NetworkManager
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
             connection = new UdpClient(ipep);
 
-            Console.WriteLine("Server Hosted on port: "+port+" Waiting for clients!");
+            Console.WriteLine("Server Hosted on port: " + port + " Waiting for clients!");
 
             IPEndPoint sender = new IPEndPoint(IPAddress.Any, 0);
 
@@ -113,7 +117,7 @@ namespace NetworkManager
             {
                 receiveBytes = connection.Receive(ref sender);
 
-                string returnData=Encoding.ASCII.GetString(receiveBytes, 0, receiveBytes.Length);
+                string returnData = Encoding.ASCII.GetString(receiveBytes, 0, receiveBytes.Length);
                 DataRecievedArgs data = new DataRecievedArgs();
                 data.Response = returnData;
                 data.RawResponse = receiveBytes;
@@ -123,17 +127,41 @@ namespace NetworkManager
         }
         public static PID GetPID(string pid)
         {
-            if (players.ContainsKey(pid))
             {
-                return players[pid];
-            } else
-            {
-                DownloadPID(pid);
-                while (!players.ContainsKey(pid))
+                if (players.ContainsKey(pid))
                 {
-                    DoMainClientStuff();
+                    return players[pid];
                 }
-                return players[pid];
+                else
+                {
+                    Wait = true;
+                    byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, pid });
+                    SendData(temp);
+                    byte[] tmprec = ClientHoldManager();
+                    while (tmprec == null && !(lastMessage == null && capturedMsg != null))
+                    {
+                        tmprec = ClientHoldManager();
+                        if (tmprec != null && tmprec[0] != GPID)
+                            tmprec = null;
+                    }
+                    if (capturedMsg != null && lastMessage == null)
+                    {
+                        tmprec = capturedMsg;
+                        capturedMsg = null;
+                    }
+                    Wait = false;
+                    byte error = tmprec[1];
+                    byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+                    if (error != 0)
+                    {
+                        Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                        return null;
+                    }
+                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    PID temppid = (PID)objects[0];
+                    players[temppid.GetID()] = temppid;
+                    return players[pid];
+                }
             }
         }
         public static Room GetRoom(string rid)
@@ -144,11 +172,32 @@ namespace NetworkManager
             }
             else
             {
-                DownloadRoom(rid);
-                while (!rooms.ContainsKey(rid))
+                Wait = true;
+                byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, rid });
+                SendData(temp);
+                byte[] tmprec = ClientHoldManager();
+                while (tmprec == null && !(lastMessage == null && capturedMsg != null))
                 {
-                    DoMainClientStuff();
+                    tmprec = ClientHoldManager();
+                    if (tmprec != null && tmprec[0] != GROOM)
+                        tmprec = null;
                 }
+                if (capturedMsg != null && lastMessage == null)
+                {
+                    tmprec = capturedMsg;
+                    capturedMsg = null;
+                }
+                Wait = false;
+                byte error = tmprec[1];
+                byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+                if (error != 0)
+                {
+                    Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                    return null;
+                }
+                objects = NetUtils.FormCommand(data, new string[] { "r" });
+                Room rtemp = (Room)objects[0];
+                rooms[rtemp.GetRoomID()] = rtemp;
                 return rooms[rid];
             }
         }
@@ -163,11 +212,16 @@ namespace NetworkManager
             Wait = true;
             SendData(NetUtils.PieceCommand(new object[] { LOGIN, user, pass }));
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
-                if (tmprec!= null && tmprec[0] != LOGIN)
+                if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -186,54 +240,35 @@ namespace NetworkManager
         public static void Consume(byte[] cmd) //Consumes commands
         {
             lastMessage = cmd;
-            connection.Client.ReceiveTimeout = 1000;
+            connection.Client.ReceiveTimeout = 500;
         }
         public static void ResendData()
         {
             if (lastMessage != null)
             {
-                Console.WriteLine("Resending...");
                 SendData(lastMessage);
             }
         }
-        public static bool CreateRoom(string password="NONE") //DONE
+        public static Room CreateRoom(string password = "NONE") //DONE
         {
             //Might need to send map data as well
-            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self,password });
+            byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self, password });
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != FORMR)
+                {
                     tmprec = null;
+                }
+                Console.WriteLine("Waiting for room data! " + (lastMessage == null && capturedMsg != null));
             }
-            Wait = false;
-            byte error = tmprec[1];
-            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
-            if (error != 0)
+            if (capturedMsg != null && lastMessage == null)
             {
-                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
-                return false;
-            }
-            objects = NetUtils.FormCommand(data, new string[] { "r" });
-            Room tempR = (Room)objects[0];
-            rooms[tempR.GetRoomID()] = tempR;
-            CurrentRoom = tempR;
-            return true;
-        }
-        public static Room JoinRoom(string roomid) //DONE
-        {//This will trigger the player joined room event with you as the argument
-            byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
-            Wait = true;
-            SendData(temp);
-            byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
-            {
-                tmprec = ClientHoldManager();
-                if (tmprec != null && tmprec[0] != JROOM)
-                    tmprec = null;
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -243,9 +278,43 @@ namespace NetworkManager
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                 return null;
             }
-            objects = NetUtils.FormCommand(data, new string[] { "r" });
-            Room tempR = (Room)objects[0];
+            objects = NetUtils.FormCommand(data, new string[] { "s" });
+            string tempS = (string)objects[0];
+            Room tempR = GetRoom(tempS);
             rooms[tempR.GetRoomID()] = tempR;
+            CurrentRoom = tempR;
+            return tempR;
+        }
+        public static Room JoinRoom(string roomid) //DONE
+        {//This will trigger the player joined room event with you as the argument
+            byte[] temp = NetUtils.PieceCommand(new object[] { JROOM, self, roomid });
+            Wait = true;
+            SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != JROOM)
+                    tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return null;
+            }
+            objects = NetUtils.FormCommand(data, new string[] { "s" });
+            string tempS = (string)objects[0];
+            Room tempR = GetRoom(tempS);
+            rooms[tempR.GetRoomID()] = tempR;
+            CurrentRoom = tempR;
             return tempR;
         }
         public static void HasUpdates()
@@ -264,11 +333,16 @@ namespace NetworkManager
             SendData(temp);
             SendData(NetUtils.PieceCommand(new object[] { LOGOUT }));
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             return self;
@@ -279,11 +353,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != ROOMS)
+                if (tmprec != null && tmprec[0] != ROOMS)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -296,17 +375,22 @@ namespace NetworkManager
             objects = NetUtils.FormCommand(data, new string[] { "i" });
             return (int)objects[0];
         }
-        public static Room[] ListRooms(int pos=0, int count=100) //DONE
+        public static Room[] ListRooms(int pos = 0, int count = 100) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { LISTR, self, pos, count });
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != LISTR)
+                if (tmprec != null && tmprec[0] != LISTR)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -328,21 +412,13 @@ namespace NetworkManager
         }
         public static void Sync(string data) //DONE
         {
-            byte[] temp;
-            string randomid = Guid.NewGuid().ToString("N").Substring(0, 8); // keep track incase multiple ppl are syncing at the same time
-            if (data.Length > 1024)
-            {
-                string[] groups = (from Match m in Regex.Matches(data, @"\d{1024}") select m.Value).ToArray();
-                for(int i=0; i <groups.Length;i++)
-                {
-                    temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, groups.Length, i, groups[i] }); // Send the data, breakes it into pieces for you
-                    SendData(temp);
-                }
-            } else
-            {
-                temp = NetUtils.PieceCommand(new object[] { SYNC, self, randomid, 1 , 1, data }); // 1 packet of data being sent... the server will simply mirror this data
-                SendData(temp);
-            }
+            byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, false, self, data }); // 1 packet of data being sent... the server will simply mirror this data
+            SendData(temp);
+        }
+        public static void Sync(byte[] data) //DONE
+        {
+            byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, true, self, data }); // 1 packet of data being sent... the server will simply mirror this data
+            SendData(temp);
         }
         public static bool SendFriendRequest(string playerid) //DONE
         {
@@ -350,11 +426,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != SENDFR)
+                if (tmprec != null && tmprec[0] != SENDFR)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -372,11 +453,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -401,11 +487,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec != null && tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
-                if (tmprec[0] != LISTRF)
+                if (tmprec != null && tmprec[0] != LISTRF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -430,11 +521,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != ADDF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -452,11 +548,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != IHOST)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -474,11 +575,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != KICK)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -496,11 +602,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != INVITEF)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -512,17 +623,22 @@ namespace NetworkManager
             }
             return true;
         }
-        public static bool SetReady(bool ready,string roomid)
+        public static bool SetReady(bool ready)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self });
+            byte[] temp = NetUtils.PieceCommand(new object[] { READY, self, ready });
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != READY)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -540,11 +656,16 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
-            while (tmprec == null)
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LEAVER)
                     tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
             }
             Wait = false;
             byte error = tmprec[1];
@@ -566,12 +687,12 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { HELLO, self });
             SendData(temp);
         }
-        public static void SendDM(Message msg,string playerid)
+        public static void SendDM(Message msg, string playerid)
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { CHATDM, self, msg, playerid });
-            SendData(temp);
+            SendData(temp, false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHATDM)
@@ -589,10 +710,10 @@ namespace NetworkManager
         }
         public static void SendRoomChat(Message msg)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg});
-            SendData(temp);
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHATRM, self, msg });
+            SendData(temp, false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHATRM)
@@ -610,10 +731,10 @@ namespace NetworkManager
         }
         public static void SendChat(Message msg)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { CHAT, self, msg});
-            SendData(temp);
+            byte[] temp = NetUtils.PieceCommand(new object[] { CHAT, self, msg });
+            SendData(temp, false);
             //byte[] tmprec = ClientHoldManager();
-            //while (tmprec == null)
+            //while (tmprec == null && !(lastMessage==null && capturedMsg!=null))
             //{
             //    tmprec = ClientHoldManager();
             //    if (tmprec != null && tmprec[0] != CHAT)
@@ -629,24 +750,15 @@ namespace NetworkManager
             //}
             //return true;
         }
-        public static void DownloadRoom(string roomid)
+        public static void SendData(byte[] data, bool doit = true)
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, roomid });
-            SendData(temp);
-        }
-        public static void DownloadPID(string playerid)
-        {
-            byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, playerid });
-            SendData(temp);
-        }
-        public static void SendData(byte[] data)
-        {
-            Consume(data);
-            connection.Send(data,data.Length);
+            if (doit)
+                Consume(data);
+            if (data != null)
+                connection.Send(data, data.Length);
         }
         public static void SendData(byte[] data, IPEndPoint sender)
         {
-            Consume(data);
             connection.Send(data, data.Length, sender);
         }
         public static IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
@@ -654,7 +766,7 @@ namespace NetworkManager
         {
             while (true)
             {
-                if(!Wait)
+                if (!Wait)
                     DoMainClientStuff();
             }
         }
@@ -665,13 +777,20 @@ namespace NetworkManager
                 Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
                 if (receiveBytes.Length > 0)
                 {
+
                     DataRecievedArgs data = new DataRecievedArgs();
                     data.RawResponse = receiveBytes;
                     OnDataRecieved(data);
+                    if (lastMessage[0] == receiveBytes[0])
+                    {
+                        capturedMsg = receiveBytes;
+                        lastMessage = null;
+                    }
                 }
-            } catch
+            }
+            catch
             {
-                //
+                ResendData();
             }
         }
         public static byte[] ClientHoldManager()
@@ -691,7 +810,10 @@ namespace NetworkManager
             }
             catch
             {
-                ResendData();
+                if (Wait)
+                {
+                    ResendData();
+                }
             }
             return null;
         }
@@ -868,7 +990,7 @@ namespace NetworkManager
     }
     public class ChatDataArgs : EventArgs
     {
-        public Message Message {get;set;}
+        public Message Message { get; set; }
         public int Flag { get; set; }
         public Room Room { get; set; }
     }

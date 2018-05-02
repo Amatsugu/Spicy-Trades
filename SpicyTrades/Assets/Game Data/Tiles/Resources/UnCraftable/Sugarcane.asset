@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tag: Resource
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.34005487, g: 0.7058823, b: 0.32698962, a: 1}
+  color: {r: 0.5019608, g: 0.24313727, b: 0.21176472, a: 1}
   cost: 0
   tileRenderers: []
   category: 0
@@ -27,5 +27,5 @@ MonoBehaviour:
     tall plant that can grow up to 20 feet tall. The tall stalks are rich in sugar
     and can be processed in various ways or eaten raw. '
   tooltip: A long reed filled with raw sugar.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2f29131c2e2db914a9a5b62b63800b46, type: 3}
   recipe: {fileID: 0}

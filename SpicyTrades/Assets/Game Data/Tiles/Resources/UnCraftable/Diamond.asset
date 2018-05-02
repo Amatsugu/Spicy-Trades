@@ -29,5 +29,5 @@ MonoBehaviour:
   tooltip: "Wow\u2026 a diamond! Looks pretty rough around the edges though. I wonder
     if it could be improved somehow\u2026 (uncut) Wow! A cut diamond! This must be
     worth a fortune. (cut)"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b7540139c5bc6d54fbe5220938f7e84b, type: 3}
   recipe: {fileID: 0}

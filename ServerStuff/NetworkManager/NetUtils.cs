@@ -74,6 +74,13 @@ namespace NetworkManager
                 {
                     temp.Add(data[pos++]);
                 }
+                else if (split[i] == "byte[]" || split[i] == "b[]")
+                {
+                    Int16 len = BitConverter.ToInt16(data.SubArray(pos, 2), 0);
+                    pos += 2;
+                    temp.Add(data.SubArray(pos, len));
+                    pos += len;
+                }
                 else if (split[i] == "bool" || split[i] == "bo")
                 {
                     temp.Add(data[pos++] == 255);
@@ -161,6 +168,17 @@ namespace NetworkManager
                 else if (parts[i].GetType().ToString().Contains("Byte"))
                 {
                     temp.Add((byte)parts[i]);
+                }
+                else if (parts[i].GetType().ToString().Contains("Byte[]"))
+                {
+                    byte[] dat = (byte[])parts[i];
+                    byte[] len = BitConverter.GetBytes((Int16)dat.Length);
+                    temp.Add(len[0]);
+                    temp.Add(len[1]);
+                    for (int j = 0; j < dat.Length; j++)
+                    {
+                        temp.Add(dat[j]);
+                    }
                 }
                 else if (parts[i].GetType().ToString().Contains("Bool"))
                 {

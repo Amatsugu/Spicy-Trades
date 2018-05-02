@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tag: Resource
   sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.65775865, g: 0, b: 0.8014706, a: 1}
+  color: {r: 0.50980395, g: 0.36078432, b: 0.68235296, a: 1}
   cost: 0
   tileRenderers: []
   category: 1
@@ -21,10 +21,10 @@ MonoBehaviour:
   - Food
   - Material
   requiredWorkers: 5
-  basePrice: 0.2
   yeild: 20
+  basePrice: 0.2
   description: A round fruit grown on vines known for its sweetness. Mostly used to
     make wines. Could be used to make jams and candied grapes.
   tooltip: "A sack of grapes. \u2026 Taste pretty sweet."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 4cc80ff3ad3f3114e89849c6ee055cd8, type: 3}
   recipe: {fileID: 0}

@@ -206,7 +206,7 @@ namespace NetworkManager
         public void SetReady(bool b)
         {
             isReady = b;
-            Network.SetReady(b, roomID); //DW Server will not mirror commands sent to you...
+            Network.SetReady(b); //DW Server will not mirror commands sent to you...
         }
         public void SetReady(bool b, PID player)
         {

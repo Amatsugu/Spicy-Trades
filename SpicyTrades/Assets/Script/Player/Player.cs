@@ -13,6 +13,8 @@ public class Player
 	public string Id { get; private set; }
 	public string Username { get; private set; }
 	public Coin Money { get; private set; }
+	public int Influence { get; private set; }
+
 	[JsonIgnore]
 	public PlayerObject playerObject;
 	[JsonIgnore]
@@ -51,11 +53,12 @@ public class Player
 		}
 	}
 
-	public void SetTile(SettlementTile tile)
+	public void SetTile(SettlementTile tile, bool showUI = true)
 	{
 		_curTile = tile.Position;
 		GameMaster.CachePrices(tile);
-		UIManager.ShowSettlementPanel(tile);
+		if(showUI)
+			UIManager.ShowSettlementPanel(tile);
 		playerObject.transform.position = tile.WolrdPos;
 	}
 

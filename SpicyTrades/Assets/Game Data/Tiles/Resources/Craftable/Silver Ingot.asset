@@ -22,6 +22,7 @@ MonoBehaviour:
   - Ingot
   - Material
   - Product
+  - Precious Metal
   requiredWorkers: 5
   yeild: 20
   basePrice: 5
