@@ -21,7 +21,7 @@ public class SettlementDescriptionGenerator : FeatureGenerator {
 				settlement.Description = "A large, dense forest spans your view. Some trees are as tall as the clouds themselves, dark and looming. It seems the local population gathers their wood from here. ";
 			}
 			//Water
-			if(settlement.GetNeighbors().Any(n => n.Tag == "Water" || n.GetNeighbors().Any(nn => nn.Tag == "Water")))
+			if(settlement.GetNeighbors().Any(n => n != null && (n.Tag == "Water" || n.GetNeighbors().Any(nn => nn != null && nn.Tag == "Water"))))
 			{
 				settlement.Description += "Large wells can be seen throughout the area; collecting water from deep below the surface and from other nearby sources. ";
 			}
