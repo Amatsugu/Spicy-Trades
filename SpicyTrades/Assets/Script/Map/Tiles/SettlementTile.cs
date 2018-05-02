@@ -268,8 +268,6 @@ public class SettlementTile : Tile
 					TakeResource(res, unitsTaken);
 					need.count -= unitsTaken;
 				}
-				if (need.count == 0)
-					break;
 			}
 		}
 		ResourceNeeds.RemoveAll(n => n.count == 0);

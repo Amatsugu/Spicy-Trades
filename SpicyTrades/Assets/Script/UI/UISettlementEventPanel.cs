@@ -22,6 +22,7 @@ public class UISettlementEventPanel : UIPanel
 	public void Show(SettlementTile settlement)
 	{
 		base.Show();
+		titleText.text = settlement.Name + "'s Current Events";
 		_currentSettlement = settlement;
 		RefreshList();
 	}
@@ -30,8 +31,11 @@ public class UISettlementEventPanel : UIPanel
 	{
 		var resCount = _currentSettlement.currentEvents.Sum(c => c.ResourceNeeds.Length);
 		var needs = _currentSettlement.currentEvents.SelectMany(e => e.ResourceNeeds);
-		_selectedNeed = needs.FirstOrDefault(need => need.count > 0);
-		UpdateInfo(_selectedNeed);
+		if (_selectedNeed == null || _selectedNeed.count == 0 || _selectedNeed.source.EndTime <= GameMaster.CurrentTick)
+		{
+			_selectedNeed = needs.FirstOrDefault(need => need.count > 0);
+			UpdateInfo(_selectedNeed);
+		}
 		if (_list.Count < resCount)
 		{
 			for (int i = _list.Count; i < resCount; i++)
@@ -41,7 +45,6 @@ public class UISettlementEventPanel : UIPanel
 				_list.Add(resUI.GetComponent<UIResourceListItem>());
 				resUI.gameObject.SetActive(false);
 			}
-			contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, _list.Count * (_list.First().GetComponent<RectTransform>().rect.height + 5));
 		}
 		var n = 0;
 		var resList = GameMaster.Registry.resourceList.GetResourceList();
@@ -56,6 +59,11 @@ public class UISettlementEventPanel : UIPanel
 			UIItem.iconImage.sprite = resList.First(res => need.Match(res)).icon;
 			UIItem.button.onClick.RemoveAllListeners();
 			UIItem.button.onClick.AddListener(() => UpdateInfo(need));
+		}
+		contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, n * (_list.First().GetComponent<RectTransform>().rect.height + 5));
+		for (int i = n; i < _list.Count; i++)
+		{
+			_list[i].gameObject.SetActive(false);
 		}
 	}
 
