@@ -104,7 +104,7 @@ namespace NetworkManager
         }
         public static void Host(int port)
         {
-            ServerDataManager.INIT();
+            //ServerDataManager.INIT(); You can't leave compile errors in the unity project
             byte[] receiveBytes;
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
             connection = new UdpClient(ipep);
