@@ -51,6 +51,7 @@ namespace NetworkManager
         public const byte READYO = 0x1D; //Tell the server you are ready
         public const byte SYNCO = 0x1E;
         public const byte RELAY = 0x1F;
+        public const byte JOINO = 0x20;
         //Error Codes
         public const byte NO_ERROR = 0x00;
         public const byte UNKNOWN_ERROR = 0x01;
@@ -914,7 +915,9 @@ namespace NetworkManager
     }
     public class SyncEventArgs : EventArgs
     {
-        public string Data { get; set; }
+        public int Type { get; set; }
+        public string SData { get; set; }
+        public byte[] BData { get; set; }
     }
     public class GotRoomEventArgs : EventArgs
     {

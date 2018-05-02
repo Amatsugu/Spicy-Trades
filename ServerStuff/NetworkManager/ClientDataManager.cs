@@ -47,6 +47,12 @@ namespace NetworkManager
                     string playerid = (string)objects[0];
                     //HOOK EVENT
                     break;
+                case Network.JOINO:
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    playerid = (string)objects[0];
+                    Network.CurrentRoom.AddMember(Network.GetPID(playerid),true);
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, (string)objects[1] }));
+                    break;
                 case Network.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
@@ -107,15 +113,19 @@ namespace NetworkManager
                     Network.OnChat(globalchat);
                     break;
                 case Network.SYNCB://payload,key
-                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
-                    string recievedData = (string)objects[0];
-                    //EVENT
+                    objects = NetUtils.FormCommand(data, new string[] { "b[]", "s" });
+                    SyncEventArgs sync = new SyncEventArgs();
+                    sync.Type = 0;
+                    sync.BData = (byte[])objects[0];
+                    Network.OnSyncData(sync);
                     Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY,Network.self,(string)objects[1] }));
                     break;
                 case Network.SYNCO:
-                    objects = NetUtils.FormCommand(data, new string[] { "b[]", "s" });
-                    byte[] recievedBData = (byte[])objects[0];
-                    //EVENT
+                    objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
+                    SyncEventArgs syncb = new SyncEventArgs();
+                    syncb.Type = 1;
+                    syncb.SData=(string)objects[0];
+                    Network.OnSyncData(syncb);
                     Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
                     break;
                 default:
