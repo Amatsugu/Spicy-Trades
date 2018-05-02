@@ -11,7 +11,7 @@ namespace NetworkManager
         static bool done = false;
         static void Main(string[] args)
         {
-            bool conn = Network.Connect("192.168.1.6", 12344);
+            bool conn = Network.Connect("spicy.luminousvector.com", 12344);
             Network.Chat += OnChat;
             if (!conn)
             {
