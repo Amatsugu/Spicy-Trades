@@ -11,7 +11,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 354017b05f180074e9ed29ca343d7bb0, type: 3}
   m_Name: Random
   m_EditorClassIdentifier: 
-  Size: {x: 40, y: 40}
+  Size: {x: 80, y: 50}
   tileMapper: {fileID: 11400000, guid: bb90c7fedf21a6446a79cc6acbeaad75, type: 2}
   OuterRadius: 0.576
   featureGenerators:
