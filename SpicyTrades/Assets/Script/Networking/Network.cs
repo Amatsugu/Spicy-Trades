@@ -105,8 +105,12 @@ namespace NetworkManager
         }
         public static void Host(int port)
         {
-            ServerDataManager.INIT();
-            byte[] receiveBytes;
+			#region NO ServerDataManager
+#if false
+			ServerDataManager.INIT();
+#endif
+			#endregion
+			byte[] receiveBytes;
             IPEndPoint ipep = new IPEndPoint(IPAddress.Any, port);
             connection = new UdpClient(ipep);
 
