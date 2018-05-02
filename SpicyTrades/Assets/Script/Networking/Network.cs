@@ -51,6 +51,7 @@ namespace NetworkManager
         public const byte READYO = 0x1D; //Tell the server you are ready
         public const byte SYNCO = 0x1E;
         public const byte RELAY = 0x1F;
+        public const byte JOINO = 0x20;
         //Error Codes
         public const byte NO_ERROR = 0x00;
         public const byte UNKNOWN_ERROR = 0x01;
@@ -73,7 +74,7 @@ namespace NetworkManager
         public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
         public static UdpClient connection;
-        public static string self="";
+        public static string self="0000000000000000000000000000000000000";
         public static PID player;
         public static Dictionary<string, PID> players = new Dictionary<string, PID>();
         public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
@@ -157,7 +158,13 @@ namespace NetworkManager
                         Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                         return null;
                     }
-                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    try
+                    {
+                        objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    } catch
+                    {
+                        return GetPID(pid);
+                    }
                     PID temppid = (PID)objects[0];
                     players[temppid.GetID()] = temppid;
                     return players[pid];
@@ -195,7 +202,14 @@ namespace NetworkManager
                     Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                     return null;
                 }
-                objects = NetUtils.FormCommand(data, new string[] { "r" });
+                try
+                {
+                    objects = NetUtils.FormCommand(data, new string[] { "r" });
+                }
+                catch
+                {
+                    return GetRoom(rid);
+                }
                 Room rtemp = (Room)objects[0];
                 rooms[rtemp.GetRoomID()] = rtemp;
                 return rooms[rid];
@@ -914,7 +928,9 @@ namespace NetworkManager
     }
     public class SyncEventArgs : EventArgs
     {
-        public string Data { get; set; }
+        public int Type { get; set; }
+        public string SData { get; set; }
+        public byte[] BData { get; set; }
     }
     public class GotRoomEventArgs : EventArgs
     {
