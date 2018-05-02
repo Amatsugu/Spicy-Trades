@@ -30,5 +30,5 @@ MonoBehaviour:
     currency. Can also be used to make jewelry and cutlery.
   tooltip: A bar of solid silver. Should you really try and make something out of
     this?
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1eb6fccd81e24014585d8bfa34a441eb, type: 3}
   recipe: {fileID: 11400000, guid: f97ae580b4b92bd44b259c57057e5801, type: 2}

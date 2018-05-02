@@ -28,5 +28,5 @@ MonoBehaviour:
   description: 'A yellow colored alloy consisting of copper and zinc. Relatively resistant
     to corrosion and deterioration. Widely used to create locks, gears and instruments. '
   tooltip: "A heavy, yellow bar of brass. Maybe you can make something out of this\u2026"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 34a9d1e8672da0b4093948df5efba38d, type: 3}
   recipe: {fileID: 11400000, guid: 15d05b3866901b142987fbd607688bbf, type: 2}

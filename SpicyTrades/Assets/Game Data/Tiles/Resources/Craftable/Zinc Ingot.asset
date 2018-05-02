@@ -27,5 +27,5 @@ MonoBehaviour:
   description: A bar of solid zinc. Has no real usage on its own. Produces brass when
     mixed with copper.
   tooltip: A shiny white bar of zinc. Can you even make anything useful out of this?
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 56f4c768d5875364b98ac108a8fc6a73, type: 3}
   recipe: {fileID: 11400000, guid: 778b0035cd59b6c40a04bac9ea492c02, type: 2}

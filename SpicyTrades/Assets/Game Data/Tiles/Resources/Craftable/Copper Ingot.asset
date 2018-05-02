@@ -28,5 +28,5 @@ MonoBehaviour:
   description: A bar of smelted copper. Fairly useless in the creation of tools on
     its own. Mostly used to create bronze, brass and copper coins for currency.
   tooltip: "A brown bar of copper. Maybe you can make something out of this\u2026"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: b426cfdf9ee93db478c4d5a4d54a35aa, type: 3}
   recipe: {fileID: 11400000, guid: fb80470491503f04cb6d68f6d093fd5b, type: 2}

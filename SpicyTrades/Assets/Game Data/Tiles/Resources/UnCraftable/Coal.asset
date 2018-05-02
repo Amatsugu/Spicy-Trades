@@ -27,5 +27,5 @@ MonoBehaviour:
   description: A blackish lump of rock that easily burns. Known for its heat production
     and loved by blacksmiths all around. Used in the production of steel.
   tooltip: "A black lump of coal\u2026 try not to stain your hands."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 336e5d673d77b6e4ab4e33301f0a6793, type: 3}
   recipe: {fileID: 0}

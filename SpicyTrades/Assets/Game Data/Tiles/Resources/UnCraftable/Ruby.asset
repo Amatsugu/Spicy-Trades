@@ -27,5 +27,5 @@ MonoBehaviour:
     wealth and social status. '
   tooltip: Wow, a ruby! What a startling red color! You can probably fetch an extremely
     high price for this.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: dc507151dcc2d0e448cf975281c1d8d7, type: 3}
   recipe: {fileID: 0}

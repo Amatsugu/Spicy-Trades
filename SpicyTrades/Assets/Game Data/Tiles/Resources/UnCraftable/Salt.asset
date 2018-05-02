@@ -26,5 +26,5 @@ MonoBehaviour:
   description: Collected from evaporated seawater. An extremely important but somewhat
     common commodity. Used to add flavor to food and as a preservative.
   tooltip: "A jar filled with salt. \u2026Salty\u2026 now, where did I put my water..."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 1de3749f614dcd54d870bd745c5e1d42, type: 3}
   recipe: {fileID: 0}

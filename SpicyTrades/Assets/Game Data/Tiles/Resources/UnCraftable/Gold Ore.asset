@@ -27,5 +27,5 @@ MonoBehaviour:
     yellow shine. Rather rare in these parts of the world.
   tooltip: "Looks like there is some gold in this rock\u2026 Maybe you can extract
     it somehow."
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 3ac97be1ffb0fdf45a7369dc5732acec, type: 3}
   recipe: {fileID: 0}

@@ -27,5 +27,5 @@ MonoBehaviour:
   description: 'A basic and essential crop usually grown by farmers in the spring
     season. Often used to make beer. '
   tooltip: A bundle of barley.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7378b84241577ca4a86a5e50333257a3, type: 3}
   recipe: {fileID: 0}

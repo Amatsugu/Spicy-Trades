@@ -26,5 +26,5 @@ MonoBehaviour:
     Associated with feelings of calm and trust. Commonly used as jewelry by the wealthy. '
   tooltip: "What a startling green color! You can probably fetch a high price for
     this emerald\u2026"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 2319996bb9a357c4980e135e5bdafa37, type: 3}
   recipe: {fileID: 0}

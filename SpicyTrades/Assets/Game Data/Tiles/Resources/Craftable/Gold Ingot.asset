@@ -30,5 +30,5 @@ MonoBehaviour:
     objects of seeming importance such as crowns.
   tooltip: A bar of solid gold! Quite heavy. Should you really try to make something
     out of this?
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 7f2724415445be24c8dbc8e5e992b981, type: 3}
   recipe: {fileID: 11400000, guid: 6089b0ceaed3df843a55e7624072bd43, type: 2}
