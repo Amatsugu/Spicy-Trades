@@ -50,20 +50,21 @@ namespace NetworkManager
                 case Network.JOINO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     playerid = (string)objects[0];
-                    Network.CurrentRoom.AddMember(Network.GetPID(playerid),true);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, (string)objects[1] }));
+                    Console.WriteLine(playerid+"|"+ (string)objects[1]);
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
+                    Network.CurrentRoom.AddMember(Network.GetPID(playerid), true);
                     break;
                 case Network.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, (string)objects[2] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
                     Console.WriteLine("Player Set Ready!");
                     break;
                 case Network.LEAVERO: // only sent if you are in the room
                     Console.WriteLine("Removing member!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY,(string)objects[2] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
