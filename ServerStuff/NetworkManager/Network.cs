@@ -158,7 +158,13 @@ namespace NetworkManager
                         Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                         return null;
                     }
-                    objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    try
+                    {
+                        objects = NetUtils.FormCommand(data, new string[] { "p" });
+                    } catch
+                    {
+                        return GetPID(pid);
+                    }
                     PID temppid = (PID)objects[0];
                     players[temppid.GetID()] = temppid;
                     return players[pid];
@@ -196,7 +202,14 @@ namespace NetworkManager
                     Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                     return null;
                 }
-                objects = NetUtils.FormCommand(data, new string[] { "r" });
+                try
+                {
+                    objects = NetUtils.FormCommand(data, new string[] { "r" });
+                }
+                catch
+                {
+                    return GetRoom(rid);
+                }
                 Room rtemp = (Room)objects[0];
                 rooms[rtemp.GetRoomID()] = rtemp;
                 return rooms[rid];
