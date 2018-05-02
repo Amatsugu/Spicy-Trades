@@ -51,20 +51,20 @@ namespace NetworkManager
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     playerid = (string)objects[0];
                     Console.WriteLine(playerid+"|"+ (string)objects[1]);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
                     Network.CurrentRoom.AddMember(Network.GetPID(playerid), true);
                     break;
                 case Network.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
                     Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
                     Console.WriteLine("Player Set Ready!");
                     break;
                 case Network.LEAVERO: // only sent if you are in the room
                     Console.WriteLine("Removing member!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
                     break;
                 case Network.INIT:
                     Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
@@ -83,7 +83,7 @@ namespace NetworkManager
                     globalchat.Flag = Network.CHAT_GLOBAL;
                     globalchat.Message = msgglobal;
                     Network.OnChat(globalchat);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
                     break;
                 case Network.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m","s" });
@@ -100,12 +100,12 @@ namespace NetworkManager
                     globalchat.Flag = Network.CHATDM;
                     globalchat.Message = msgdm;
                     Network.OnChat(globalchat);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
                     break;
                 case Network.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s", "s" });
                     Message msgrm = (Message)objects[0];
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
                     Console.WriteLine("Got Room Chat! " + (string)objects[2]);
                     globalchat = new ChatDataArgs();
                     globalchat.Room = Network.GetRoom((string)objects[1]);
@@ -119,7 +119,7 @@ namespace NetworkManager
                     sync.Type = 0;
                     sync.BData = (byte[])objects[0];
                     Network.OnSyncData(sync);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY,Network.self,(string)objects[1] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self,(string)objects[1] }), false);
                     break;
                 case Network.SYNCO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
@@ -127,7 +127,7 @@ namespace NetworkManager
                     syncb.Type = 1;
                     syncb.SData=(string)objects[0];
                     Network.OnSyncData(syncb);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }));
+                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
                     break;
                 default:
                     break;
