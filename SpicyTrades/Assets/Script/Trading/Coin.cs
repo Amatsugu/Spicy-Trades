@@ -10,16 +10,18 @@ using UnityEngine;
 public struct Coin
 {
 	[JsonIgnore]
-	public int Chip { get { return (int)((Value - (Royal * silverPerGold) - Silver) * chipPerSilver); } }
+	public long Chip { get { return (int)((Value - (Royal * silverPerGold) - Silver) * chipPerSilver); } }
 	[JsonIgnore]
-	public int Silver { get { return (int)(Value - (Royal * silverPerGold)); } }
+	public long Silver { get { return (int)(Value - (Royal * silverPerGold)); } }
 	[JsonIgnore]
-	public int Royal { get { return (int)(Value / silverPerGold); } }
+	public long Royal { get { return (int)(Value / silverPerGold); } }
 
-	public float Value { get; private set; }
+	public double Value => _value;
 
-	private const float chipPerSilver = 50;
-	private const float silverPerGold = 10;
+	private double _value;
+
+	private const double chipPerSilver = 50;
+	private const double silverPerGold = 10;
 
 	public Coin(int chip = 0, int silver = 0, int gold = 0)
 	{
@@ -33,14 +35,18 @@ public struct Coin
 			gold += (int)(silver / silverPerGold);
 			silver = (int)(silver % silverPerGold);
 		}
-		Value = gold * silverPerGold;
-		Value += silver;
-		Value += chip / chipPerSilver;
+		_value = gold * silverPerGold;
+		_value += silver;
+		_value += chip / chipPerSilver;
+		if (_value < 0)
+			_value = 0;
 	}
 
-	public Coin(float value)
+	public Coin(double value)
 	{
-		Value = value;
+		_value = value;
+		if (_value < 0)
+			_value = 0;
 	}
 
 	public static Coin operator +(Coin a, Coin b)
@@ -200,11 +206,11 @@ public struct Coin
 	{
 		string[] s = new string[3];
 		if(Royal != 0)
-			s[0] = "<color=#fcc100>" + Royal + "</color>";
+			s[0] = $"<color=#fcc100>{Royal}</color>";
 		if(Silver != 0)
-			s[1] = "<color=#cccccc>" + Silver + "</color>";
+			s[1] = $"<color=#cccccc>{Silver}</color>";
 		if(Chip != 0)
-			s[2] = "<color=#8c4800>" + Chip + "</color>";
+			s[2] = $"<color=#8c4800>{Chip}</color>";
 		return string.Join(separator, s.Where(i => i != null).ToArray());
 	}
 }

@@ -39,9 +39,7 @@ public class UISettlementMarketPanel : UIPanel
 	public void Show(SettlementTile settlement)
 	{
 		Show();
-		//if (GameMaster.CameraPan != null)
-		//	GameMaster.CameraPan.isPaused = true;
-		titleText.text = settlement.Name + ": Market";
+		titleText.text = $"{settlement.Name}'s Market";
 		_currentSettlement = settlement;
 		var res = settlement.ResourceCache.Keys.ToArray();
 		_selectedResource = res.Length == 0 ? null : res[0];
@@ -70,12 +68,12 @@ public class UISettlementMarketPanel : UIPanel
 				var res = GameMaster.Player.inventory.FirstOrDefault(inv => inv.Resource.Match(_selectedResource));
 				count = (res != null) ? (int)res.Resource.count : 0;
 			}
-			itemName.text += " (" + count + " Owned)";
+			itemName.text += $" ({count} Owned)";
 		}
 		var value = (_currentSettlement.ResourceCache.ContainsKey(_selectedResource)) ? _currentSettlement.ResourceCache[_selectedResource][1] : 1.5f;
 		var unitPrice = new Coin(value * _selectedResource.basePrice);
 		itemPrice.text = unitPrice.ToString(" ");
-		itemDescription.text = _selectedResource.description;
+		itemDescription.text = $"{_selectedResource.description} \n {_selectedResource.tooltip}" ;
 		UpdateBuyButton();
 	}
 
@@ -166,7 +164,7 @@ public class UISettlementMarketPanel : UIPanel
 			if (count == 0)
 				buyButton.interactable = false;
 			countInput.text = count.ToString();
-			buyButtonText.text =  _curMode + " (" + (count * unitPrice).ToString(" ") + ")";
+			buyButtonText.text =  $"{_curMode} ({(_curMode == MarketMode.Buy ? "-" : "+")}{(count * unitPrice).ToString(" ")})";
 			buyButton.onClick.RemoveAllListeners();
 			if (_curMode == MarketMode.Buy)
 				buyButton.onClick.AddListener(() => 
