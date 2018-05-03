@@ -35,7 +35,11 @@ public class Player
 		playerObject = player;
 		player.SetPlayer(this);
 		inventory = new List<InventoryItem>();
+#if DEBUG
+		Money = new Coin(Mathf.Infinity);
+#else
 		Money = new Coin(10000f);
+#endif
 		GameMaster.GameMap.OnMapSimulate += m => GameMaster.CachePrices(CurrentTile);
 	}
 

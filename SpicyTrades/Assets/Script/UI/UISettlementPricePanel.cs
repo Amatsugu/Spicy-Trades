@@ -31,6 +31,8 @@ public class UISettlementPricePanel : UIPanel
 			noPriceText.gameObject.SetActive(true);
 			return;
 		}
+		else
+			noPriceText.gameObject.SetActive(false);
 		var rCache = GameMaster.PriceKnowledge[tile].Cache;
 		var i = 0;
 		foreach (var res in rCache.Keys)

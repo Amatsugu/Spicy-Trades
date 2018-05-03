@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -77,7 +77,7 @@ public class UISettlementEventPanel : UIPanel
 		var price = resList.Where(res => _selectedNeed.Match(res)).Average(res => res.basePrice) * 10;
 		itemPrice.text = "<color=#ff0064>" + price + "</color>";
 		itemIcon.sprite = resList.First(res => need.Match(res)).icon;
-		var matchedPlayerItems = GameMaster.Player.inventory.SelectMany(inv => resList.Where(res => inv.Resource.count > 0 && inv.Resource.Match(res)));
+		var matchedPlayerItems = GameMaster.Player.inventory.Select(inv => inv.ActualResource);
 		var sb = new StringBuilder();
 		sb.Append("<b>");
 		sb.Append(need.source.Name);

@@ -225,6 +225,14 @@ Prefab:
       propertyPath: eventButton
       value: 
       objectReference: {fileID: 404930344}
+    - target: {fileID: 1594881184898020, guid: 57d986139b2bacb4a9cc1d4c6f58d9be, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1028454871242558, guid: 57d986139b2bacb4a9cc1d4c6f58d9be, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 57d986139b2bacb4a9cc1d4c6f58d9be, type: 2}
   m_IsPrefabParent: 0
