@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Ground
   m_EditorClassIdentifier: 
   tag: Ground
-  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  sprite: {fileID: 21300000, guid: 9239405763a81d248bb83f8a241eb01b, type: 3}
   color: {r: 0, g: 0.8308824, b: 0.38392502, a: 1}
   cost: 50
   tileRenderers: []
