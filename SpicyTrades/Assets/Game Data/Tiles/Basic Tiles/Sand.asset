@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Sand
   m_EditorClassIdentifier: 
   tag: Ground
-  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.75, g: 0.7226166, b: 0.65073526, a: 1}
+  sprite: {fileID: 21300000, guid: 12899b0665000854ca79610ce4c7160c, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
   cost: 100
   tileRenderers: []

@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   tag: Water
-  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0.18382353, g: 0.35831636, b: 1, a: 1}
+  sprite: {fileID: 21300000, guid: af13267b3a10c59419b3dd8cf746541c, type: 3}
+  color: {r: 1, g: 1, b: 1, a: 1}
   cost: 1000
-  tileRenderers: []
+  tileRenderers:
+  - {fileID: 11400000, guid: a0a05a2c685540e4a9f0a4d766a6a862, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 80, y: 50}
   tileMapper: {fileID: 11400000, guid: bb90c7fedf21a6446a79cc6acbeaad75, type: 2}
-  OuterRadius: 0.576
+  OuterRadius: 0.57
   featureGenerators:
   - {fileID: 11400000, guid: 20c1a71c5036ca64ab9f24cd62486203, type: 2}
   - {fileID: 11400000, guid: de7c548e92e27ce479a7bbd86dedc918, type: 2}
@@ -29,7 +29,7 @@ MonoBehaviour:
   damping: 0
   type: 1
   demensions: 3
-  position: {x: -26, y: -36, z: 62}
-  rotation: {x: 98, y: -72, z: 85}
+  position: {x: 35, y: 26, z: -96}
+  rotation: {x: -35, y: 95, z: -24}
   useSeed: 1
-  seed: -890257471
+  seed: -894236266

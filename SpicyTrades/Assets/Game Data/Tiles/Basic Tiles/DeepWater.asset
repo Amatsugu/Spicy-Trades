@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: DeepWater
   m_EditorClassIdentifier: 
   tag: Water
-  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
-  color: {r: 0, g: 0.168864, b: 0.66176474, a: 1}
+  sprite: {fileID: 21300000, guid: af13267b3a10c59419b3dd8cf746541c, type: 3}
+  color: {r: 0.45882356, g: 0.9477138, b: 1, a: 1}
   cost: 10000
   tileRenderers: []

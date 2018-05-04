@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Name: Timber
   m_EditorClassIdentifier: 
   tag: Resource
-  sprite: {fileID: 21300000, guid: 4c4b8ce7624e52d4f932b68c5145eda5, type: 3}
+  sprite: {fileID: 21300000, guid: 323a7692c43db4c4fb686f767dffe3ea, type: 3}
   color: {r: 0.5, g: 0.23793103, b: 0, a: 1}
   cost: 50
   tileRenderers:
