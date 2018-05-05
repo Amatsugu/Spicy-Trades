@@ -39,6 +39,23 @@ SET default_tablespace = '';
 
 SET default_with_oids = false;
 
+	CREATE TABLE public."FriendList"
+(
+    "LinkID" integer NOT NULL DEFAULT nextval('"FriendList_LinkID_seq"'::regclass),
+    "UserID" integer,
+    "FriendID" integer,
+    CONSTRAINT "FriendList_pkey" PRIMARY KEY ("LinkID"),
+    CONSTRAINT "fkey_playerID" FOREIGN KEY ("UserID")
+        REFERENCES public.players (player_id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+WITH (
+    OIDS = FALSE
+)
+TABLESPACE pg_default;
+
+
 --
 -- TOC entry 199 (class 1259 OID 33178)
 -- Name: FriendList; Type: TABLE; Schema: public; Owner: postgres
