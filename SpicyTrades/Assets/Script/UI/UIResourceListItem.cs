@@ -10,4 +10,10 @@ public class UIResourceListItem : MonoBehaviour
 	public TextMeshProUGUI priceText;
 	public Image iconImage;
 	public Button button;
+	public RectTransform rectTransform;
+
+	private void Start()
+	{
+		rectTransform = GetComponent<RectTransform>();
+	}
 }

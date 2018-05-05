@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = 0.01f;
+	public const float TickRate = 1f;
 	public static event Action GameReady
 	{
 		add
@@ -45,7 +45,6 @@ public class GameMaster
 		set
 		{
 			Instance._gameMap = value;
-			Instance._gameReady.Invoke();
 		}
 	}
 	public static Player Player
@@ -144,5 +143,10 @@ public class GameMaster
 			if (t != null)
 				Debug.DrawLine(tile.WolrdPos, t.WolrdPos, Color.white, 3);
 #endif
+	}
+
+	public static void Ready()
+	{
+		Instance._gameReady.Invoke();
 	}
 }

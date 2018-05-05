@@ -11,7 +11,6 @@ public class Tile
 	public Vector3 WolrdPos { get; private set; }
 	[JsonIgnore]
 	public GameObject ThisGameObject { get; private set; }
-
 	internal void Hover()
 	{
 		_sprite.color = _hCol;

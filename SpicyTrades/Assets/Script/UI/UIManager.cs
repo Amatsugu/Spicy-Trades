@@ -14,14 +14,16 @@ public class UIManager : MonoBehaviour
 
 	public UISettlementPricePanel pricePanel;
 	public UISettlementPanel settlementPanel;
+	public TextMeshProUGUI moneyText;
+	public TextMeshProUGUI influenceText;
 
-	private Vector3 _priceWindowPos;
-	private UIList _windowList;
 	private bool _inventory;
+	private bool _gameReady = false;
 
 	private void Awake()
 	{
 		Instance = this;
+		GameMaster.GameReady += () => _gameReady = true;
 		GameMaster.GameReady += () => GameMaster.GameMap.OnMapSimulate += m =>
 		{
 			if (settlementPanel.IsOpen && settlementPanel.marketPanel.IsOpen)
@@ -33,14 +35,12 @@ public class UIManager : MonoBehaviour
 				settlementPanel.eventPanel.RefreshList();
 			}
 		};
-		_windowList = pricePanel.contentBase.GetComponent<UIList>();
 	}
 
 	public static void ShowPricePanel(SettlementTile tile)
 	{
 		if (Instance.settlementPanel.IsOpen)
 			return;
-		Instance._priceWindowPos = tile.WolrdPos;
 		Instance.pricePanel.Show(tile);
 	}
 
@@ -58,8 +58,10 @@ public class UIManager : MonoBehaviour
 
 	private void Update()
 	{
-		//var pos = Instance.camera.WorldToScreenPoint(_priceWindowPos);
-		//Instance.pricePanel.Move(pos);
+		if (!_gameReady)
+			return;
+		moneyText.text = GameMaster.Player.Money.ToString(" ");
+		influenceText.text = $"<color=#ff0064>{GameMaster.Player.Influence}</color>";
 	}
 
 	private void OnGUI()

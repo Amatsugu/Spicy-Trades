@@ -123,6 +123,7 @@ MonoBehaviour:
   priceText: {fileID: 114156025426814894}
   iconImage: {fileID: 114524589752791234}
   button: {fileID: 114867689266465968}
+  rectTransform: {fileID: 224324176723133984}
 --- !u!114 &114156025426814894
 MonoBehaviour:
   m_ObjectHideFlags: 1

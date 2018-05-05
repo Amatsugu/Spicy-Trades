@@ -44,7 +44,7 @@ public class RandomGenerator : MapGenerator {
 			return Noise.noiseMethods[(int)type][demensions - 1];
 		}
 	}
-	public override Tile Generate(int x, int y, Transform parent = null)
+	public override Tile Generate(int x, int y,  Transform parent = null)
 	{
 		//rotation = new Vector3(Random.value, Random.value, Random.value);
 		var q = Quaternion.Euler(rotation);

@@ -20,3 +20,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f12f6a55a657ce24191c8f6da430f923, type: 2}
   settlementType: 1
   foodPerPop: 0.5
+  maxEvents: 6

@@ -13,7 +13,7 @@ public class Player
 	public string Id { get; private set; }
 	public string Username { get; private set; }
 	public Coin Money { get; private set; }
-	public int Influence { get; private set; }
+	public int Influence { get; set; }
 
 	[JsonIgnore]
 	public PlayerObject playerObject;
@@ -36,7 +36,7 @@ public class Player
 		player.SetPlayer(this);
 		inventory = new List<InventoryItem>();
 #if DEBUG
-		Money = new Coin(Mathf.Infinity);
+		Money = new Coin(int.MaxValue);
 #else
 		Money = new Coin(10000f);
 #endif
@@ -84,7 +84,7 @@ public class Player
 		}
 	}
 
-	public bool TakeItem(InventoryItem item)
+	public bool		TakeItem(InventoryItem item)
 	{
 		var invItem = inventory.First(i => i.Resource.resource == item.Resource.resource);
 		if (invItem == null)

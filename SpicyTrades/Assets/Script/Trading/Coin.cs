@@ -206,11 +206,11 @@ public struct Coin
 	{
 		string[] s = new string[3];
 		if(Royal != 0)
-			s[0] = $"<color=#fcc100>{Royal}</color>";
+			s[0] = $"<color=#fcc100>{(Royal <= int.MinValue || Royal >= int.MaxValue ? "Åá" : Royal.ToString())}</color>";
 		if(Silver != 0)
-			s[1] = $"<color=#cccccc>{Silver}</color>";
+			s[1] = $"<color=#cccccc>{(Silver <= int.MinValue || Silver >= int.MaxValue ? "Åá" : Silver.ToString())}</color>";
 		if(Chip != 0)
-			s[2] = $"<color=#8c4800>{Chip}</color>";
+			s[2] = $"<color=#8c4800>{(Chip <= int.MinValue || Chip >= int.MaxValue ? "Åá" : Chip.ToString())}</color>";
 		return string.Join(separator, s.Where(i => i != null).ToArray());
 	}
 }
