@@ -20,7 +20,7 @@ namespace NetworkManager
         public Message(string message) //When data comes from the client
         {
             this.message = message;
-            pid = Network.player;
+            pid = SpicyNetwork.player;
             time = DateTime.Now;
         }
         /*
@@ -34,7 +34,7 @@ namespace NetworkManager
         {
             //BitConverter.ToInt32(b, 0)
             byte Type = messagedata[0];
-            if (Type == Network.MESSAGE) // Make sure the datatype is correct
+            if (Type == SpicyNetwork.MESSAGE) // Make sure the datatype is correct
             {
                 int mSize = BitConverter.ToInt16(messagedata.SubArray(1, 2),0);
                 int hour = messagedata[3];
@@ -88,7 +88,7 @@ namespace NetworkManager
                 byte hour = (byte)time.Hour;
                 byte minute = (byte)time.Minute;
                 byte second = (byte)time.Second;
-                send[0] = Network.MESSAGE;
+                send[0] = SpicyNetwork.MESSAGE;
                 send[1] = size[0];
                 send[2] = size[1];
                 send[3] = hour;

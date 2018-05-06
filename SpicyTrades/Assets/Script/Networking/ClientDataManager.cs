@@ -8,7 +8,7 @@ namespace NetworkManager
     {
         public static void INIT()
         {
-            Network.DataRecieved += OnDataRecieved;
+            SpicyNetwork.DataRecieved += OnDataRecieved;
         }
         static Dictionary<string, Dictionary<int,string>> SYNC_CACHE = new Dictionary<string, Dictionary<int, string>>();
         public static void OnDataRecieved(object sender, DataRecievedArgs e)
@@ -23,111 +23,111 @@ namespace NetworkManager
             ChatDataArgs globalchat;
             switch (command)
             {
-                case Network.HELLO:
+                case SpicyNetwork.HELLO:
                     Console.WriteLine("Got a hello from the server!");
-                    Network.SendData(new byte[] { 0, 0 });
+                    SpicyNetwork.SendData(new byte[] { 0, 0 });
                     break;
-                case Network.REQUEST:
+                case SpicyNetwork.REQUEST:
                     // Nothing is needed here
                     break;
-                case Network.LISTF:
+                case SpicyNetwork.LISTF:
                     objects = NetUtils.FormCommand(data, new string[] { "s[]" });
                     pids = (string[])objects[0];
                     FriendsArgs friendArr = new FriendsArgs();
                     PID[] friends = new PID[pids.Length];
                     for (int i = 0; i < pids.Length; i++)
                     {
-                        friends[i] = Network.GetPID(pids[i]);
+                        friends[i] = SpicyNetwork.GetPID(pids[i]);
                     }
                     friendArr.Friends = friends;
-                    Network.OnFriendsList(friendArr);
+                    SpicyNetwork.OnFriendsList(friendArr);
                     break;
-                case Network.INVITEF:
+                case SpicyNetwork.INVITEF:
                     objects = NetUtils.FormCommand(data, new string[] {  "s" });
                     string playerid = (string)objects[0];
                     //HOOK EVENT
                     break;
-                case Network.JOINO:
+                case SpicyNetwork.JOINO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     playerid = (string)objects[0];
                     Console.WriteLine(playerid+"|"+ (string)objects[1]);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
-                    Network.CurrentRoom.AddMember(Network.GetPID(playerid), true);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
+                    SpicyNetwork.CurrentRoom.AddMember(SpicyNetwork.GetPID(playerid), true);
                     break;
-                case Network.READYO:
+                case SpicyNetwork.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
-                    Network.CurrentRoom.SetReady((bool)objects[1], Network.GetPID((string)objects[0]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
+                    SpicyNetwork.CurrentRoom.SetReady((bool)objects[1], SpicyNetwork.GetPID((string)objects[0]));
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[2] }), false);
                     Console.WriteLine("Player Set Ready!");
                     break;
-                case Network.LEAVERO: // only sent if you are in the room
+                case SpicyNetwork.LEAVERO: // only sent if you are in the room
                     Console.WriteLine("Removing member!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
-                    Network.CurrentRoom.RemoveMember(Network.GetPID((string)objects[1]));
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
+                    SpicyNetwork.CurrentRoom.RemoveMember(SpicyNetwork.GetPID((string)objects[1]));
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[2] }), false);
                     break;
-                case Network.INIT:
-                    Network.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
+                case SpicyNetwork.INIT:
+                    SpicyNetwork.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
                     break;
-                case Network.CHAT:
+                case SpicyNetwork.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgglobal = (Message)objects[0];
-                    if (Network.msgCache.ContainsKey(msgglobal.GetMessage()))
+                    if (SpicyNetwork.msgCache.ContainsKey(msgglobal.GetMessage()))
                     {
                         break;
                     } else
                     {
-                        Network.msgCache.Add(msgglobal.GetMessage(), msgglobal);
+                        SpicyNetwork.msgCache.Add(msgglobal.GetMessage(), msgglobal);
                     }
                     globalchat = new ChatDataArgs();
-                    globalchat.Flag = Network.CHAT_GLOBAL;
+                    globalchat.Flag = SpicyNetwork.CHAT_GLOBAL;
                     globalchat.Message = msgglobal;
-                    Network.OnChat(globalchat);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
+                    SpicyNetwork.OnChat(globalchat);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
                     break;
-                case Network.CHATDM:
+                case SpicyNetwork.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgdm = (Message)objects[0];
-                    if (Network.msgCache.ContainsKey(msgdm.GetMessage()))
+                    if (SpicyNetwork.msgCache.ContainsKey(msgdm.GetMessage()))
                     {
                         break;
                     }
                     else
                     {
-                        Network.msgCache.Add(msgdm.GetMessage(), msgdm);
+                        SpicyNetwork.msgCache.Add(msgdm.GetMessage(), msgdm);
                     }
                     globalchat = new ChatDataArgs();
-                    globalchat.Flag = Network.CHATDM;
+                    globalchat.Flag = SpicyNetwork.CHATDM;
                     globalchat.Message = msgdm;
-                    Network.OnChat(globalchat);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
+                    SpicyNetwork.OnChat(globalchat);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
                     break;
-                case Network.CHATRM:
+                case SpicyNetwork.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s", "s" });
                     Message msgrm = (Message)objects[0];
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[2] }), false);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[2] }), false);
                     Console.WriteLine("Got Room Chat! " + (string)objects[2]);
                     globalchat = new ChatDataArgs();
-                    globalchat.Room = Network.GetRoom((string)objects[1]);
-                    globalchat.Flag = Network.CHATDM;
+                    globalchat.Room = SpicyNetwork.GetRoom((string)objects[1]);
+                    globalchat.Flag = SpicyNetwork.CHATDM;
                     globalchat.Message = msgrm;
-                    Network.OnChat(globalchat);
+                    SpicyNetwork.OnChat(globalchat);
                     break;
-                case Network.SYNCB://payload,key
+                case SpicyNetwork.SYNCB://payload,key
                     objects = NetUtils.FormCommand(data, new string[] { "b[]", "s" });
                     SyncEventArgs sync = new SyncEventArgs();
                     sync.Type = 0;
                     sync.BData = (byte[])objects[0];
-                    Network.OnSyncData(sync);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self,(string)objects[1] }), false);
+                    SpicyNetwork.OnSyncData(sync);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self,(string)objects[1] }), false);
                     break;
-                case Network.SYNCO:
+                case SpicyNetwork.SYNCO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     SyncEventArgs syncb = new SyncEventArgs();
                     syncb.Type = 1;
                     syncb.SData=(string)objects[0];
-                    Network.OnSyncData(syncb);
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.RELAY, Network.self, (string)objects[1] }), false);
+                    SpicyNetwork.OnSyncData(syncb);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
                     break;
                 default:
                     break;

@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace NetworkManager
 {
-    public static class Network
+    public static class SpicyNetwork
     {
         //Data Types
         public const byte PID = 0x00; //Player ID This is sent once, then player id's are used
@@ -215,11 +215,31 @@ namespace NetworkManager
                 return rooms[rid];
             }
         }
-        public static void RegisterAccount(string user, string pass)
+        public static bool RegisterAccount(string email, string user, string pass)
         {
-            //TODO SSL connection to register 
-            byte[] temp = NetUtils.PieceCommand(new object[] { REGISTER, user, pass });
-            //DO IT
+            Wait = true;
+            SendData(NetUtils.PieceCommand(new object[] { REGISTER, email, user, pass }));
+            byte[] tmprec = ClientHoldManager();
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != LOGIN)
+                    tmprec = null;
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
         public static bool Login(string user, string pass)
         {

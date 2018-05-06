@@ -41,7 +41,7 @@ namespace NetworkManager
             members = new PID[MAX_MEMBERS];
             theyReady = new bool[MAX_MEMBERS];
             byte Type = roomdata[0];
-            if (Type == Network.ROOM) // Make sure the datatype is correct
+            if (Type == SpicyNetwork.ROOM) // Make sure the datatype is correct
             {
                 numOfPlayers = roomdata[1];
                 theyReady = NetUtils.ConvertByteToBoolArray(roomdata[2]);
@@ -78,7 +78,7 @@ namespace NetworkManager
             }
             int sendSize = (ppl * members[0].GetSize()) + 1 + 1 + MAX_ID_SIZE + 1 + 1 + 1 + _pass; // The data stuff
             byte[] send = new byte[sendSize];
-            send[0] = Network.ROOM;
+            send[0] = SpicyNetwork.ROOM;
             send[1] = (byte)ppl;
             send[2] = NetUtils.ConvertBoolArrayToByte(theyReady);
             send[3] = theyHost;
@@ -165,7 +165,7 @@ namespace NetworkManager
         public void AddMember(PID member)
         {
             members[numOfPlayers++] = member;
-            Network.InviteFriend(member.GetID()); // Its started
+            SpicyNetwork.InviteFriend(member.GetID()); // Its started
         }
         public void AddMember(PID member, bool noprob)
         {
@@ -190,7 +190,7 @@ namespace NetworkManager
         {
             if (host)
             {
-                Network.KickPlayer(member.GetID()); // Its started
+                SpicyNetwork.KickPlayer(member.GetID()); // Its started
                 return true;
             }
             return false;
@@ -201,12 +201,12 @@ namespace NetworkManager
         }
         public void LeaveRoom()
         {
-            Network.LeaveRoom(); //Tells the server you are leaving
+            SpicyNetwork.LeaveRoom(); //Tells the server you are leaving
         }
         public void SetReady(bool b)
         {
             isReady = b;
-            Network.SetReady(b); //DW Server will not mirror commands sent to you...
+            SpicyNetwork.SetReady(b); //DW Server will not mirror commands sent to you...
         }
         public void SetReady(bool b, PID player)
         {
@@ -225,7 +225,7 @@ namespace NetworkManager
         }
         public void SendChat(string message)
         {
-            Network.SendRoomChat(new Message(message, Network.player));
+            SpicyNetwork.SendRoomChat(new Message(message, SpicyNetwork.player));
         }
     }
 }

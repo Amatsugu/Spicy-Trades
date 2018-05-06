@@ -52,7 +52,7 @@ namespace NetworkManager
         // when converted to hex we get our 8byte id
         public static void INIT()
         {
-            Network.DataRecieved += OnDataRecieved;
+            SpicyNetwork.DataRecieved += OnDataRecieved;
         }
 
         public static string GenRoomID()
@@ -77,11 +77,11 @@ namespace NetworkManager
             string id = "";
             switch (command)
             {
-                case Network.HELLO:
+                case SpicyNetwork.HELLO:
                     Console.WriteLine("Got a hello from the client!");
                     //Handle data for this
                     break;
-                case Network.LOGIN:
+                case SpicyNetwork.LOGIN:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     string username = (string)objects[0];
                     string password = (string)objects[1];
@@ -96,7 +96,7 @@ namespace NetworkManager
                     else
                     {
                         Console.WriteLine("¯\\_(ツ)_/¯ you done goof!");
-                        SendError(Network.LOGIN, Network.INVALID_USERPASS, "Invalid Username or Password", send);
+                        SendError(SpicyNetwork.LOGIN, SpicyNetwork.INVALID_USERPASS, "Invalid Username or Password", send);
                         break;
                     }
                     //END OF FAKE STUFF
@@ -106,14 +106,14 @@ namespace NetworkManager
                     //Need to get the players name... You are not a friend of yourself are you?
                     Connections[sessionkey] = new CID(tempPID, send);
                     Console.WriteLine("Sending data");
-                    Network.SendData(NetUtils.PieceCommand(new object[] {
-                    Network.LOGIN,
-                    Network.NO_ERROR,
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] {
+                    SpicyNetwork.LOGIN,
+                    SpicyNetwork.NO_ERROR,
                     tempPID,
                     sessionkey
                 }), send);
                     break;
-                case Network.REGISTER:
+                case SpicyNetwork.REGISTER:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s", "s" });//user pass, email
                     self = (string)objects[0];
                     string reg_username = (string)objects[1];
@@ -122,13 +122,13 @@ namespace NetworkManager
                     //Handled by the TCP manager
                     //GenUniqueSessionKey();
                     break;
-                case Network.UPDATES:
+                case SpicyNetwork.UPDATES:
                     //NOT IMPLEMENTED IN THIS VERSION
                     break;
-                case Network.DOUPDATES:
+                case SpicyNetwork.DOUPDATES:
                     //NOT IMPLEMENTED IN THIS VERSION
                     break;
-                case Network.LISTR: //Gets the roomids
+                case SpicyNetwork.LISTR: //Gets the roomids
                     objects = NetUtils.FormCommand(data, new string[] { "s", "i", "i" });
                     self = (string)objects[0];
                     int pos = (int)objects[1];
@@ -139,9 +139,9 @@ namespace NetworkManager
                     {
                         roomlist[c++] = Rooms[kvp.Key].GetRoomID();
                     }
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.LISTR, Network.NO_ERROR, roomlist }), send);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.LISTR, SpicyNetwork.NO_ERROR, roomlist }), send);
                     break;
-                case Network.JROOM:
+                case SpicyNetwork.JROOM:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     roomid = (string)objects[1];
                     self = (string)objects[0];
@@ -151,72 +151,72 @@ namespace NetworkManager
                     {
                         Rooms[roomid].AddMember(player, true);
                         SendToRoom(NetUtils.PieceCommand(new object[] {
-                        Network.JROOM,
-                        Network.NO_ERROR,
+                        SpicyNetwork.JROOM,
+                        SpicyNetwork.NO_ERROR,
                         roomid,
                         playerid
                     }), roomid);
                     }
                     else
                     {
-                        SendError(Network.JROOM, Network.CANT_JOIN_ROOM, "Cannot join Room: Room full!", send);
+                        SendError(SpicyNetwork.JROOM, SpicyNetwork.CANT_JOIN_ROOM, "Cannot join Room: Room full!", send);
                     }
                     break;
-                case Network.CHAT:
+                case SpicyNetwork.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m" });
                     self = (string)objects[0];
                     msg = (Message)objects[1];
-                    dat = NetUtils.PieceCommand(new object[] { Network.CHAT, Network.NO_ERROR });
+                    dat = NetUtils.PieceCommand(new object[] { SpicyNetwork.CHAT, SpicyNetwork.NO_ERROR });
                     SendToAll(dat);
                     break;
-                case Network.REQUEST:
+                case SpicyNetwork.REQUEST:
                     //self, playerid 
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     self = (string)objects[0];
                     playerid = (string)objects[1];
-                    Network.SendData(NetUtils.PieceCommand(new object[] {
-                        Network.REQUEST,
-                        Network.NO_ERROR,
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] {
+                        SpicyNetwork.REQUEST,
+                        SpicyNetwork.NO_ERROR,
                         GetPlayerPID (self).GetID ()
                     }));
                     //TODO FINISH THIS! This needs the database, but will alert the user if online
                     break;
-                case Network.LISTF:
+                case SpicyNetwork.LISTF:
                     //self
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
                     //TODO FINISH THIS! Needs database
                     break;
-                case Network.LISTRF:
+                case SpicyNetwork.LISTRF:
                     //self
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
                     //TODO FINISH THIS! Needs database
                     break;
-                case Network.ADDF:
+                case SpicyNetwork.ADDF:
                     //self, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     //TODO FINISH THIS! Needs database
                     break;
-                case Network.FORMR:
+                case SpicyNetwork.FORMR:
                     //self, roompassword
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     roomid = GenRoomID();
                     Rooms[roomid] = new Room(roomid, "", true);// Server is always a "host"
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.GROOM, Rooms[roomid] }), send);//Send a copy of the room data to the player
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.GROOM, Rooms[roomid] }), send);//Send a copy of the room data to the player
                     break;
-                case Network.IHOST:
+                case SpicyNetwork.IHOST:
                     //Command not needed, server handles and sends this data over
                     break;
-                case Network.KICK:
+                case SpicyNetwork.KICK:
                     //self, roomid, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     self = (string)objects[0];
                     roomid = (string)objects[1];
                     playerid = (string)objects[2];
                     Rooms[roomid].Kick(PIDs[playerid]);
-                    dat = NetUtils.PieceCommand(new object[] { Network.KICK, Network.NO_ERROR, roomid, playerid });
+                    dat = NetUtils.PieceCommand(new object[] { SpicyNetwork.KICK, SpicyNetwork.NO_ERROR, roomid, playerid });
                     SendToRoom(dat, roomid);
                     break;
-                case Network.INVITEF:
+                case SpicyNetwork.INVITEF:
                     //self, playerid, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     self = (string)objects[0];
@@ -225,19 +225,19 @@ namespace NetworkManager
                     if (PlayerExists(playerid) && RoomExists(roomid) && ISOnfriendList(self, playerid))
                     {
                         SendToPlayer(NetUtils.PieceCommand(new object[] {
-                        Network.INVITEF,
-                        Network.NO_ERROR,
+                        SpicyNetwork.INVITEF,
+                        SpicyNetwork.NO_ERROR,
                         playerid,
                         roomid
                     }), playerid);
                     }
                     else
                     {
-                        Network.SendData(NetUtils.PieceCommand(new object[] { }), send);
-                        SendError(Network.INVITEF, Network.INVALID_FID, "Invalid playerid!", send);
+                        SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { }), send);
+                        SendError(SpicyNetwork.INVITEF, SpicyNetwork.INVALID_FID, "Invalid playerid!", send);
                     }
                     break;
-                case Network.READY:
+                case SpicyNetwork.READY:
                     //self, isready. roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bo", "s" });
                     self = (string)objects[0];
@@ -245,60 +245,60 @@ namespace NetworkManager
                     roomid = (string)objects[2];
                     Rooms[roomid].SetReady(isReady, GetPlayerPID(self));
                     dat = NetUtils.PieceCommand(new object[] {
-                    Network.READY,
-                    Network.NO_ERROR,
+                    SpicyNetwork.READY,
+                    SpicyNetwork.NO_ERROR,
                     isReady,
                     GetPlayerPID (self).GetID ()
                 });
                     SendToRoom(dat, roomid);
                     break;
-                case Network.LEAVER: // only sent if you are in the room
+                case SpicyNetwork.LEAVER: // only sent if you are in the room
                                      //self, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     self = (string)objects[0];
                     roomid = (string)objects[1];
                     Rooms[roomid].RemoveMember(GetPlayerPID(self));
                     dat = NetUtils.PieceCommand(new object[] {
-                    Network.LEAVER,
-                    Network.NO_ERROR,
+                    SpicyNetwork.LEAVER,
+                    SpicyNetwork.NO_ERROR,
                     GetPlayerPID (self).GetID ()
                 });
                     SendToRoom(dat, roomid);
                     break;
-                case Network.INIT:
+                case SpicyNetwork.INIT:
                     self = (string)NetUtils.FormCommand(data, new string[] { "s" })[0];
                     GetPlayerPID(self).SetConnection(send); // Allows for faster player lookup
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.INIT, Network.NO_ERROR }), send);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.INIT, SpicyNetwork.NO_ERROR }), send);
                     break;
-                case Network.CHATDM:
+                case SpicyNetwork.CHATDM:
                     //self, msg, playerid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
                     self = (string)objects[0];
                     msg = (Message)objects[1];
                     playerid = (string)objects[2];
-                    dat = NetUtils.PieceCommand(new object[] { Network.CHAT, Network.NO_ERROR });
+                    dat = NetUtils.PieceCommand(new object[] { SpicyNetwork.CHAT, SpicyNetwork.NO_ERROR });
                     SendToRoom(dat, playerid);
                     break;
-                case Network.CHATRM:
+                case SpicyNetwork.CHATRM:
                     //self, msg, roomid
                     objects = NetUtils.FormCommand(data, new string[] { "s", "m", "s" });
                     self = (string)objects[0];
                     msg = (Message)objects[1];
                     roomid = (string)objects[2];
-                    dat = NetUtils.PieceCommand(new object[] { Network.CHAT, Network.NO_ERROR });
+                    dat = NetUtils.PieceCommand(new object[] { SpicyNetwork.CHAT, SpicyNetwork.NO_ERROR });
                     SendToRoom(dat, roomid);
                     break;
-                case Network.ROOMS:
+                case SpicyNetwork.ROOMS:
                     objects = NetUtils.FormCommand(data, new string[] { "s" });
                     self = (string)objects[0];
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.ROOMS, Network.NO_ERROR, Rooms.Count }), send);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.ROOMS, SpicyNetwork.NO_ERROR, Rooms.Count }), send);
                     break;
-                case Network.GROOM:
+                case SpicyNetwork.GROOM:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     self = (string)objects[0];
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.GROOM, Network.NO_ERROR, Rooms[(string)objects[1]] }), send);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.GROOM, SpicyNetwork.NO_ERROR, Rooms[(string)objects[1]] }), send);
                     break;
-                case Network.GPID:
+                case SpicyNetwork.GPID:
                     Console.WriteLine("Get Request!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     self = (string)objects[0];
@@ -306,15 +306,15 @@ namespace NetworkManager
                     if (PIDs.ContainsKey(key))
                     {
                         Console.WriteLine("Sending PID data");
-                        Network.SendData(NetUtils.PieceCommand(new object[] { Network.GPID, Network.NO_ERROR, PIDs[key] }), send);
+                        SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.GPID, SpicyNetwork.NO_ERROR, PIDs[key] }), send);
                     }
                     else
                     {
                         Console.WriteLine("NO PID" + key);
-                        SendError(Network.GPID, Network.INVALID_UID, "Cannot retreive that pid data", send);
+                        SendError(SpicyNetwork.GPID, SpicyNetwork.INVALID_UID, "Cannot retreive that pid data", send);
                     }
                     break;
-                case Network.SYNC:
+                case SpicyNetwork.SYNC:
                     //self, randomid, groups.Length, i, groups[i] 
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     self = (string)objects[0];
@@ -323,8 +323,8 @@ namespace NetworkManager
                     int cpiece = (int)objects[3];
                     string payload = (string)objects[4];
                     dat = NetUtils.PieceCommand(new object[] {
-                    Network.SYNC,
-                    Network.NO_ERROR,
+                    SpicyNetwork.SYNC,
+                    SpicyNetwork.NO_ERROR,
                     id,
                     numpieces,
                     cpiece,
@@ -332,12 +332,12 @@ namespace NetworkManager
                 });
                     SendToRoom(dat, Connections[self].GetCurrentRoom().GetRoomID());// remove the self tag and send the data to the clients
                     break;
-                case Network.LOGOUT:
+                case SpicyNetwork.LOGOUT:
                     self = (string)(NetUtils.FormCommand(data, new string[] { "s" })[0]);
                     pid = GetPlayerPID(self).GetID();
                     Connections[self] = null;
                     PIDs[pid] = null;
-                    Network.SendData(NetUtils.PieceCommand(new object[] { Network.LOGOUT, Network.NO_ERROR }), send);
+                    SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.LOGOUT, SpicyNetwork.NO_ERROR }), send);
                     break;
                 default:
                     Console.WriteLine("Unknown command!");
@@ -370,7 +370,7 @@ namespace NetworkManager
         {
             foreach (var kvp in Connections.ToArray())
             {
-                Network.SendData(data, kvp.Value.GetConn());
+                SpicyNetwork.SendData(data, kvp.Value.GetConn());
             }
         }
 
@@ -381,7 +381,7 @@ namespace NetworkManager
             {
                 if (pids[i] != null)
                 {
-                    Network.SendData(data, pids[i].GetConnection());
+                    SpicyNetwork.SendData(data, pids[i].GetConnection());
                 }
             }
         }
@@ -393,7 +393,7 @@ namespace NetworkManager
             {
                 if (temp != kvp.Value.GetPID())
                 {
-                    Network.SendData(data, kvp.Value.GetConn());
+                    SpicyNetwork.SendData(data, kvp.Value.GetConn());
                 }
             }
         }
@@ -406,14 +406,14 @@ namespace NetworkManager
             {
                 if (pids[i] != null && pids[i] != temp)
                 {
-                    Network.SendData(data, pids[i].GetConnection());
+                    SpicyNetwork.SendData(data, pids[i].GetConnection());
                 }
             }
         }
 
         public static void SendToPlayer(byte[] data, string playerid)
         {
-            Network.SendData(data, PIDs[playerid].GetConnection());
+            SpicyNetwork.SendData(data, PIDs[playerid].GetConnection());
         }
 
         public static string GenUniqueSessionKey()
@@ -423,7 +423,7 @@ namespace NetworkManager
 
         public static void SendError(byte cmd, byte err, string msg, IPEndPoint send)
         {
-            Network.SendData(NetUtils.PieceCommand(new object[] { cmd, err, msg }), send);
+            SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { cmd, err, msg }), send);
         }
     }
 }

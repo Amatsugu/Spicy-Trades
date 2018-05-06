@@ -11,8 +11,8 @@ namespace NetworkManager
         static bool done = false;
         static void Main(string[] args)
         {
-            bool conn = Network.Connect("spicy.luminousvector.com", 12344);
-            Network.Chat += OnChat;
+            bool conn = SpicyNetwork.Connect("spicy.luminousvector.com", 12344);
+            SpicyNetwork.Chat += OnChat;
             if (!conn)
             {
                 Console.WriteLine("Could not connect!");
@@ -56,11 +56,11 @@ namespace NetworkManager
                 switch (cho)
                 {
                     case 0:
-                        Network.Login("epicknex", "password");
-                        Console.WriteLine("Login Success! " + Network.player.GetName() + " " + Network.player.GetID());
+                        SpicyNetwork.Login("epicknex", "password");
+                        Console.WriteLine("Login Success! " + SpicyNetwork.player.GetName() + " " + SpicyNetwork.player.GetID());
                         break;
                     case 1:
-                        if (Network.CreateRoom()!=null)
+                        if (SpicyNetwork.CreateRoom()!=null)
                         {
                             Console.WriteLine("Created a room!");
                         }
@@ -68,13 +68,13 @@ namespace NetworkManager
                     case 2:
                         Console.Write("Global Message: ");
                         msg = Console.ReadLine();
-                        Network.SendChat(new Message(msg));
+                        SpicyNetwork.SendChat(new Message(msg));
                         Console.WriteLine("Message Sent!");
                         break;
                     case 3:
                         Console.Write("Room Message: ");
                         msg = Console.ReadLine();
-                        Network.SendRoomChat(new Message(msg));
+                        SpicyNetwork.SendRoomChat(new Message(msg));
                         Console.WriteLine("Message Sent!");
                         break;
                     case 4:
@@ -82,24 +82,24 @@ namespace NetworkManager
                         msg = Console.ReadLine();
                         Console.Write("PlayerID: ");
                         id = Console.ReadLine();
-                        Network.SendDM(new Message(msg),id);
+                        SpicyNetwork.SendDM(new Message(msg),id);
                         Console.WriteLine("Message Sent!");
                         break;
                     case 5:
                         Console.Write("RoomID: ");
                         id = Console.ReadLine();
-                        rm = Network.JoinRoom(id);
+                        rm = SpicyNetwork.JoinRoom(id);
                         if (rm!=null)
                         {
                             Console.WriteLine("Joined a room!");
                         }
                         break;
                     case 6:
-                        int? num = Network.GetNumberOfRooms();
+                        int? num = SpicyNetwork.GetNumberOfRooms();
                         Console.WriteLine("There are: "+num+" Rooms!");
                         break;
                     case 7:
-                        Room[] rms = Network.ListRooms();
+                        Room[] rms = SpicyNetwork.ListRooms();
                         Console.WriteLine("RoomList:");
                         for(int i = 0; i < rms.Length; i++)
                         {
@@ -107,13 +107,13 @@ namespace NetworkManager
                         }
                         break;
                     case 8:
-                        bool? host = Network.IsHostOf();
+                        bool? host = SpicyNetwork.IsHostOf();
                         Console.WriteLine("Host: {0}",host);
                         break;
                     case 9:
                         Console.Write("PlayerID: ");
                         id = Console.ReadLine();
-                        if (Network.KickPlayer(id))
+                        if (SpicyNetwork.KickPlayer(id))
                         {
                             Console.WriteLine("Player Kicked!");
                         }
@@ -121,21 +121,21 @@ namespace NetworkManager
                     case 10:
                         Console.Write("PlayerID: ");
                         id = Console.ReadLine();
-                        Network.InviteFriend(id);
+                        SpicyNetwork.InviteFriend(id);
                         Console.WriteLine("Sent Invite!");
                         break;
                     case 11:
                         Console.Write("Ready (y/n): ");
                         bool ready = Console.ReadLine()=="y";
-                        Network.SetReady(ready);
+                        SpicyNetwork.SetReady(ready);
                         Console.WriteLine("Set Ready!");
                         break;
                     case 12:
-                        Network.LeaveRoom();
+                        SpicyNetwork.LeaveRoom();
                         Console.WriteLine("Left Room!");
                         break;
                     case 13:
-                        Console.WriteLine(Network.Logout());
+                        Console.WriteLine(SpicyNetwork.Logout());
                         Console.WriteLine("Logged Out!");
                         break;
                     default:

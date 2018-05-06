@@ -42,7 +42,7 @@ namespace NetworkManager
         public PID(byte[] piddata)
         {
             byte Type = piddata[0];
-            if (Type == Network.PID) // Make sure the datatype is correct
+            if (Type == SpicyNetwork.PID) // Make sure the datatype is correct
             {
                 isFriend = piddata[1] != 0x00;// Assign the isFriend bool
                 byte[] _name = piddata.SubArray(2,MAX_USERNAME_SIZE);
@@ -76,7 +76,7 @@ namespace NetworkManager
             byte[] send = new byte[UID_BYTE_SIZE];
             byte[] _name = ASCIIEncoding.ASCII.GetBytes(name);
             byte[] _id = ASCIIEncoding.ASCII.GetBytes(id);
-            send[0] = (byte)Network.PID;
+            send[0] = (byte)SpicyNetwork.PID;
             if (isFriend)
             {
                 send[1] = (byte)255; // true
