@@ -32,6 +32,10 @@ public class Transaction
 				break;
 		}
 	}
+
+	public string ToJSON() => JsonConvert.SerializeObject(this);
+
+	public static Transaction FromJSON(string json) => JsonConvert.DeserializeObject<Transaction>(json);
 }
 
 public enum TransactionType

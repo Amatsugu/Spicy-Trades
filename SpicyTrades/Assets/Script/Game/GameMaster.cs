@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using UnityEngine;
 
 public class GameMaster
@@ -118,12 +119,13 @@ public class GameMaster
 
 	public static void SendTransaction(Transaction transaction)
 	{
-		//TODO: Send Transaction
+		NetworkManager.Network.Sync(transaction.ToJSON());
 	}
 
 	public static void OnTransactionRecieve(Transaction transaction)
 	{
-		transaction.Execute();
+		if(transaction.playerId != Player.Id)
+			transaction.Execute();
 	}
 
 	public static Tile GetTile(int x, int y, int z)
@@ -148,5 +150,9 @@ public class GameMaster
 	public static void Ready()
 	{
 		Instance._gameReady.Invoke();
+		NetworkManager.Network.SyncData += (s, a) =>
+		{
+			OnTransactionRecieve(Transaction.FromJSON(a.SData)); 
+		};
 	}
 }

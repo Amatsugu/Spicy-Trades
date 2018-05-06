@@ -30,10 +30,11 @@ public class Player
 	
 	public List<InventoryItem> inventory;
 
-	public Player(PlayerObject player)
+	public Player(PlayerObject player, string id = null)
 	{
 		playerObject = player;
 		player.SetPlayer(this);
+		Id = id;
 		inventory = new List<InventoryItem>();
 #if DEBUG
 		Money = new Coin(int.MaxValue);
