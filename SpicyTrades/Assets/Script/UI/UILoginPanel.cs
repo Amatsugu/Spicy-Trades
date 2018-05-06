@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using NetworkManager;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UILoginPanel : UIPanel
 {
@@ -17,5 +20,11 @@ public class UILoginPanel : UIPanel
 			//TODO: Give Error
 			return;
 		}
+		SceneManager.LoadScene("main");
+	}
+
+	public void Register()
+	{
+
 	}
 }
