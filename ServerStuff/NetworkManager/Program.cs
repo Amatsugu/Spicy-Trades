@@ -56,7 +56,11 @@ namespace NetworkManager
                 switch (cho)
                 {
                     case 0:
-                        SpicyNetwork.Login("epicknex", "password");
+                        bool t =SpicyNetwork.Login("epicknex", "password");
+                        if (t == false)
+                        {
+                            Console.WriteLine("Cannot connect!");
+                        }
                         Console.WriteLine("Login Success! " + SpicyNetwork.player.GetName() + " " + SpicyNetwork.player.GetID());
                         break;
                     case 1:
