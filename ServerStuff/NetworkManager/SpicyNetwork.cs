@@ -824,10 +824,38 @@ namespace NetworkManager
             byte[] temp = NetUtils.PieceCommand(new object[] { INIT, self });
             SendData(temp);
         }
-        public static void SayHello()
+        public static bool SayHello()
         {
-            byte[] temp = NetUtils.PieceCommand(new object[] { HELLO, self });
+            byte[] temp = NetUtils.PieceCommand(new object[] { HELLO });
+            Wait = true;
             SendData(temp);
+            byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
+            while (tmprec == null && !(lastMessage == null && capturedMsg != null))
+            {
+                tmprec = ClientHoldManager();
+                if (tmprec != null && tmprec[0] != HELLO)
+                    tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
+            }
+            if (capturedMsg != null && lastMessage == null)
+            {
+                tmprec = capturedMsg;
+                capturedMsg = null;
+            }
+            Wait = false;
+            byte error = tmprec[1];
+            byte[] data = tmprec.SubArray(2, tmprec.Length - 2);
+            if (error != 0)
+            {
+                Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
+                return false;
+            }
+            return true;
         }
         public static void SendDM(Message msg, string playerid)
         {

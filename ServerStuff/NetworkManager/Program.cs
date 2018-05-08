@@ -142,6 +142,13 @@ namespace NetworkManager
                         Console.WriteLine(SpicyNetwork.Logout());
                         Console.WriteLine("Logged Out!");
                         break;
+                    case 14:
+                        var b = SpicyNetwork.SayHello();
+                        if (b)
+                        {
+                            Console.WriteLine("Got Hello!");
+                        }
+                        break;
                     default:
                         Console.WriteLine("Unknown command!");
                         break;

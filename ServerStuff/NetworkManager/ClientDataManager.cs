@@ -23,10 +23,6 @@ namespace NetworkManager
             ChatDataArgs globalchat;
             switch (command)
             {
-                case SpicyNetwork.HELLO:
-                    Console.WriteLine("Got a hello from the server!");
-                    SpicyNetwork.SendData(new byte[] { 0, 0 });
-                    break;
                 case SpicyNetwork.REQUEST:
                     // Nothing is needed here
                     break;
