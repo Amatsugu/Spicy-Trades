@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class UISplashScreen : UIPanel
 {
 	public UILoginPanel loginPanel;
+	public DateTime helloStart;
 
 	private void Start()
 	{
@@ -22,12 +23,15 @@ public class UISplashScreen : UIPanel
 			}
 		}
 		Debug.Log("Saying Hello");
+		helloStart = DateTime.Now;
 		SpicyNetwork.SayHello();
 	}
 
 	private void Hello(object s, DataRecievedArgs args)
 	{
-		Debug.Log($"Server Hello: {args.Response}");
+		var time = DateTime.Now - helloStart;
+		GameMaster.Offline = false;
+		Debug.Log($"Server Hello: {args.Response} ({time.TotalMilliseconds}ms)");
 	}
 
 	public void StartGame()

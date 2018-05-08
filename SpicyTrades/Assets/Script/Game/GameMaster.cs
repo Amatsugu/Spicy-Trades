@@ -8,7 +8,7 @@ using UnityEngine;
 public class GameMaster
 {
 	public const float TickRate = 1f;
-	public static bool Offline { get; set; } = false;
+	public static bool Offline { get; set; } = true;
 	public static event Action GameReady
 	{
 		add
