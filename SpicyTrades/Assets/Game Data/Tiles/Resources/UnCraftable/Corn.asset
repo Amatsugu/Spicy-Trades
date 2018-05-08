@@ -30,5 +30,5 @@ MonoBehaviour:
     may vary from blue, red, purple and white-ish, on long ears. The kernels may be
     replanted as seeds and have a variety of uses amongst food and animal feed.
   tooltip: "A bushel of corn. Looks pretty tasty\u2026"
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: e4e9d9776fcd2c3428501831abd7de9c, type: 3}
   recipe: {fileID: 0}

@@ -28,5 +28,5 @@ MonoBehaviour:
     and more comfortable than wool and as such, preferred for undergarments or summer
     wear. '
   tooltip: A roll of linen. You can probably make some clothes out of this.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: ae25390dd184d884c969a7e9bb88ed1d, type: 3}
   recipe: {fileID: 11400000, guid: d94569f2da4905246ad0547b56e249c4, type: 2}

@@ -29,5 +29,5 @@ MonoBehaviour:
     of sheep yield different textures of wool. Much sought after, second to silk,
     and a common trade good. Used to create clothing of all types. '
   tooltip: A roll of wool. You can probably make some clothes out of this.
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 888fd031d1dc1cc41a7bc10564413215, type: 3}
   recipe: {fileID: 0}
