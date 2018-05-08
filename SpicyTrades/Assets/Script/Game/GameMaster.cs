@@ -1,12 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using NetworkManager;
 using Newtonsoft.Json;
 using UnityEngine;
 
 public class GameMaster
 {
 	public const float TickRate = 1f;
+	public static bool Offline { get; set; } = false;
 	public static event Action GameReady
 	{
 		add
@@ -119,7 +121,8 @@ public class GameMaster
 
 	public static void SendTransaction(Transaction transaction)
 	{
-		NetworkManager.Network.Sync(transaction.ToJSON());
+		if(!Offline)
+			SpicyNetwork.Sync(transaction.ToJSON());
 	}
 
 	public static void OnTransactionRecieve(Transaction transaction)
@@ -150,7 +153,7 @@ public class GameMaster
 	public static void Ready()
 	{
 		Instance._gameReady.Invoke();
-		NetworkManager.Network.SyncData += (s, a) =>
+		SpicyNetwork.SyncData += (s, a) =>
 		{
 			OnTransactionRecieve(Transaction.FromJSON(a.SData)); 
 		};
