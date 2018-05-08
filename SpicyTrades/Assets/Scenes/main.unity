@@ -818,6 +818,16 @@ Prefab:
       propertyPath: contributionText
       value: 
       objectReference: {fileID: 1544187851}
+    - target: {fileID: 114770257357335958, guid: 920fa73ec2e454042a9cd268f8ea74cf,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1427806258}
+    - target: {fileID: 114770257357335958, guid: 920fa73ec2e454042a9cd268f8ea74cf,
+        type: 2}
+      propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: UpdateContributeButton
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 920fa73ec2e454042a9cd268f8ea74cf, type: 2}
   m_IsPrefabParent: 0

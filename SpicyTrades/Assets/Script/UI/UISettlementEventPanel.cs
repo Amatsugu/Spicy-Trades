@@ -146,8 +146,9 @@ public class UISettlementEventPanel : UIPanel
 						count = count,
 					}
 				}))
-					GameMaster.Player.Influence += price;
+				GameMaster.Player.Influence += price;
 				RefreshList();
+				UpdateInfo(_selectedNeed);
 			});
 		}else
 		{
