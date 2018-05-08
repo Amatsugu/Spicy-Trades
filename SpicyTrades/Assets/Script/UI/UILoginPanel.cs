@@ -10,27 +10,23 @@ public class UILoginPanel : UIPanel
 {
 	public TMP_InputField login;
 	public TMP_InputField password;
-
-	private void Start()
-	{
-		if(!NetworkManager.Network.Connect("spicy2.luminousvector.com", 9614))
-		{
-			Debug.LogError("Unable to Connect to Server!");
-		}
-	}
+	
 	public void Login()
 	{
+		Debug.Log("Logging in...");
 		var loginString = login.text;
 		var passwordString = password.text;
 		if(string.IsNullOrEmpty(loginString) || string.IsNullOrEmpty(passwordString))
 		{
-			//TODO: Give Error
+			Debug.Log("Empty Login");
 			return;
 		}
-		if(NetworkManager.Network.Login(loginString, passwordString))
+		if(SpicyNetwork.Login(loginString, passwordString))
 		{
 			SceneManager.LoadScene("main");
+			return;
 		}
+		Debug.Log("Failed to login	");
 	}
 
 	public void Register()
