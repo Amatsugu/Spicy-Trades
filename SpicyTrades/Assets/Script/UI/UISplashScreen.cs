@@ -12,7 +12,6 @@ public class UISplashScreen : UIPanel
 
 	private void Start()
 	{
-		SpicyNetwork.DataRecieved += Hello;
 		if(!SpicyNetwork.Connect("spicy.luminousvector.com", 12344))
 		{
 			Debug.LogWarning("Unable to connect to server 1, trying server 2");
@@ -24,21 +23,21 @@ public class UISplashScreen : UIPanel
 		}
 		Debug.Log("Saying Hello");
 		helloStart = DateTime.Now;
-		SpicyNetwork.SayHello();
+		if(SpicyNetwork.SayHello())
+			Hello();
 	}
 
-	private void Hello(object s, DataRecievedArgs args)
+	private void Hello()
 	{
 		var time = DateTime.Now - helloStart;
 		GameMaster.Offline = false;
-		Debug.Log($"Server Hello: {args.Response} ({time.TotalMilliseconds}ms)");
+		Debug.Log($"Server Hello in {time.TotalMilliseconds}ms");
 	}
 
 	public void StartGame()
 	{
 		if(GameMaster.Offline)
 		{
-			SpicyNetwork.DataRecieved -= Hello;
 			SceneManager.LoadScene("main");
 			return;
 		}
