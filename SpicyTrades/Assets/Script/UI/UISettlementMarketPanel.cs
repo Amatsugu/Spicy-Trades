@@ -132,7 +132,8 @@ public class UISettlementMarketPanel : UIPanel
 				});
 			}
 		}
-		contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, r * (_list.First().GetComponent<RectTransform>().rect.height + 5));
+		if(_list.Count > 0)
+			contentBase.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, r * (_list.First().GetComponent<RectTransform>().rect.height + 5));
 
 		for (int i = r; i < _list.Count; i++)
 		{
