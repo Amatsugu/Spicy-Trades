@@ -155,7 +155,8 @@ public class GameMaster
 		Instance._gameReady.Invoke();
 		SpicyNetwork.SyncData += (s, a) =>
 		{
-			OnTransactionRecieve(Transaction.FromJSON(a.SData)); 
+			OnTransactionRecieve(Transaction.FromJSON(a.SData));
+			Debug.Log($"Data: {a.SData}");
 		};
 	}
 }

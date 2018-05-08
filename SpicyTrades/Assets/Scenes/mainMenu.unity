@@ -113,6 +113,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!114 &48062106 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114023691138340940, guid: 0907ff26472572848b7922aa4766f401,
+    type: 2}
+  m_PrefabInternal: {fileID: 312108492}
+  m_Script: {fileID: -1620774994, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
 --- !u!1001 &312108492
 Prefab:
   m_ObjectHideFlags: 0
@@ -304,6 +310,36 @@ Prefab:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114549683879842278, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114549683879842278, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_SelectOnDown
+      value: 
+      objectReference: {fileID: 48062106}
+    - target: {fileID: 114549683879842278, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_SelectOnRight
+      value: 
+      objectReference: {fileID: 48062106}
+    - target: {fileID: 114023691138340940, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114023691138340940, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_SelectOnUp
+      value: 
+      objectReference: {fileID: 1299224021}
+    - target: {fileID: 114023691138340940, guid: 0907ff26472572848b7922aa4766f401,
+        type: 2}
+      propertyPath: m_Navigation.m_SelectOnLeft
+      value: 
+      objectReference: {fileID: 1299224021}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0907ff26472572848b7922aa4766f401, type: 2}
   m_IsPrefabParent: 0
@@ -878,6 +914,12 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1299224021 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114549683879842278, guid: 0907ff26472572848b7922aa4766f401,
+    type: 2}
+  m_PrefabInternal: {fileID: 312108492}
+  m_Script: {fileID: -1620774994, guid: 89f0137620f6af44b9ba852b4190e64e, type: 3}
 --- !u!1 &1374833799
 GameObject:
   m_ObjectHideFlags: 0
