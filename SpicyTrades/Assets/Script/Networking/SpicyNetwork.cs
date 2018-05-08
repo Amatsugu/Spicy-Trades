@@ -139,11 +139,17 @@ namespace NetworkManager
                     byte[] temp = NetUtils.PieceCommand(new object[] { GPID, self, pid });
                     SendData(temp);
                     byte[] tmprec = ClientHoldManager();
+                    var time = DateTime.Now;
                     while (tmprec == null && !(lastMessage == null && capturedMsg != null))
                     {
                         tmprec = ClientHoldManager();
                         if (tmprec != null && tmprec[0] != GPID)
                             tmprec = null;
+                        if ((DateTime.Now - time).TotalSeconds > 3)
+                        {
+                            Wait = false;
+                            return null;
+                        }
                     }
                     if (capturedMsg != null && lastMessage == null)
                     {
@@ -183,11 +189,17 @@ namespace NetworkManager
                 byte[] temp = NetUtils.PieceCommand(new object[] { GROOM, self, rid });
                 SendData(temp);
                 byte[] tmprec = ClientHoldManager();
+                var time = DateTime.Now;
                 while (tmprec == null && !(lastMessage == null && capturedMsg != null))
                 {
                     tmprec = ClientHoldManager();
                     if (tmprec != null && tmprec[0] != GROOM)
                         tmprec = null;
+                    if ((DateTime.Now - time).TotalSeconds > 3)
+                    {
+                        Wait = false;
+                        return null;
+                    }
                 }
                 if (capturedMsg != null && lastMessage == null)
                 {
@@ -220,11 +232,17 @@ namespace NetworkManager
             Wait = true;
             SendData(NetUtils.PieceCommand(new object[] { REGISTER, email, user, pass }));
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -246,11 +264,17 @@ namespace NetworkManager
             Wait = true;
             SendData(NetUtils.PieceCommand(new object[] { LOGIN, user, pass }));
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+                if((DateTime.Now-time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -290,12 +314,18 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != FORMR)
                 {
                     tmprec = null;
+                }
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
                 }
                 Console.WriteLine("Waiting for room data! " + (lastMessage == null && capturedMsg != null));
             }
@@ -325,11 +355,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != JROOM)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -367,11 +403,17 @@ namespace NetworkManager
             SendData(temp);
             SendData(NetUtils.PieceCommand(new object[] { LOGOUT }));
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -387,11 +429,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != ROOMS)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -415,11 +463,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTR)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -460,11 +514,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != SENDFR)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -487,11 +547,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTF)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -521,11 +587,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LISTRF)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -555,11 +627,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != ADDF)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -582,11 +660,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != IHOST)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return null;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -609,11 +693,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != KICK)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -636,11 +726,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != INVITEF)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -663,11 +759,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != READY)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
@@ -690,11 +792,17 @@ namespace NetworkManager
             Wait = true;
             SendData(temp);
             byte[] tmprec = ClientHoldManager();
+            var time = DateTime.Now;
             while (tmprec == null && !(lastMessage == null && capturedMsg != null))
             {
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LEAVER)
                     tmprec = null;
+                if ((DateTime.Now - time).TotalSeconds > 3)
+                {
+                    Wait = false;
+                    return false;
+                }
             }
             if (capturedMsg != null && lastMessage == null)
             {
