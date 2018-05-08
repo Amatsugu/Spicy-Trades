@@ -18,15 +18,31 @@ public class UILoginPanel : UIPanel
 		var passwordString = password.text;
 		if(string.IsNullOrEmpty(loginString) || string.IsNullOrEmpty(passwordString))
 		{
-			Debug.Log("Empty Login");
+			Debug.LogWarning("Empty Login");
 			return;
 		}
 		if(SpicyNetwork.Login(loginString, passwordString))
 		{
+			var joined = false;
+			var rooms = SpicyNetwork.ListRooms();
+			foreach (var room in rooms)
+			{
+				if (room.GetNumPlayers() < 4)
+				{
+					joined = SpicyNetwork.JoinRoom(room.GetRoomID()) != null;
+					break;
+				}
+			}
+			if(!joined)
+				joined = SpicyNetwork.CreateRoom() != null;
+			if(!joined)
+			{
+				Debug.LogError("Failed to join or create room");
+			}
 			SceneManager.LoadScene("main");
 			return;
 		}
-		Debug.Log("Failed to login	");
+		Debug.LogError("Failed to login");
 	}
 
 	public void Register()
