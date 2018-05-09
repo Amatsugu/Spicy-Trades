@@ -275,18 +275,16 @@ namespace NetworkManager
         public static void Consume(byte[] cmd) //Consumes commands
         {
             lastMessage = cmd;
-            //connection.Client.ReceiveTimeout = 1;
         }
         public static void ResendData()
         {
             if (lastMessage != null)
             {
-                SendData(lastMessage);
+                SendData(lastMessage,false);
             }
         }
         public static Room CreateRoom(string password = "NONE") //DONE
         {
-            //Might need to send map data as well
             byte[] temp = NetUtils.PieceCommand(new object[] { FORMR, self, password });
             Wait = true;
             SendData(temp);
