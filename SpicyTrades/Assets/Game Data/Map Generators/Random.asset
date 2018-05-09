@@ -29,7 +29,7 @@ MonoBehaviour:
   damping: 0
   type: 1
   demensions: 3
-  position: {x: 35, y: 26, z: -96}
-  rotation: {x: -35, y: 95, z: -24}
-  useSeed: 1
-  seed: -894236266
+  position: {x: 17, y: -49, z: 43}
+  rotation: {x: -80, y: -23, z: 6}
+  useSeed: 0
+  seed: -894677633
