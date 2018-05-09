@@ -37,14 +37,15 @@ public class UILoginPanel : UIPanel
 				Debug.Log("Joining Room...");
 				var joined = false;
 				var rooms = SpicyNetwork.ListRooms();
-				foreach (var room in rooms)
-				{
-					if (room.GetNumPlayers() < 4)
-					{
-						joined = SpicyNetwork.JoinRoom(room.GetRoomID()) != null;
-						break;
-					}
-				}
+                if(rooms!=null)
+				    foreach (var room in rooms)
+				    {
+					    if (room.GetNumPlayers() < 4)
+					    {
+						    joined = SpicyNetwork.JoinRoom(room.GetRoomID()) != null;
+						    break;
+					    }
+				    }
 				if(!joined)
 					joined = SpicyNetwork.CreateRoom() != null;
 				if(!joined)

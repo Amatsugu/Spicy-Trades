@@ -465,6 +465,10 @@ namespace NetworkManager
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                 return null;
             }
+            if (data.Length == 0)
+            {
+                return null;
+            }
             objects = NetUtils.FormCommand(data, new string[] { "s[]" });
             string[] rids = (string[])objects[0];
             RoomListArgs args = new RoomListArgs();
