@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -61,7 +61,7 @@ public class SmartTileRenderer : TileRenderer
 				sides[i].enabled = tileType.invert;
 				continue;
 			}
-			if (!n[i].tileInfo.tileRenderers.Any(r => r.GetType() == typeof(SmartTileRenderer)))
+			if (!n[i].tileInfo.tileRenderers.Any(r => r != null && r.GetType() == typeof(SmartTileRenderer)))
 			{
 				sides[i].enabled = !tileType.invert;
 				continue;

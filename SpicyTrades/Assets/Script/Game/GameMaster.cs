@@ -122,9 +122,11 @@ public class GameMaster
 
 	public static void SendTransaction(Transaction transaction)
 	{
-		Debug.Log("Send");
 		if(!Offline)
+		{
+			Debug.Log("Send");
 			SpicyNetwork.Sync(transaction.ToJSON());
+		}
 	}
 
 	public static void OnTransactionRecieve(Transaction transaction)
