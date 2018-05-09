@@ -25,8 +25,10 @@ MonoBehaviour:
   requiredWorkers: 5
   yeild: 20
   basePrice: 10000000
-  description: If you obtain this item, you beat the game. It has a strange aura around
-    it.
-  tooltip: 
+  description: A strange red plant grown deep in the mountains. It is fabled to grant
+    those who eat it incredible luck and fortune. Highly sought after and passed down
+    from generation to generation in the royal family.
+  tooltip: "A pepper!!!! It seems to glow and pulse with a strange aura. Either you
+    are very lucky\u2026 or incredibly rich."
   icon: {fileID: 21300000, guid: 13ad1300bcad4304cb8549e7bc268e17, type: 3}
   recipe: {fileID: 0}
