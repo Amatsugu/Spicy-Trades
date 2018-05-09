@@ -56,8 +56,8 @@ public class MapRenderer : MonoBehaviour
 			var time = DateTime.Now;
 			map.Simulate(1);
 			if(!GameMaster.Offline)
-				SpicyNetwork.DoMainClientStuff();
-			//StartCoroutine(Net());
+				StartCoroutine(Net());
+				//SpicyNetwork.DoMainClientStuff();
 			nextTick = Time.time + GameMaster.TickRate;
 			ticks++;
 		}
@@ -76,6 +76,8 @@ public class MapRenderer : MonoBehaviour
 
 	private void OnApplicationQuit()
 	{
+		if (GameMaster.Offline)
+			return;
 		Debug.Log("Exit");
 		SpicyNetwork.LeaveRoom();
 		SpicyNetwork.Logout();

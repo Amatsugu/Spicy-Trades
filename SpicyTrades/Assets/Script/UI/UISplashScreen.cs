@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using NetworkManager;
@@ -25,6 +25,8 @@ public class UISplashScreen : UIPanel
 		helloStart = DateTime.Now;
 		if(SpicyNetwork.SayHello())
 			Hello();
+		else
+			Debug.LogWarning("No Hello Response, Switching to offline mode.");
 	}
 
 	private void Hello()
