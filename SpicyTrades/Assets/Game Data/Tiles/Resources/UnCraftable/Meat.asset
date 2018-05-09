@@ -16,7 +16,10 @@ MonoBehaviour:
   color: {r: 0.85098046, g: 0.31764707, b: 0.3019608, a: 1}
   cost: 0
   tileRenderers:
-  - {fileID: 11400000, guid: 82694358e4c89614aba860a758ca0c47, type: 2}
+  - {fileID: 11400000, guid: 70d7c5d9a97bde84da84e0a07136d19b, type: 2}
+  - {fileID: 11400000, guid: a43aa7e66bdf0bb4c8492019c956204c, type: 2}
+  - {fileID: 11400000, guid: 192808c210fad3d44b809ba93c425dff, type: 2}
+  - {fileID: 11400000, guid: 43b36a26ca81a9946b2cb0d9492a1fe5, type: 2}
   category: 1
   tags:
   - Food

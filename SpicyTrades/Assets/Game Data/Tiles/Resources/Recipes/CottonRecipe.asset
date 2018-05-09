@@ -21,4 +21,4 @@ MonoBehaviour:
     type: 0
   output: {fileID: 11400000, guid: cfb9c069b59a60547b3a1ea486c688d5, type: 2}
   outputCount: 1
-  factoryType: Textile
+  factoryType: Mill

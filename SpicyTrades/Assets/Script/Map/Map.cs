@@ -151,12 +151,15 @@ public class Map : IEnumerable<Tile>
 			foreach (var town in Settlements)
 				town.Simulate();
 			Capital.Simulate();
-			foreach (var town in Settlements) //TODO: Do we do this
-				town.NegotiateTrade();
 			GameMaster.CurrentTick++;
 		}
 		if(OnMapSimulate != null)
 			OnMapSimulate.Invoke(this);
+
+		foreach(var tile in Tiles)
+		{
+			tile.RenderUpdate();
+		}
 		return null;
 	}
 

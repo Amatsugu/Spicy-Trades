@@ -44,15 +44,6 @@ public class Tile
 	private Color _hCol;
 	private Color _curCol;
 	private bool _colorOveride;
-	// Use this for initialization
-
-	/*public Tile(GameObject tilePrefab, Transform parent, int x, int y, float outerRadius)
-	{
-		this.tilePrefab = tilePrefab;
-		this.parent = parent;
-		WolrdPos = GetPosition(x, y);
-		Position = HexCoords.FromOffsetCoords(x, y);
-	}*/
 
 	public Tile(TileInfo tileInfo, Transform parent, HexCoords hexCoords, float outerRadius)
 	{
@@ -123,6 +114,17 @@ public class Tile
 				continue;
 			else
 				tr.PostRender(this, _renderData[tr.name]);
+	}
+
+	public virtual void RenderUpdate()
+	{
+		if (tileInfo.tileRenderers == null)
+			return;
+		foreach (var tr in tileInfo.tileRenderers)
+			if (tr == null)
+				continue;
+			else
+				tr.RenderUpdate(this, _renderData[tr.name]);
 	}
 
 	public void SetRenderData(string name, object data)

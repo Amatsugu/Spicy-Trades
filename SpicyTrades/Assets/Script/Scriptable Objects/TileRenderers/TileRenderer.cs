@@ -8,4 +8,9 @@ public abstract class TileRenderer : ScriptableObject {
 
 	public abstract void PostRender(Tile tile, object renderData);
 
+	public virtual void RenderUpdate(Tile tile, object renderData)
+	{
+
+	}
+
 }
