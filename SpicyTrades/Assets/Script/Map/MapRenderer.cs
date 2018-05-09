@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MapRenderer : MonoBehaviour
@@ -55,9 +56,11 @@ public class MapRenderer : MonoBehaviour
 		{
 			var time = DateTime.Now;
 			map.Simulate(1);
-			if(!GameMaster.Offline)
-				StartCoroutine(Net());
+			if (!GameMaster.Offline)
+			{
+				Net().GetAwaiter().GetResult();
 				//SpicyNetwork.DoMainClientStuff();
+			}
 			nextTick = Time.time + GameMaster.TickRate;
 			ticks++;
 		}
@@ -68,10 +71,9 @@ public class MapRenderer : MonoBehaviour
 		Awake();
     }
 
-	public IEnumerator Net()
+	public async Task Net()
 	{
-		SpicyNetwork.DoMainClientStuff();
-		yield return new WaitForEndOfFrame();
+		await Task.Run(() => SpicyNetwork.DoMainClientStuff());
 	}
 
 	private void OnApplicationQuit()
