@@ -478,12 +478,12 @@ namespace NetworkManager
         public static void Sync(string data) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, false, self, data }); // 1 packet of data being sent... the server will simply mirror this data
-            SendData(temp);
+            SendData(temp,false);
         }
         public static void Sync(byte[] data) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, true, self, data }); // 1 packet of data being sent... the server will simply mirror this data
-            SendData(temp);
+            SendData(temp,false);
         }
         public static bool SendFriendRequest(string playerid) //DONE
         {
