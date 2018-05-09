@@ -12,6 +12,8 @@ public class UILoginPanel : UIPanel
 	public TMP_InputField login;
 	public TMP_InputField password;
 
+	public UIRegisterPanel registerPanel;
+
 	private void Start()
 	{
 		login.text = PlayerPrefs.GetString("user", "");
@@ -28,8 +30,6 @@ public class UILoginPanel : UIPanel
 			Debug.LogWarning("Empty Login");
 			return;
 		}
-		GameMaster.Offline = true; //Offline Killswitch
-
 		try
 		{
 			if(SpicyNetwork.Login(loginString, passwordString))
@@ -50,6 +50,7 @@ public class UILoginPanel : UIPanel
 				    }
 				if(!joined)
 					joined = SpicyNetwork.CreateRoom() != null;
+
 				if(!joined)
 				{
 					Debug.LogError("Failed to join or create room");
@@ -72,5 +73,7 @@ public class UILoginPanel : UIPanel
 
 	public void Register()
 	{
+		registerPanel.Show();
+		Hide();
 	}
 }

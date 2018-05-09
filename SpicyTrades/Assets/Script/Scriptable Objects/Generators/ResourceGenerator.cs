@@ -19,7 +19,7 @@ public class ResourceGenerator : FeatureGenerator
 		foreach(SettlementTile settlement in settlements)
 		{
 			var curSettlementInfo = (settlement.tileInfo as SettlementTileInfo);
-			var candidates = settlement.GetNeighbors().SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
+			var candidates = settlement.GetNeighbors().Where(t => t != null).SelectMany(n => from Tile nt in n.GetNeighbors() where nt != null && nt.Tag == "Ground" select nt).Distinct().ToList();
 			var numResources = Random.Range(1, maxResources + 1);
 			if (curSettlementInfo.settlementType == SettlementType.Town)
 			{
