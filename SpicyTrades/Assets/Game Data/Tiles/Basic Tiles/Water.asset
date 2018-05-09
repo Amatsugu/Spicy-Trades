@@ -17,3 +17,4 @@ MonoBehaviour:
   cost: 1000
   tileRenderers:
   - {fileID: 11400000, guid: a0a05a2c685540e4a9f0a4d766a6a862, type: 2}
+  - {fileID: 11400000, guid: b51258155599c384b9f725e8394e72eb, type: 2}

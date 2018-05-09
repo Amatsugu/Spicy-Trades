@@ -11,7 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f65ed76e912f794ca1e18782d87465b, type: 3}
   m_Name: TileBorder
   m_EditorClassIdentifier: 
-  tileId: 1
   edgeSprites:
   - {fileID: 21300000, guid: ed57558a8a4a97544a5e5b918836b321, type: 3}
   - {fileID: 21300000, guid: d549b9e6625f0bf4abf6180cfebaa719, type: 3}
@@ -23,7 +22,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: e34dce900a0f03b4bbe4b5592f29000f, type: 3}
   - {fileID: 21300000, guid: f7160fc7f092ea14e9175c7112d91f4e, type: 3}
   - {fileID: 21300000, guid: 4eb2a017d8c05334e99418cba8ee8d5e, type: 3}
-  - {fileID: 21300000, guid: 953aade92addf554488c7037bf13361b, type: 3}
+  - {fileID: 21300000, guid: c5cf394484a9d8c4cbf5bce6a44f6d99, type: 3}
   - {fileID: 21300000, guid: 48f5cf24bef48104e993d9c18f65961b, type: 3}
   dualSprite: 1
   invert: 0

@@ -13,4 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileType: {fileID: 11400000, guid: 14c18349632701347896af866d579643, type: 2}
   connectTo:
-  - Capital
+  - Water
