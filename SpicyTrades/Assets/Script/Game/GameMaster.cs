@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class GameMaster
 {
-	public const float TickRate = 1f;
+	public const float TickRate = 1f/100f;
 	public static bool Offline { get; set; } = true;
 	public static event Action GameReady
 	{
@@ -146,7 +146,7 @@ public class GameMaster
 		var n = tile.GetNeighbors();
 		foreach (Tile t in n)
 			if (t != null)
-				Debug.DrawLine(tile.WolrdPos, t.WolrdPos, Color.white, 3);
+				Debug.DrawLine(tile.WolrdPos, t.WolrdPos, Color.black, 3);
 #endif
 	}
 

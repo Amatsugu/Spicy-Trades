@@ -91,7 +91,7 @@ public class Tile
 			_sprite.color = _curCol = _sCol = tileInfo.color;
 		else
 			_sprite.color = _curCol = _sCol;
-		_hCol = Color.white;
+		_hCol = new Color(.3f, .3f, .3f);
 		if (tileInfo.tileRenderers == null)
 			return;
 		_renderData = new Dictionary<string, object>();

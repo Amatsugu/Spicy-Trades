@@ -11,4 +11,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d6c7ebda21ebdd3479d5ce1d2afe5597, type: 3}
   m_Name: GreyRenderer
   m_EditorClassIdentifier: 
-  color: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
+  color: {r: 1, g: 1, b: 1, a: 1}
