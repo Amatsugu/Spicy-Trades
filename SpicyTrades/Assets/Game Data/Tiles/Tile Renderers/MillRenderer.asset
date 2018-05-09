@@ -8,9 +8,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13a72d873be823747a0a54195707ad53, type: 3}
+  m_Script: {fileID: 11500000, guid: 594dfd3275e4696469ea2872ff81a4bd, type: 3}
   m_Name: MillRenderer
   m_EditorClassIdentifier: 
-  sprite: {fileID: 21300000, guid: 217093a7e925e5f43a660237ca308976, type: 3}
+  millBase: {fileID: 21300000, guid: b885dbd9fec2cb7429f22bd9f7d93d5b, type: 3}
+  millBlade: {fileID: 21300000, guid: 4e179222efbf26d4bbf11287b8ea8495, type: 3}
+  speed: 20
+  bladeOffset: {x: -0.0217, y: 0.8514, z: 0}
   sortOrder: 3
-  offset: {x: 0, y: -0.2, z: 0}
