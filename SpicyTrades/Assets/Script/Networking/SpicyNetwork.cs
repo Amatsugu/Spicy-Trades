@@ -275,7 +275,7 @@ namespace NetworkManager
         public static void Consume(byte[] cmd) //Consumes commands
         {
             lastMessage = cmd;
-            connection.Client.ReceiveTimeout = 500;
+            connection.Client.ReceiveTimeout = 1;
         }
         public static void ResendData()
         {
@@ -941,7 +941,7 @@ namespace NetworkManager
             }
             catch
             {
-                ResendData();
+                //ResendData();
             }
         }
         public static byte[] ClientHoldManager()
