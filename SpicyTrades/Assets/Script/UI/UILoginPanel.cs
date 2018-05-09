@@ -28,6 +28,8 @@ public class UILoginPanel : UIPanel
 			Debug.LogWarning("Empty Login");
 			return;
 		}
+		GameMaster.Offline = true; //Offline Killswitch
+
 		try
 		{
 			if(SpicyNetwork.Login(loginString, passwordString))
