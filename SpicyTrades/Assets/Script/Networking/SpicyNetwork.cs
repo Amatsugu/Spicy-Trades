@@ -84,6 +84,7 @@ namespace NetworkManager
         public static bool Wait = false;
         public static byte[] lastMessage = null;
         public static byte[] capturedMsg = null;
+        public static Thread t;
         public static Dictionary<string, Message> msgCache = new Dictionary<string, Message>();
         public static bool Connect(string ip, int port)
         {
@@ -93,8 +94,7 @@ namespace NetworkManager
             try
             {
                 connection.Connect(ip, port);
-                Thread t = new Thread(new ThreadStart(ThreadProc));
-                t.Start();
+                t = new Thread(new ThreadStart(ThreadProc));
                 return true;
             }
             catch (Exception e)
@@ -465,10 +465,6 @@ namespace NetworkManager
                 Console.WriteLine((string)NetUtils.FormCommand(data, new string[] { "s" })[0]);
                 return null;
             }
-            if (data.Length == 0)
-            {
-                return null;
-            }
             objects = NetUtils.FormCommand(data, new string[] { "s[]" });
             string[] rids = (string[])objects[0];
             RoomListArgs args = new RoomListArgs();
@@ -634,6 +630,10 @@ namespace NetworkManager
                 return false;
             }
             return true;
+        }
+        public static void runGameManager()
+        {
+            t.Start();
         }
         public static bool? IsHostOf() //DONE
         {
@@ -918,7 +918,10 @@ namespace NetworkManager
             while (true)
             {
                 if (!Wait)
+                {
+                    Console.WriteLine("running...");
                     DoMainClientStuff();
+                }
             }
         }
         public static void DoMainClientStuff()
@@ -928,10 +931,7 @@ namespace NetworkManager
                 Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
                 if (receiveBytes.Length > 0)
                 {
-
-                    DataRecievedArgs data = new DataRecievedArgs();
-                    data.RawResponse = receiveBytes;
-                    OnDataRecieved(data);
+                    ClientDataManager.OnDataRecieved(receiveBytes);
                     if (lastMessage[0] == receiveBytes[0])
                     {
                         capturedMsg = receiveBytes;
@@ -953,10 +953,8 @@ namespace NetworkManager
                 {
                     connection.Client.ReceiveTimeout = 1;
                     lastMessage = null;
-                    DataRecievedArgs data = new DataRecievedArgs();
-                    data.RawResponse = receiveBytes;
-                    OnDataRecieved(data);
-                    return receiveBytes;
+                    if(ClientDataManager.OnDataRecieved(receiveBytes))
+                        return receiveBytes;
                 }
             }
             catch

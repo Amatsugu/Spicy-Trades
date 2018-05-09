@@ -8,14 +8,14 @@ namespace NetworkManager
     {
         public static void INIT()
         {
-            SpicyNetwork.DataRecieved += OnDataRecieved;
+            //SpicyNetwork.DataRecieved += OnDataRecieved;
         }
         static Dictionary<string, Dictionary<int,string>> SYNC_CACHE = new Dictionary<string, Dictionary<int, string>>();
-        public static void OnDataRecieved(object sender, DataRecievedArgs e)
+        public static bool OnDataRecieved(byte[] RawResponse)
         {
-            byte command = e.RawResponse[0];
-            byte error = e.RawResponse[1];
-            byte[] data = e.RawResponse.SubArray(2, e.RawResponse.Length-2);
+            byte command = RawResponse[0];
+            byte error = RawResponse[1];
+            byte[] data = RawResponse.SubArray(2, RawResponse.Length-2);
             RoomUpdateArgs roomargs;
             //If there is an error you'll get the command byte[0] error byte[1] and a string of what the error is
             object[] objects;
@@ -25,7 +25,7 @@ namespace NetworkManager
             {
                 case SpicyNetwork.REQUEST:
                     // Nothing is needed here
-                    break;
+                    return false;
                 case SpicyNetwork.LISTF:
                     objects = NetUtils.FormCommand(data, new string[] { "s[]" });
                     pids = (string[])objects[0];
@@ -37,40 +37,40 @@ namespace NetworkManager
                     }
                     friendArr.Friends = friends;
                     SpicyNetwork.OnFriendsList(friendArr);
-                    break;
+                    return false;
                 case SpicyNetwork.INVITEF:
                     objects = NetUtils.FormCommand(data, new string[] {  "s" });
                     string playerid = (string)objects[0];
                     //HOOK EVENT
-                    break;
+                    return false;
                 case SpicyNetwork.JOINO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     playerid = (string)objects[0];
                     Console.WriteLine(playerid+"|"+ (string)objects[1]);
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
                     SpicyNetwork.CurrentRoom.AddMember(SpicyNetwork.GetPID(playerid), true);
-                    break;
+                    return false;
                 case SpicyNetwork.READYO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "bool", "s" });
                     SpicyNetwork.CurrentRoom.SetReady((bool)objects[1], SpicyNetwork.GetPID((string)objects[0]));
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[2] }), false);
                     Console.WriteLine("Player Set Ready!");
-                    break;
+                    return false;
                 case SpicyNetwork.LEAVERO: // only sent if you are in the room
                     Console.WriteLine("Removing member!");
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s", "s" });
                     SpicyNetwork.CurrentRoom.RemoveMember(SpicyNetwork.GetPID((string)objects[1]));
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[2] }), false);
-                    break;
+                    return false;
                 case SpicyNetwork.INIT:
                     SpicyNetwork.HANDSHAKEDONE = true; //This is a handshake that your ready for continuous datastreams
-                    break;
+                    return false;
                 case SpicyNetwork.CHAT:
                     objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgglobal = (Message)objects[0];
                     if (SpicyNetwork.msgCache.ContainsKey(msgglobal.GetMessage()))
                     {
-                        break;
+                        return false;
                     } else
                     {
                         SpicyNetwork.msgCache.Add(msgglobal.GetMessage(), msgglobal);
@@ -80,13 +80,13 @@ namespace NetworkManager
                     globalchat.Message = msgglobal;
                     SpicyNetwork.OnChat(globalchat);
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
-                    break;
+                    return false;
                 case SpicyNetwork.CHATDM:
                     objects = NetUtils.FormCommand(data, new string[] { "m","s" });
                     Message msgdm = (Message)objects[0];
                     if (SpicyNetwork.msgCache.ContainsKey(msgdm.GetMessage()))
                     {
-                        break;
+                        return false;
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace NetworkManager
                     globalchat.Message = msgdm;
                     SpicyNetwork.OnChat(globalchat);
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
-                    break;
+                    return false;
                 case SpicyNetwork.CHATRM:
                     objects = NetUtils.FormCommand(data, new string[] { "m", "s", "s" });
                     Message msgrm = (Message)objects[0];
@@ -108,7 +108,7 @@ namespace NetworkManager
                     globalchat.Flag = SpicyNetwork.CHATDM;
                     globalchat.Message = msgrm;
                     SpicyNetwork.OnChat(globalchat);
-                    break;
+                    return false;
                 case SpicyNetwork.SYNCB://payload,key
                     objects = NetUtils.FormCommand(data, new string[] { "b[]", "s" });
                     SyncEventArgs sync = new SyncEventArgs();
@@ -116,7 +116,7 @@ namespace NetworkManager
                     sync.BData = (byte[])objects[0];
                     SpicyNetwork.OnSyncData(sync);
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self,(string)objects[1] }), false);
-                    break;
+                    return false;
                 case SpicyNetwork.SYNCO:
                     objects = NetUtils.FormCommand(data, new string[] { "s", "s" });
                     SyncEventArgs syncb = new SyncEventArgs();
@@ -124,9 +124,9 @@ namespace NetworkManager
                     syncb.SData=(string)objects[0];
                     SpicyNetwork.OnSyncData(syncb);
                     SpicyNetwork.SendData(NetUtils.PieceCommand(new object[] { SpicyNetwork.RELAY, SpicyNetwork.self, (string)objects[1] }), false);
-                    break;
+                    return false;
                 default:
-                    break;
+                    return true;
             }
         }
     }
