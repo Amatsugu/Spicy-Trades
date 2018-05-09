@@ -1,3 +1,4 @@
+using NetworkManager;
 using Newtonsoft.Json;
 using System;
 using System.Collections;
@@ -18,6 +19,7 @@ public class MapRenderer : MonoBehaviour
 	public float frames;
 	public float frameRate;
 	public float averageTick;
+
 
     // Use this for initialization
     void Awake()
@@ -53,6 +55,9 @@ public class MapRenderer : MonoBehaviour
 		{
 			var time = DateTime.Now;
 			map.Simulate(1);
+			if(!GameMaster.Offline)
+				SpicyNetwork.DoMainClientStuff();
+			//StartCoroutine(Net());
 			nextTick = Time.time + GameMaster.TickRate;
 			ticks++;
 		}
@@ -62,6 +67,19 @@ public class MapRenderer : MonoBehaviour
 		map.Destroy();
 		Awake();
     }
+
+	public IEnumerator Net()
+	{
+		SpicyNetwork.DoMainClientStuff();
+		yield return new WaitForEndOfFrame();
+	}
+
+	private void OnApplicationQuit()
+	{
+		Debug.Log("Exit");
+		SpicyNetwork.LeaveRoom();
+		SpicyNetwork.Logout();
+	}
 
 	private void OnGUI()
 	{

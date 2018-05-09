@@ -9,9 +9,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: cb43a09490327e845877a0f295cc6b16, type: 3}
-  m_Name: MoneyGet
+  m_Name: Buy
   m_EditorClassIdentifier: 
   audioClips:
   - {fileID: 8300000, guid: a2d667e7f439943478ee10a14a2f8ec5, type: 3}
-  minPitch: 0
-  maxPitch: 0
+  minPitch: 1
+  maxPitch: 1

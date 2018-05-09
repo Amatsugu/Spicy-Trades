@@ -3,14 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using System.Linq;
+using System;
 
 public class Transaction
-{ 
+{
+	public Guid iD;
 	public TransactionType type;
 	public string playerId;
 	public string targetPlayerId;
 	public HexCoords targetSettlement;
 	public ResourceIdentifier resources;
+
+	public Transaction()
+	{
+		iD = Guid.NewGuid();
+	}
+
 
 	public void Execute()
 	{

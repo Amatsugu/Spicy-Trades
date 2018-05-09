@@ -53,6 +53,7 @@ public class UILoginPanel : UIPanel
 					Debug.LogError("Failed to join or create room");
 					return;
 				}
+				GameMaster.Offline = true;
 				SceneManager.LoadScene("main");
 				return;
 			}

@@ -527,7 +527,8 @@ AudioSource:
   m_GameObject: {fileID: 1587448325043556}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: 243262590733866704, guid: 4eb2bb447c0890d4898602a368a3e6bf,
+    type: 2}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
   m_Volume: 1
@@ -2136,6 +2137,8 @@ MonoBehaviour:
   contentBase: {fileID: 224820177979341332}
   resoruceItemUI: {fileID: 224324176723133984, guid: f42490c238b36444589ad191390393ae,
     type: 2}
+  buySound: {fileID: 11400000, guid: c0984864b9295e5419c1a1508a6d31a2, type: 2}
+  sellSound: {fileID: 11400000, guid: 5a93ed304bdb4f744bcd0b5ae1689d53, type: 2}
   countInput: {fileID: 114100769358854204}
   buyButton: {fileID: 114087492741964898}
   buyButtonText: {fileID: 114974928017313478}

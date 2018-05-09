@@ -85,6 +85,7 @@ public class GameMaster
 	private Map _gameMap;
 	private GameRegistry _registry;
 
+	private List<Guid> _processedTransactrions = new List<Guid>();
 	
 	public static void CachePrices(SettlementTile settlement)
 	{
@@ -121,6 +122,7 @@ public class GameMaster
 
 	public static void SendTransaction(Transaction transaction)
 	{
+		Debug.Log("Send");
 		if(!Offline)
 			SpicyNetwork.Sync(transaction.ToJSON());
 	}
@@ -128,7 +130,13 @@ public class GameMaster
 	public static void OnTransactionRecieve(Transaction transaction)
 	{
 		if(transaction.playerId != Player.Id)
-			transaction.Execute();
+		{
+			if(Instance._processedTransactrions.Contains(transaction.iD))
+			{
+				Instance._processedTransactrions.Add(transaction.iD);
+				transaction.Execute();
+			}
+		}
 	}
 
 	public static Tile GetTile(int x, int y, int z)

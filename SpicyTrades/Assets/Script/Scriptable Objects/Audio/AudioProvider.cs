@@ -40,6 +40,7 @@ public class AudioProvider : ScriptableObject
 
 	public void Play(AudioSource source)
 	{
+		Debug.Log($"Play: {name}");
 		source.pitch = (float)MathUtils.Map(random.NextDouble(), 0, 1, minPitch, maxPitch);
 		source.PlayOneShot(audioClips[random.Next(audioClips.Length)]);
 	}

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Linq;
 
+[RequireComponent(typeof(AudioSource))]
 public class UISettlementMarketPanel : UIPanel
 {
 	public Image itemIcon;
@@ -14,6 +15,8 @@ public class UISettlementMarketPanel : UIPanel
 	public RectTransform contentBase;
 	public RectTransform resoruceItemUI;
 
+	public AudioProvider buySound;
+	public AudioProvider sellSound;
 
 	public TMP_InputField countInput;
 
@@ -27,6 +30,7 @@ public class UISettlementMarketPanel : UIPanel
 	private SettlementTile _currentSettlement;
 
 	private List<UIResourceListItem> _list = new List<UIResourceListItem>();
+	private AudioSource _audioSource;
 
 	private MarketMode _curMode;
 
@@ -39,6 +43,8 @@ public class UISettlementMarketPanel : UIPanel
 	public void Show(SettlementTile settlement)
 	{
 		Show();
+		if(_audioSource == null)
+			_audioSource = GetComponent<AudioSource>();
 		titleText.text = $"{settlement.Name}'s Market";
 		_currentSettlement = settlement;
 		var res = settlement.ResourceCache.Keys.ToArray();
@@ -170,6 +176,7 @@ public class UISettlementMarketPanel : UIPanel
 			if (_curMode == MarketMode.Buy)
 				buyButton.onClick.AddListener(() => 
 				{
+					buySound.Play(_audioSource);
 					_currentSettlement.Buy(_selectedResource, count, GameMaster.Player);
 					if (_currentSettlement.ResourceCache[_selectedResource][0] == 0)
 						_selectedResource = _currentSettlement.ResourceCache.Keys.FirstOrDefault(res => _currentSettlement.ResourceCache[res][0] != 0);
@@ -178,6 +185,7 @@ public class UISettlementMarketPanel : UIPanel
 			else
 				buyButton.onClick.AddListener(() => 
 				{
+					sellSound.Play(_audioSource);
 					GameMaster.Player.Sell(_selectedResource, count, _currentSettlement);
 					if(GameMaster.Player.inventory.FirstOrDefault(inv => inv.Resource.Match(_selectedResource)) == null)
 					{
