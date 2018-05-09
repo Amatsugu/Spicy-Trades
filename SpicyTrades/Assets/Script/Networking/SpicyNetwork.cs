@@ -946,7 +946,6 @@ namespace NetworkManager
                 Byte[] receiveBytes = connection.Receive(ref RemoteIpEndPoint);
                 if (receiveBytes.Length > 0)
                 {
-                    connection.Client.ReceiveTimeout = 1;
                     lastMessage = null;
                     if(ClientDataManager.OnDataRecieved(receiveBytes))
                         return receiveBytes;

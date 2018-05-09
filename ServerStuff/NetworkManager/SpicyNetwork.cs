@@ -74,7 +74,7 @@ namespace NetworkManager
         public const byte CHAT_GLOBAL = 0x02;
         //Client stuff
         public static UdpClient connection;
-        public static string self="0000000000000000000000000000000000000";
+        public static string self = "0000000000000000000000000000000000000";
         public static PID player;
         public static Dictionary<string, PID> players = new Dictionary<string, PID>();
         public static Dictionary<string, Room> rooms = new Dictionary<string, Room>();
@@ -144,7 +144,8 @@ namespace NetworkManager
                     try
                     {
                         objects = NetUtils.FormCommand(data, new string[] { "p" });
-                    } catch
+                    }
+                    catch
                     {
                         return GetPID(pid);
                     }
@@ -247,7 +248,7 @@ namespace NetworkManager
                 tmprec = ClientHoldManager();
                 if (tmprec != null && tmprec[0] != LOGIN)
                     tmprec = null;
-                if((DateTime.Now-time).TotalSeconds > 3)
+                if ((DateTime.Now - time).TotalSeconds > 3)
                 {
                     Wait = false;
                     return false;
@@ -275,7 +276,7 @@ namespace NetworkManager
         public static void Consume(byte[] cmd) //Consumes commands
         {
             lastMessage = cmd;
-            //connection.Client.ReceiveTimeout = 500;
+            //connection.Client.ReceiveTimeout = 1;
         }
         public static void ResendData()
         {
@@ -478,12 +479,12 @@ namespace NetworkManager
         public static void Sync(string data) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, false, self, data }); // 1 packet of data being sent... the server will simply mirror this data
-            SendData(temp);
+            SendData(temp, false);
         }
         public static void Sync(byte[] data) //DONE
         {
             byte[] temp = NetUtils.PieceCommand(new object[] { SYNC, true, self, data }); // 1 packet of data being sent... the server will simply mirror this data
-            SendData(temp);
+            SendData(temp, false);
         }
         public static bool SendFriendRequest(string playerid) //DONE
         {
@@ -932,16 +933,11 @@ namespace NetworkManager
                 if (receiveBytes.Length > 0)
                 {
                     ClientDataManager.OnDataRecieved(receiveBytes);
-                    if (lastMessage[0] == receiveBytes[0])
-                    {
-                        capturedMsg = receiveBytes;
-                        lastMessage = null;
-                    }
                 }
             }
             catch
             {
-                ResendData();
+                //ResendData();
             }
         }
         public static byte[] ClientHoldManager()
@@ -953,7 +949,7 @@ namespace NetworkManager
                 {
                     connection.Client.ReceiveTimeout = 1;
                     lastMessage = null;
-                    if(ClientDataManager.OnDataRecieved(receiveBytes))
+                    if (ClientDataManager.OnDataRecieved(receiveBytes))
                         return receiveBytes;
                 }
             }
