@@ -35,7 +35,6 @@ public class SettlementGenerator : FeatureGenerator
 		var capitalCandicateCenters = capitalCandidates.SelectMany(t => t.GetNeighbors().Where(nt => nt != null && nt.Tag == "Ground"));
 		var centerCandidates = capitalCandicateCenters.Where(t => t.GetNeighbors().All(nt => nt != null && nt.Tag == "Ground"));
 		var ccA = centerCandidates.ToArray();
-		//capital.SetColor(Color.red).SetWeight(0).tag = "Capital"; //Spawn Capital
 		var capital = map.MakeCapital(ccA[Random.Range(0, ccA.Length - 1)], CapitalTile);
 		capital.Name = capitalNames.GetNameList().GetNextName();
 		foreach (var c in capital.GetNeighbors())
@@ -116,7 +115,6 @@ public class SettlementGenerator : FeatureGenerator
 					RenderPath(path, map);
 					closed.Add(path.Last());
 					open.Remove(path.Last());
-			
 				}
 				break;
 			//Method 2

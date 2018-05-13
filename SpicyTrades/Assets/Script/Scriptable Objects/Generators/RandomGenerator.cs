@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using LuminousVector;
 
 [CreateAssetMenu(menuName = "Map Generator/Random")]
@@ -28,25 +26,11 @@ public class RandomGenerator : MapGenerator {
 	public bool useSeed;
 	public int seed = 11;
 
+	private float _stepSize => 1f / resolution;
+	private NoiseMethod _method => Noise.noiseMethods[(int)type][demensions - 1];
 
-	private float _stepSize
-	{
-		get
-		{
-			return 1f / resolution;
-		}
-	}
-
-	private NoiseMethod _method
-	{
-		get
-		{
-			return Noise.noiseMethods[(int)type][demensions - 1];
-		}
-	}
 	public override Tile Generate(int x, int y,  Transform parent = null)
 	{
-		//rotation = new Vector3(Random.value, Random.value, Random.value);
 		var q = Quaternion.Euler(rotation);
 		Vector3 p00 = q * (new Vector3(-.5f, -.5f) + position);
 		Vector3 p10 = q * (new Vector3(.5f, -.5f) + position);
@@ -60,25 +44,19 @@ public class RandomGenerator : MapGenerator {
 		if (type != NoiseMethodType.Value)
 			sample = sample * .5f + .5f;
 		sample *= amplitude;
-		return CreateTile(tileMapper.GetTile(sample), x, y, parent);//.SetWeight(tileMapper.GetMoveCost(sample));
+		return CreateTile(tileMapper.GetTile(sample), x, y, parent);
 	}
 
 	public override Map GenerateMap(Transform parent = null)
 	{
 		if(!useSeed)
-		{
 			seed = (int)(new System.DateTime(1990, 1, 1) - System.DateTime.Now).TotalSeconds; 
-		}
 		Map map = new Map((int)Size.y, (int)Size.x, seed);
 		position = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
 		rotation = new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100));
 		for (int y = 0, i = 0; y < map.Height; y++)
-		{
 			for (int x = 0; x < map.Width; x++)
-			{
 				map[i++] = Generate(x, y, parent);
-			}
-		}
 		return map;
 	}
 

@@ -55,13 +55,8 @@ public class Tile
 		Position = hexCoords;
 	}
 
-	private float _innerRadius
-	{
-		get
-		{
-			return outerRadius * Mathf.Sqrt(3) / 2;
-		}
-	}
+	private float _innerRadius => outerRadius * Mathf.Sqrt(3) / 2;
+
 	private Vector3 GetPosition(int x, int y)
 	{
 		return new Vector3
