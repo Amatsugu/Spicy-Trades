@@ -100,7 +100,6 @@ public class ResourceGenerator : FeatureGenerator
 		if (recipeList == null)
 			return;
 		var recipes = placedResources.SelectMany(resA => placedResources.SelectMany(resB => recipeList.GetRecipesByIngredients(resA, resB))).Distinct().ToList();
-		var numResources = Random.Range(1, maxResources);
 		for (int i = 0; i < recipes.Count; i++)
 		{
 			var c = Random.Range(0, candicates.Count);
