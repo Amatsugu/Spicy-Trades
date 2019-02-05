@@ -1,3 +1,4 @@
+<img src="https://github.com/TheDarkVoid/Spicy-Trades/raw/master/Art/Spicy%20Trade%20Icon.png" height="512" width="512">
 # Spicy Trades
 
 [Trello](https://trello.com/b/726iJQH2/senior-project)
